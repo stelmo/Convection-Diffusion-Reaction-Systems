@@ -11,7 +11,7 @@ include("fdm1D.jl")
 
 a = 5.0 # convection coefficient
 b = 1.0 # diffusion coefficient
-c = 0.0 # Dissipation
+c = 0.0 # dispersion coefficient
 
 x0 = 0.0 # space boundary
 xL = 10.0 # space boundary
@@ -22,21 +22,21 @@ tL = 1.0 # time boundary
 Nx = 100 # Number of space nodes
 Nt = 250 # Number of time nodes
 
-femImp = Helper.Model(x0, xL, t0, tL, Nx, Nt, a, b, c, "FEM Implicit")
-Helper.enforceBCs!(femImp)
-Fem1Du.solveImplicit!(femImp)
+femImp = Helper_u.Model(x0, xL, t0, tL, Nx, Nt, a, b, c, "FEM Implicit")
+Helper_u.enforceBCs!(femImp)
+Fem1D_u.solveImplicit!(femImp)
 
-femExp = Helper.Model(x0, xL, t0, tL, Nx, Nt, a, b, c, "FEM Explicit")
-Helper.enforceBCs!(femExp)
-Fem1Du.solveExplicit!(femExp)
+femExp = Helper_u.Model(x0, xL, t0, tL, Nx, Nt, a, b, c, "FEM Explicit")
+Helper_u.enforceBCs!(femExp)
+Fem1D_u.solveExplicit!(femExp)
 
-fdmFTCS = Helper.Model(x0, xL, t0, tL, Nx, Nt, a, b, c, "FDM FTCS")
-Helper.enforceBCs!(fdmFTCS)
-Fdm1Du.solveFTCS!(fdmFTCS)
+fdmFTCS = Helper_u.Model(x0, xL, t0, tL, Nx, Nt, a, b, c, "FDM FTCS")
+Helper_u.enforceBCs!(fdmFTCS)
+Fdm1D_u.solveFTCS!(fdmFTCS)
 
-fdmFTCSup = Helper.Model(x0, xL, t0, tL, Nx, Nt, a, b, c, "FDM Upwind FTCS")
-Helper.enforceBCs!(fdmFTCSup)
-Fdm1Du.solveFTCSup!(fdmFTCSup)
+fdmFTCSup = Helper_u.Model(x0, xL, t0, tL, Nx, Nt, a, b, c, "FDM Upwind FTCS")
+Helper_u.enforceBCs!(fdmFTCSup)
+Fdm1D_u.solveFTCSup!(fdmFTCSup)
 
 
 ## 3D plotting

@@ -1,17 +1,17 @@
 # One dimensional finite element method for the convection diffusion reaction scheme.
 
 # Model form:
-# u_t = b*u_xx - a*u_x - c*u + f(u, t)
+# u_t = b*u_xx - a*u_x - c*u + f(x, t)
 # u_x(0,t) = g(t)
 # u_x(L, t) = h(t)
 # u(x, 0) = i(t)
 # with x0 < x < xL
 # and t0 < t < tL
-# The interpolant is used to approximate f(u, t)
+# The interpolant is used to approximate f(x, t)
 
-module Fem1Du
+module Fem1D_u
 
-using Helper: Model, forcingFunction, vnBC0, vnBCL
+using Helper_u: Model, forcingFunction, vnBC0, vnBCL
 
 function solveImplicit!(model::Model)
 # FEM approximation will be of the form:
@@ -128,8 +128,7 @@ function createBoundaryVectors(model::Model, timeState::Float64)
    return bvecs
 end
 
-end # module
-
+end # module: Fem1D_u
 
 
 

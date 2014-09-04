@@ -1,16 +1,16 @@
 # One dimensional finite difference method for the convection diffusion reaction scheme.
 
 # Model form:
-# u_t = b*u_xx - a*u_x - c*u + f(u, t)
+# u_t = b*u_xx - a*u_x - c*u + f(x, t)
 # u_x(0,t) = g(t)
 # u_x(L, t) = h(t)
 # u(x, 0) = i(t)
 # with x0 < x < xL
 # and t0 < t < tL
 
-module Fdm1Du
+module Fdm1D_u
 
-using Helper: Model, forcingFunction, vnBC0, vnBCL
+using Helper_u: Model, forcingFunction, vnBC0, vnBCL
 
 function solveFTCS!(model::Model)
 # Forward time central space
@@ -92,7 +92,7 @@ end
 
 end
 
-end # module
+end # module: Fdm1D_u
 
 
 

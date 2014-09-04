@@ -1,5 +1,5 @@
 # Helper functions - basically the globally common functions/structs
-module Helper
+module Helper_u
 
 type Model
 
@@ -61,7 +61,7 @@ function combine(models::Model...)
       values = [values, model.us]
       solvers = [solvers, fill(model.name, model.Nx)]
    end
-   return space, values, solvers
+   return (space, values, solvers)
 end
 
 end # module
