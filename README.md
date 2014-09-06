@@ -1,7 +1,7 @@
 Convection-Diffusion-Reaction-Systems
 =====================================
 
-## The analysis and implementation of coupled convection diffusion reaction systems with the finite element method.
+### The analysis and implementation of coupled convection diffusion reaction systems with the finite element method.
 
 The implementation of the project is in Julia 0.3. The following packages are required:
 
@@ -16,8 +16,8 @@ Launch the IJulia Notebook interface and run the notebook "Convection Diffusion 
 It is possible to change the forcing function and all the initial conditions but, if you don't modify the
 auxiliary modules, you can only modify the parameters shown in the notebook directly. 
 
-Done: Implement an uncoupled linear convection diffusion reaction parabolic equation with constant coefficients 
-and Von Neumann boundary conditions.
+Done: Implement an uncoupled parabolic linear convection diffusion reaction equation with constant coefficients 
+and Von Neumann boundary conditions using both FEMs and FDMs.
 
 To do: Implement the FEM solution of a system of coupled nonlinear convection diffusion reaction equations. 
 
