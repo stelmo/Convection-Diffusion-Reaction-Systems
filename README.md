@@ -1,13 +1,13 @@
 Convection-Diffusion-Reaction-Systems
 =====================================
 
-The analysis and implementation of coupled convection diffusion reaction systems with the finite element method.
+## The analysis and implementation of coupled convection diffusion reaction systems with the finite element method.
 
 The implementation of the project is in Julia 0.3. The following packages are required:
-Gadfly -> For static visualisation
-Interact -> For interactive visualisation
-IJulia -> To use the IPython Notebook interface (makes everything look pretty)
-PyPlot -> For 3D visualisations (not as nice as the Gadfly visualisation implemented in the notebook)
+1. Gadfly -> For static visualisation
+2. Interact -> For interactive visualisation
+3. IJulia -> To use the IPython Notebook interface (makes everything look pretty)
+4. PyPlot -> For 3D visualisations (not as nice as the Gadfly visualisation implemented in the notebook)
 
 To use:
 
