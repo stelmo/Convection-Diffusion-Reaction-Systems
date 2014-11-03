@@ -3,22 +3,16 @@ Convection-Diffusion-Reaction-Systems
 
 ### The analysis and implementation of coupled convection diffusion reaction systems with the finite element method.
 
-The implementation of the project is in Julia 0.3. The following packages are required:
+## One Dimensional Analysis
 
-1. Gadfly -> For static visualisation
-2. Interact -> For interactive visualisation
-3. IJulia -> To use the IPython Notebook interface (makes everything look pretty)
-4. PyPlot -> For 3D visualisations (not as nice as the Gadfly visualisation implemented in the notebook)
+# Steady State Systems
+The Aris-Taylor approximation is used to model radial diffusion with axial diffusion and convection. First order kinetics are used.
 
-To use:
+# Unsteady Systems
 
-Launch the IJulia Notebook interface and run the notebook "Convection Diffusion Reaction Uncoupled". 
-It is possible to change the forcing function and all the initial conditions but, if you don't modify the
-auxiliary modules, you can only modify the parameters shown in the notebook directly. 
+## Two Dimensional
 
-Done: Implement an uncoupled parabolic linear convection diffusion reaction equation with constant coefficients 
-and Von Neumann boundary conditions using both FEMs and FDMs.
+# Steady State Systems
+Axial diffusion with radial diffusion and convection. First order kinetics are used.
 
-To do: Implement the FEM solution of a system of coupled nonlinear convection diffusion reaction equations. 
-
-
+# Unsteady Systems
