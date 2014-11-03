@@ -13,19 +13,19 @@ N = 4
 xs = linspace(0., 1., N+1)
 h = xs[2] - xs[1]
 
-c12 = 1./h + 1./6.*a*b*h
-c11 = -2./h + 2./3.*a*b*h
-c13 = -1./h + 1./3.*a*b*h
+c12 = 1./h + (1./6.)*a*b*h
+c11 = -2./h + (2./3.)*a*b*h
+c13 = -1./h + (1./3.)*a*b*h
 
 # Kx = 0
 d = fill(c11, N)
-d[end] = c13
-dl = fill(c12+a/2. ,N-1)
-du = fill(c12-a/2. ,N-1)
+d[end] = c13-a/2.
+dl = fill(c12+a/2., N-1)
+du = fill(c12-a/2., N-1)
 
 K = Tridiagonal(dl, d, du)
 B = zeros(N)
-B[1] = (c12+a/2.)
+B[1] = c12+a/2.
 
 fs = \(K, B)
 
