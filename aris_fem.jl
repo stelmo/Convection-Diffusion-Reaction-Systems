@@ -37,6 +37,6 @@ B[1] = -(-(-1./h - a/2.) - a*b*h/6.)
 
 fs = \(K, B)
 
-plot(xs, [1.,fs])
+plot(xs, [1.,fs]) # added the BC in here!!!
 
 plt.show()
