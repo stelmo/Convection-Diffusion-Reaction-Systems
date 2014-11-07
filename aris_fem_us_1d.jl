@@ -8,7 +8,7 @@ using PyPlot
 a = 7.5 # Peclet number
 b = 1.29 # Damkohler number
 
-N = 4
+N = 50
 xs = linspace(0., 1., N+1)
 h = xs[2] - xs[1]
 
@@ -42,12 +42,12 @@ md = fill((1./6.)*h, N-1)
 M = Tridiagonal(md, m, md)
 
 # Now start the time series
-Nt = 100
-ts = linspace(0., 1., Nt)
+Nt = 50
+ts = linspace(0., 0.2, Nt) # this is dimensionless time... but it reaches steady quickly
 dt = ts[2] - ts[1]
 
 us = zeros(N+1, Nt)
-finit(x) = exp(-x*10) # Initial condition
+finit(x) = 4.0.*x.^2 -4.0.*x +1 #exp(-x*10) # Initial condition
 us[:,1] = finit(xs) # Initial condition
 us[1, :] = 1. # Boundary condition
 
@@ -62,6 +62,10 @@ for (tind, t) in enumerate(ts[2:end])
 end
 
 
-plot(xs, us[:, end])
+mesh(xs, ts, us')
+xlabel("Space")
+ylabel("Time")
+
+# plot(xs, us[:, end])
 
 plt.show()
