@@ -1,12 +1,18 @@
 # Two dimensional problem
 
-xN = 3 # Number of elements - 1
+xN = 5 # Number of elements - 1
 xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
-yN = 3 # Number of elements - 1
+yN = 5 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
+
+reaction_constant = 0.25
+Dab = 1.0538
+L = 6.36
+R = 1.00
+U0 = 1.24
 
 us = zeros(yN, xN)
 
@@ -133,7 +139,117 @@ function getK4(row_node, col_node, yN, xN, dy, dx)
   return entry
 end
 
-# Create the general matrix
+function getK1(row_node, col_node, yN, xN, dy, dx)
+  # Get each entry for the K4 matrix
+
+  # K1 matrix - its symmetric hence only these entries
+  d = 2.*dx/dy
+  s1 = dx/dy
+  s2 = -2.*dx/dy
+
+  m11 = 2.*d
+  m12 = 2.*s1
+  m13 = -d
+  m14 = 2.*s2
+  m23 = 2.*s2
+  m24 = -d
+  m34 = 2.*s1
+
+  M = zeros(4,4) # it's symmetric
+  M[1,1] = m11
+  M[2,2] = m11
+  M[3,3] = m11
+  M[4,4] = m11
+  M[1,2] = m12
+  M[2,1] = m12
+  M[1,3] = m13
+  M[3,1] = m13
+  M[1,4] = m14
+  M[4,1] = m14
+  M[2,3] = m23
+  M[3,2] = m23
+  M[2,4] = m24
+  M[4,2] = m24
+  M[3,4] = m34
+  M[4,3] = m34
+
+  M = 1./12.*M
+
+  rn_recs = getRecs(row_node, yN, xN)
+  cn_recs = getRecs(col_node, yN, xN)
+
+  entry = 0.0
+
+  for rn_rec in rn_recs
+    for cn_rec in cn_recs
+      if rn_rec == cn_rec
+        ind_r = getIndex(findfirst(rn_rec, row_node))
+        ind_c = getIndex(findfirst(cn_rec, col_node))
+        # println(ind_r, ind_c) # for fault checking
+        entry = entry + M[ind_r, ind_c]
+      end
+    end
+  end
+  # println("****") # for fault checking
+  return entry
+end
+
+function getK2(row_node, col_node, yN, xN, dy, dx)
+  # Get each entry for the K4 matrix
+
+  # K1 matrix - its symmetric hence only these entries
+  d = 2.*dy/dx
+  s1 = -2.*dy/dx
+  s2 = dy/dx
+
+  m11 = 2.*d
+  m12 = 2.*s1
+  m13 = -d
+  m14 = 2.*s2
+  m23 = 2.*s2
+  m24 = -d
+  m34 = 2.*s1
+
+  M = zeros(4,4) # it's symmetric
+  M[1,1] = m11
+  M[2,2] = m11
+  M[3,3] = m11
+  M[4,4] = m11
+  M[1,2] = m12
+  M[2,1] = m12
+  M[1,3] = m13
+  M[3,1] = m13
+  M[1,4] = m14
+  M[4,1] = m14
+  M[2,3] = m23
+  M[3,2] = m23
+  M[2,4] = m24
+  M[4,2] = m24
+  M[3,4] = m34
+  M[4,3] = m34
+
+  M = 1./12.*M
+
+  rn_recs = getRecs(row_node, yN, xN)
+  cn_recs = getRecs(col_node, yN, xN)
+
+  entry = 0.0
+
+  for rn_rec in rn_recs
+    for cn_rec in cn_recs
+      if rn_rec == cn_rec
+        ind_r = getIndex(findfirst(rn_rec, row_node))
+        ind_c = getIndex(findfirst(cn_rec, col_node))
+        # println(ind_r, ind_c) # for fault checking
+        entry = entry + M[ind_r, ind_c]
+      end
+    end
+  end
+  # println("****") # for fault checking
+  return entry
+end
+
+# Create the general K4 matrix
 K4 = zeros(yN*xN, xN*yN) # total # nodes * total # nodes
 for j = [1:xN*yN]
   for i = [1:xN*yN]
@@ -141,7 +257,38 @@ for j = [1:xN*yN]
   end
 end
 
-# Strip out unnecessary rows
-K4 = K4[yN+1:end, :]
+# Strip out unnecessary rows for K4
+K4 = -reaction_constant*K4[yN+1:end, :]
 K4_const = K4[:, 1:yN]
 K4 = K4[:, yN+1:end]
+
+# Create the general K1 matrix
+K1 = zeros(yN*xN, xN*yN) # total # nodes * total # nodes
+for j = [1:xN*yN]
+  for i = [1:xN*yN]
+    K1[i,j] = getK1(i, j, yN, xN, dy, dx)
+  end
+end
+
+# Strip out unnecessary rows for K1
+K1 = (-Dab/(R^2))*K1[yN+1:end, :]
+K1_const = K1[:, 1:yN]
+K1 = K1[:, yN+1:end]
+
+# Create the general K2 matrix
+K2 = zeros(yN*xN, xN*yN) # total # nodes * total # nodes
+for j = [1:xN*yN]
+  for i = [1:xN*yN]
+    K2[i,j] = getK2(i, j, yN, xN, dy, dx)
+  end
+end
+
+# Strip out unnecessary rows for K2
+K2 = (-Dab/(L^2))*K2[yN+1:end, :]
+K2_const = K2[:, 1:yN]
+K2 = K2[:, yN+1:end]
+
+
+KK = K1+K2+K4
+BB = -(sum(K1_const,2)+sum(K2_const,2)+sum(K4_const,2))
+u = \(KK, BB)
