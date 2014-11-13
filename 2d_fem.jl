@@ -1,17 +1,17 @@
 # Two dimensional problem
 
-xN = 5 # Number of elements - 1
+xN = 3 # Number of elements - 1
 xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
-yN = 4 # Number of elements - 1
+yN = 3 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
 us = zeros(yN, xN)
 
 function getRecs(node, yN, xN)
-  # Returns all the admissable rectangles adjacent to the node
+  # Returns all the admissible rectangles adjacent to the node
 
   total = yN*xN # total number of nodes
   recs = Array{Int64,1}[]
@@ -71,9 +71,21 @@ function getRecs(node, yN, xN)
   return recs
 end
 
+function getIndex(ind)
 
+  if ind == 4
+    return 2
+  elseif ind == 3
+    return 3
+  elseif ind == 2
+    return 1
+  else
+    return 4
+  end
+end
 
-function get_K4(K4, dy, dx)
+function getK4(row_node, col_node, yN, xN, dy, dx)
+  # Get each entry for the K4 matrix
 
   # M matrix - its symmetric hence only these entries
   m11 = (4./36.)*dx*dy
@@ -84,12 +96,52 @@ function get_K4(K4, dy, dx)
   m24 = (1./36.)*dx*dy
   m34 = (2./36.)*dx*dy
 
-  # Construct K4
-  (yN, xN) = size(K4)
-  for i=1:xN
-    for j=1:yN
-      # K4[j,i] = (j, i, yN, xN, dy, dx)
+  M = zeros(4,4)
+  M[1,1] = m11
+  M[2,2] = m11
+  M[3,3] = m11
+  M[4,4] = m11
+  M[1,2] = m12
+  M[2,1] = m12
+  M[1,3] = m13
+  M[3,1] = m13
+  M[1,4] = m14
+  M[4,1] = m14
+  M[2,3] = m23
+  M[3,2] = m23
+  M[2,4] = m24
+  M[4,2] = m24
+  M[3,4] = m34
+  M[4,3] = m34
+
+  rn_recs = getRecs(row_node, yN, xN)
+  cn_recs = getRecs(col_node, yN, xN)
+
+  entry = 0.0
+
+  for rn_rec in rn_recs
+    for cn_rec in cn_recs
+      if rn_rec == cn_rec
+        ind_r = getIndex(findfirst(rn_rec, row_node))
+        ind_c = getIndex(findfirst(cn_rec, col_node))
+        # println(ind_r, ind_c) # for fault checking
+        entry = entry + M[ind_r, ind_c]
+      end
     end
   end
-
+  # println("****") # for fault checking
+  return entry
 end
+
+# Create the general matrix
+K4 = zeros(yN*xN, xN*yN) # total # nodes * total # nodes
+for j = [1:xN*yN]
+  for i = [1:xN*yN]
+    K4[i,j] = getK4(i, j, yN, xN, dy, dx)
+  end
+end
+
+# Strip out unnecessary rows
+K4 = K4[yN+1:end, :]
+K4_const = K4[:, 1:yN]
+K4 = K4[:, yN+1:end]
