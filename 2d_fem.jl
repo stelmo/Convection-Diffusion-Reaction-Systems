@@ -1,20 +1,18 @@
 # Two dimensional problem
 
-xN = 5 # Number of elements - 1
+xN = 10 # Number of elements - 1
 xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
-yN = 5 # Number of elements - 1
+yN = 10 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
-reaction_constant = 0.25
-Dab = 1.0538
+reaction_constant = 0.25 #0.25
+Dab = 7.6E-05 # should be 7.6E-05
 L = 6.36
-R = 1.00
+R = 0.05 # should be 0.05
 U0 = 1.24
-
-us = zeros(yN, xN)
 
 function getRecs(node, yN, xN)
   # Returns all the admissible rectangles adjacent to the node
@@ -140,7 +138,7 @@ function getK4(row_node, col_node, yN, xN, dy, dx)
 end
 
 function getK1(row_node, col_node, yN, xN, dy, dx)
-  # Get each entry for the K4 matrix
+  # Get each entry for the K1 matrix
 
   # K1 matrix - its symmetric hence only these entries
   d = 2.*dx/dy
@@ -195,7 +193,7 @@ function getK1(row_node, col_node, yN, xN, dy, dx)
 end
 
 function getK2(row_node, col_node, yN, xN, dy, dx)
-  # Get each entry for the K4 matrix
+  # Get each entry for the K2 matrix
 
   # K1 matrix - its symmetric hence only these entries
   d = 2.*dy/dx
@@ -249,18 +247,50 @@ function getK2(row_node, col_node, yN, xN, dy, dx)
   return entry
 end
 
-# Create the general K4 matrix
-K4 = zeros(yN*xN, xN*yN) # total # nodes * total # nodes
-for j = [1:xN*yN]
-  for i = [1:xN*yN]
-    K4[i,j] = getK4(i, j, yN, xN, dy, dx)
-  end
-end
+function getK3(row_node, col_node, yN, xN, dy, dx)
+  # Get each entry for the K3 matrix
 
-# Strip out unnecessary rows for K4
-K4 = -reaction_constant*K4[yN+1:end, :]
-K4_const = K4[:, 1:yN]
-K4 = K4[:, yN+1:end]
+  M = zeros(4,4) # it's not symmetric
+  M[1,1] = -2.
+  M[1,2] = 2.
+  M[1,3] = 1.
+  M[1,4] = -1.
+
+  M[2,1] = -2.
+  M[2,2] = 2.
+  M[2,3] = 1.
+  M[2,4] = -1.
+
+  M[3,1] = -1.
+  M[3,2] = 1.
+  M[3,3] = 2.
+  M[3,4] = -2.
+
+  M[4,1] = -1.
+  M[4,2] = 1.
+  M[4,3] = 2.
+  M[4,4] = -2.
+
+  M = (dy/12)*M
+
+  rn_recs = getRecs(row_node, yN, xN)
+  cn_recs = getRecs(col_node, yN, xN)
+
+  entry = 0.0
+
+  for rn_rec in rn_recs
+    for cn_rec in cn_recs
+      if rn_rec == cn_rec
+        ind_r = getIndex(findfirst(rn_rec, row_node))
+        ind_c = getIndex(findfirst(cn_rec, col_node))
+        # println(ind_r, ind_c) # for fault checking
+        entry = entry + M[ind_r, ind_c]
+      end
+    end
+  end
+  # println("****") # for fault checking
+  return entry
+end
 
 # Create the general K1 matrix
 K1 = zeros(yN*xN, xN*yN) # total # nodes * total # nodes
@@ -270,11 +300,6 @@ for j = [1:xN*yN]
   end
 end
 
-# Strip out unnecessary rows for K1
-K1 = (-Dab/(R^2))*K1[yN+1:end, :]
-K1_const = K1[:, 1:yN]
-K1 = K1[:, yN+1:end]
-
 # Create the general K2 matrix
 K2 = zeros(yN*xN, xN*yN) # total # nodes * total # nodes
 for j = [1:xN*yN]
@@ -283,12 +308,54 @@ for j = [1:xN*yN]
   end
 end
 
+# Create the general K4 matrix
+K3 = zeros(yN*xN, xN*yN) # total # nodes * total # nodes
+for j = [1:xN*yN]
+  for i = [1:xN*yN]
+    K3[i,j] = getK3(i, j, yN, xN, dy, dx)
+  end
+end
+
+# Create the general K4 matrix
+K4 = zeros(yN*xN, xN*yN) # total # nodes * total # nodes
+for j = [1:xN*yN]
+  for i = [1:xN*yN]
+    K4[i,j] = getK4(i, j, yN, xN, dy, dx)
+  end
+end
+
+# Strip out unnecessary rows for K1
+K1 = (-Dab/(R^2))*K1[yN+1:end, :]
+K1_const = K1[:, 1:yN]
+K1 = K1[:, yN+1:end]
+
 # Strip out unnecessary rows for K2
 K2 = (-Dab/(L^2))*K2[yN+1:end, :]
 K2_const = K2[:, 1:yN]
 K2 = K2[:, yN+1:end]
 
+# Strip out unnecessary rows for K4
+K3 = -(U0/L)*K3[yN+1:end, :]
+K3_const = K3[:, 1:yN]
+K3 = K3[:, yN+1:end]
 
-KK = K1+K2+K4
-BB = -(sum(K1_const,2)+sum(K2_const,2)+sum(K4_const,2))
+# Strip out unnecessary rows for K4
+K4 = -reaction_constant*K4[yN+1:end, :]
+K4_const = K4[:, 1:yN]
+K4 = K4[:, yN+1:end]
+
+
+# Calculate the magic!
+KK = K1 + K2 + K3 + K4
+BB = zeros(xN*yN-yN, 1)
+u1 = zeros(yN)
+
+for i=1:yN
+  BB[:] = BB[:] +  (K1_const[:,i] + K2_const[:,i] + K3_const[:,i] + K4_const[:,i])*(i/yN)^2
+  u1[i] = (i/yN)^2
+end
+BB = -BB
+
 u = \(KK, BB)
+u = [u1, u]
+reshape(u, (yN, xN))
