@@ -1,21 +1,29 @@
 Convection-Diffusion-Reaction-Systems
 =====================================
 
-### The analysis and implementation of coupled convection diffusion reaction systems with the finite element method.
-All the programs were done in the Julia Language.
+### The analysis and implementation of coupled and uncoupled convection diffusion reaction systems with the finite element method.
+All the programs were written in the Julia Language.
 
-# One Dimensional Analysis
-Piecewise linear basis functions are used exclusively (Straight line elements).
+# Uncoupled System
+The reactor is assumed to be isothermal.
 
-## Steady State Systems
-The Aris-Taylor approximation is used to model radial diffusion with axial diffusion and convection. First order kinetics are used.
+## One Dimensional Analysis
+The elements are comprised of piecewise linear basis functions (roof functions). The spatial problem was solved using the finite element method. The unsteady (temporal) problem was solved using a combination of the FEM and the Crank-Nicholson method (to solve the system of resultant ODEs).
 
-## Unsteady Systems
+### Steady State System
+The Aris-Taylor approximation is used to model a reacting system with radial and axial diffusion, and axial convection. First order kinetics are used with a constant rate.
 
-# Two Dimensional Analysis
-Piecewise bilinear basis functions are used exclusively (Square elements).
+### Unsteady System
+The unsteady case was an extension of the steady case. The initial condition approximates an inert reactor.
 
-## Steady State Systems
-Axial diffusion with radial diffusion and convection. First order kinetics are used.
+## Two Dimensional Analysis
+Piecewise bilinear basis functions (rectangular elements) are used as elements in the spatial dimensions. Again the Crank-Nicholson method was used to solve the system of resultant ODEs for the unsteady problem.
 
-## Unsteady Systems
+### Steady State System
+Axial and radial diffusion with axial convection was considered. First order kinetics are used. Both plug flow and laminar flow were implemented.
+
+### Unsteady System
+The unsteady case was again just an extension of the steady case. An inert reactor was approximated for the initial condition. Both plug flow and laminar flow were implemented.
+
+# Coupled Systems
+The isothermal assumption is dropped. The same systems as above, but this time incorporating a non-constant rate term which depends on temperature were modelled. Only the one dimensional case was modelled.

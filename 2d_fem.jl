@@ -1,10 +1,11 @@
-# Two dimensional problem - plug flow case
+# Two dimensional problem - plug flow case + steady state
+using PyPlot
 
-xN = 10 # Number of elements - 1
+xN = 30 # Number of elements - 1
 xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
-yN = 10 # Number of elements - 1
+yN = 30 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
@@ -350,6 +351,7 @@ KK = K1 + K2 + K3 + K4
 BB = zeros(xN*yN-yN, 1)
 u1 = zeros(yN)
 
+# Left most BC - change this to be interesting
 for i=1:yN
   BB[:] = BB[:] +  (K1_const[:,i] + K2_const[:,i] + K3_const[:,i] + K4_const[:,i])*(i/yN)^2
   u1[i] = (i/yN)^2
@@ -358,4 +360,10 @@ BB = -BB
 
 u = \(KK, BB)
 u = [u1, u]
-reshape(u, (yN, xN))
+u = reshape(u, (yN, xN))
+
+contourf(xs, reverse(ys), u, 20)
+colorbar()
+xlabel("Axial Distance")
+ylabel("Radial Distance")
+plt.show()

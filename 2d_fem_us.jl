@@ -1,15 +1,19 @@
-# Two dimensional problem - plug flow case
+# Two dimensional problem - plug flow case + steady state
 using PyPlot
 
-xN = 30 # Number of elements - 1
+xN = 50 # Number of elements - 1
 xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
-yN = 30 # Number of elements - 1
+yN = 50 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
-reaction_constant = 0.25 #0.25
+tN = 50
+ts = linspace(0., 5., tN)
+dt = ts[2] - ts[1]
+
+reaction_constant = 0.25 # should be 0.25
 Dab = 7.6E-05 # should be 7.6E-05
 L = 6.36
 R = 0.05 # should be 0.05
@@ -325,6 +329,13 @@ for j = [1:xN*yN]
   end
 end
 
+K5 = zeros(yN*xN, xN*yN) # total # nodes * total # nodes
+for j = [1:xN*yN]
+  for i = [1:xN*yN]
+    K5[i,j] = getK4(i, j, yN, xN, dy, dx)
+  end
+end
+
 # Strip out unnecessary rows for K1
 K1 = (-Dab/(R^2))*K1[yN+1:end, :]
 K1_const = K1[:, 1:yN]
@@ -345,24 +356,54 @@ K4 = -reaction_constant*K4[yN+1:end, :]
 K4_const = K4[:, 1:yN]
 K4 = K4[:, yN+1:end]
 
+# Strip out unnecessary rows for K4
+K5 = (U0/((L^2)*R))*K5[yN+1:end, :]
+K5 = K5[:, yN+1:end]
 
 # Calculate the magic!
 KK = K1 + K2 + K3 + K4
 BB = zeros(xN*yN-yN, 1)
 u1 = zeros(yN)
 
+# Left boundary condition
 for i=1:yN
   BB[:] = BB[:] +  (K1_const[:,i] + K2_const[:,i] + K3_const[:,i] + K4_const[:,i])*(i/yN)^2
   u1[i] = (i/yN)^2
 end
-BB = -BB
 
-u = \(KK, BB)
-u = [u1, u]
-u = reshape(u, (yN, xN))
+# Initial condition
+us = zeros(yN, xN)
+us[:,1] = u1[:]
+for i=2:xN
+  us[:,i] = us[:, i-1]*exp(-5.*xs[i])
+end
 
+u0 = reshape(us[:,2:end], ((xN-1)*yN, 1))
+u_profile = zeros((xN-1)*yN, tN)
+u_profile[:,1] = u0
+
+for t=2:tN
+  A = K5 - (dt/2.)*KK
+  B = (K5 + (dt/2)*KK)*u_profile[:,t-1] + dt*BB
+  u_profile[:, t] = \(A, B)
+end
+
+# Start
+figure(1)
+u = reshape(u_profile[:, 1], (yN, xN-1))
+u = [u1 u]
 contourf(xs, reverse(ys), u, 20)
 colorbar()
 xlabel("Axial Distance")
 ylabel("Radial Distance")
+
+# End
+figure(2)
+u = reshape(u_profile[:, end], (yN, xN-1))
+u = [u1 u]
+contourf(xs, reverse(ys), u, 20)
+colorbar()
+xlabel("Axial Distance")
+ylabel("Radial Distance")
+
 plt.show()
