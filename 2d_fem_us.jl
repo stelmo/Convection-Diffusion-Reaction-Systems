@@ -1,16 +1,16 @@
 # Two dimensional problem - plug flow case + steady state
 using PyPlot
 
-xN = 50 # Number of elements - 1
+xN = 20 # Number of elements - 1
 xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
-yN = 50 # Number of elements - 1
+yN = 20 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
-tN = 50
-ts = linspace(0., 5., tN)
+tN = 20
+ts = linspace(0., 5., tN) # it takes looong to reach SS
 dt = ts[2] - ts[1]
 
 reaction_constant = 0.25 # should be 0.25
@@ -397,8 +397,18 @@ colorbar()
 xlabel("Axial Distance")
 ylabel("Radial Distance")
 
-# End
+# Middle
 figure(2)
+mid = int((tN/2))
+u = reshape(u_profile[:, mid], (yN, xN-1))
+u = [u1 u]
+contourf(xs, reverse(ys), u, 20)
+colorbar()
+xlabel("Axial Distance")
+ylabel("Radial Distance")
+
+# End
+figure(3)
 u = reshape(u_profile[:, end], (yN, xN-1))
 u = [u1 u]
 contourf(xs, reverse(ys), u, 20)

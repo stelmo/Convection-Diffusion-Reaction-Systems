@@ -25,5 +25,7 @@ f(x) = cs[1].*exp(r1.*x) + cs[2].*exp(r2.*x)
 xs = linspace(0.,1.,100)
 fs = f(xs)
 plot(xs, fs)
+xlabel("Axial Distance")
+ylabel("Concentration")
 
 plt.show()

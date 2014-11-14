@@ -47,7 +47,7 @@ ts = linspace(0., 0.2, Nt) # this is dimensionless time... but it reaches steady
 dt = ts[2] - ts[1]
 
 us = zeros(N+1, Nt)
-finit(x) = 4.0.*x.^2 -4.0.*x +1 #exp(-x*10) # Initial condition
+finit(x) = exp(-x*10)#4.0.*x.^2 -4.0.*x +1 # # Initial condition
 us[:,1] = finit(xs) # Initial condition
 us[1, :] = 1. # Boundary condition
 
