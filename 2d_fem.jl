@@ -1,4 +1,4 @@
-# Two dimensional problem
+# Two dimensional problem - plug flow case
 
 xN = 10 # Number of elements - 1
 xs = linspace(0., 1., xN)
