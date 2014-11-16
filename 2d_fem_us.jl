@@ -10,7 +10,7 @@ ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
 tN = 20
-ts = linspace(0., 5., tN) # it takes looong to reach SS
+ts = linspace(0., 5., tN) # it takes long to reach SS. Try 5.0 for the end time.
 dt = ts[2] - ts[1]
 
 reaction_constant = 0.25 # should be 0.25
@@ -377,6 +377,15 @@ us[:,1] = u1[:]
 for i=2:xN
   us[:,i] = us[:, i-1]*exp(-5.*xs[i])
 end
+## Weird conditions for fun :)
+## Weird one
+# ymid = int(yN/2)
+# xmid = int(xN/2)
+# us[ymid-2:ymid+2, xmid-2:xmid+2] = 1.
+## Weird two
+us[:, 2:end] = rand(yN,xN-1)
+
+# Normal code follows
 
 u0 = reshape(us[:,2:end], ((xN-1)*yN, 1))
 u_profile = zeros((xN-1)*yN, tN)

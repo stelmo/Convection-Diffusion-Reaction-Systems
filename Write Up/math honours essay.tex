@@ -1,0 +1,101 @@
+\documentclass[11pt,fleqn]{article}
+\linespread{1.3}
+\usepackage{parskip}
+\setlength{\parindent}{0pt} %no paragraph indentation
+\setlength{\parskip}{2.1ex plus 0.2ex minus 0.2ex} %3x paragraph spacing
+\usepackage{geometry}
+\geometry{a4paper,left=30mm,right=25mm,top=20mm,bottom=20mm} %margin spacing
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\rfoot{\thepage}
+
+\usepackage[pdftex]{graphicx} %so that eps files may be included
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{float}
+
+% Theorems, definitions etc.
+\newtheoremstyle{defstyle}
+  {10pt} % Space above
+  {0pt} % Space below
+  {} % Body font
+  {} % Indent amount
+  {\bfseries} % Theorem head font
+  {.} % Punctuation after theorem head
+  {0.5em} % Space after theorem head
+  {} % Theorem head spec (can be left empty, meaning `normal')
+\theoremstyle{defstyle}
+\newtheorem{defn}{Definition}[section]
+
+\begin{document}
+%Title page
+\input{./title_page_mod.tex}
+
+%Abstract and Keywords
+\begin{center}
+\Large Finite Element Approximation for a Convection, Diffusion and Reaction System in a Tubular Reactor \\[0.5cm]
+\large St. Elmo Wilken \\
+29034133
+\end{center}
+
+\begin{abstract}
+Insert abstract...
+\end{abstract}
+
+\textsc{\small KEYWORDS:} \small Finite Element Method, diffusion, convection, reaction, tubular reactor
+\tableofcontents
+\pagenumbering{gobble}
+
+\newpage
+\pagenumbering{arabic}
+\section{Introduction}
+
+\section{Model Derivation}
+In this section the general convection, diffusion and reaction (CDR) continuum equation is developed. Furthermore, the accompanying energy balance necessitated by the reaction component of the resultant model is also derived. For the purposes of this project a tubular reactor geometry is assumed; thus the model is derived with respect to the (more natural) cylindrical coordinate system. 
+
+\begin{defn}
+Diffusion is the spontaneous mixing of molecules by random thermal motion. It gives rise to motion of a chemical species relative to the motion of the mixture.
+\end{defn}
+
+In the absence of other gradients, molecules of a single species will always diffuse from regions of higher concentration to regions of lower concentration. This concentration gradient results in a molar flux of the species.
+
+\begin{defn}
+For species A the molar flux is denoted by $\mathbf{W}_A$ and has units of $\frac{moles}{time \times area}$. The molar flux is a vector quantity and can be expressed as $\mathbf{W}_A = W_A|_r \mathbf{e}_r + W_A|_\theta \mathbf{e}_\theta + W_A|_z \mathbf{e}_z$ in cylindrical coordinates. The molar flow rate is related to the molar flux and cross-sectional area by $F_A|_i = A_c|_i \times W_A|_i$ where $i$ indicates the component of interest. 
+\end{defn}
+
+The basis of the model's derivation rests on the conservation of mass principle. A consequence of this assumption is the mole balance: barring a reaction, the number of moles of a species is conserved within a given control volume. The mole balance for the reacting species A is derived with reference to the control volume depicted in Figure \ref{fig_vol_element}.
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.5]{volume_element}
+\caption{Control volume element for a tubular reactor} 
+\label{fig_vol_element}
+\end{figure}
+
+The mole balance is shown in (\ref{eq_mole_balance}) where $r_A$ indicates the generation or consumption due to reaction and $C_A$ is the concentration of species A in the mixture.
+\begin{equation}
+\sum_{i=r, \theta, z}[F_A|_i(i) - F_A|_i(i+\delta i)] + r_A = \frac{\partial C_A}{\partial t}
+\label{eq_mole_balance}
+\end{equation}
+
+Consider the molar flow rate in the $\mathbf{e}_r$ direction. By using the definition of molar flux and the Taylor series expansion of $F_A|_r(r+\delta r)$ we have (\ref{eq_F_A_r}).
+\begin{equation}
+\begin{aligned}
+F_A|_r(r) &= W_A|_r(r) r \delta \theta \delta z \\
+F_A|_r(r) &= (W_ A|_r(r) + \frac{\partial W_A|r(r)}{\partial r} \delta r)(r+\delta r)\delta \theta \delta z
+\end{aligned}
+\label{eq_F_A_r}
+\end{equation}
+
+
+
+
+%References
+\newpage
+\bibliographystyle{plain}
+\bibliography{research}
+
+\end{document}
