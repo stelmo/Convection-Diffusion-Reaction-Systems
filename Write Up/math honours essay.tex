@@ -148,13 +148,19 @@ W_A|_r &= -D_{AB}\frac{\partial C_A}{\partial r}
 \end{aligned}
 \label{eq_fick}
 \end{equation} 
-Substituting (\ref{eq_fick}) into (\ref{eq_mb3}) results in the model we will be using for this project (\ref{eq_cdr}).
+Substituting (\ref{eq_fick}) into (\ref{eq_mb3}) results in the model (\ref{eq_cdr}) we will be using for this project \cite{fogler}.
 \begin{equation}
 D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - U_z\frac{\partial C_A}{\partial z} + r_A = \frac{\partial C_A}{\partial t}
 \label{eq_cdr}
 \end{equation}
 
-Up to now not much has been said about the reaction term $r_A$.
+Up to now not much has been said about the reaction term $r_A$. Typically $r_A$ is formulated as a rate equation based on experimental evidence modelling reaction kinetics. It is possible for the rate ``law" to be quite complex in character but the most commonly encountered expressions for forward, irreversible reactions are based on power law kinetics \cite{delmar}. For example, it usually takes the form $-r_A=k(T)[C_A]^M$ for reactions of the form $A \rightarrow B$ or $-r_A=k(T)[C_A]^M[C_B]^N$ for reactions of the form $A + B \rightarrow 2C$ with $M,N$ usually a non-negative integer less than 3. The factor $k(T)$ is called the rate constant even though it is not a constant (it depends quite strongly on temperature). The Arrhenius equation is a very commonly used empirical function which describes the temperature dependence of the rate constant. It is typically expressed by (\ref{eq_arrhenius}) with $E$ is the activation energy, $R$ the ideal gas constant and $k_a$ is the pre-exponential factor at the reference temperature $T_a$. 
+\begin{equation}
+k(T) = k_a e^{(\frac{E}{R}(\frac{1}{T_a} - \frac{1}{T}))}
+\label{eq_arrhenius}
+\end{equation} 
+
+It is prudent (in practice a necessity) to attempt to model the temperature profile of the reactor given that we will be dealing with forward, exothermic, irreversible reactions exclusively in this project. 
 
 %References
 \newpage
