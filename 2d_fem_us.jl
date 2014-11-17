@@ -383,7 +383,7 @@ end
 # xmid = int(xN/2)
 # us[ymid-2:ymid+2, xmid-2:xmid+2] = 1.
 ## Weird two
-us[:, 2:end] = rand(yN,xN-1)
+# us[:, 2:end] = rand(yN,xN-1)
 
 # Normal code follows
 
