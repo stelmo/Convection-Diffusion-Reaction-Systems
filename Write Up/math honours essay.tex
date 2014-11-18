@@ -151,7 +151,7 @@ Substituting (\ref{eq_fick}) into (\ref{eq_mb3}) results in the model (\ref{eq_c
 D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - U_z\frac{\partial C_A}{\partial z} + r_A = \frac{\partial C_A}{\partial t}
 \label{eq_cdr}
 \end{equation}
-Up to now not much has been said about the reaction term $r_A$. Typically $r_A$ is formulated as a rate equation based on experimental evidence modelling reaction kinetics. It is possible for the rate ``law" to be quite complex in character but the most commonly encountered expressions for forward, irreversible reactions are based on power law kinetics \cite{delmar}. For example, it usually takes the form $-r_A=k(T)[C_A]^M$ for reactions of the form $A \rightarrow B$ or $-r_A=k(T)[C_A]^M[C_B]^N$ for reactions of the form $A + B \rightarrow 2C$ with $M,N$ usually a non-negative integer less than 3. The factor $k(T)$ is called the rate constant even though it is not a constant (it depends quite strongly on temperature). The Arrhenius equation is a very commonly used empirical function which describes the temperature dependence of the rate constant. It is typically expressed by (\ref{eq_arrhenius}) with $E$ is the activation energy, $R$ the ideal gas constant and $k_a$ is the pre-exponential factor at the reference temperature $T_a$. 
+Up to now not much has been said about the reaction term $r_A$. Typically $r_A$ is formulated as a rate equation based on experimental evidence modelling reaction kinetics. It is possible for the rate ``law" to be quite complex in character but the most commonly encountered expressions for forward, irreversible reactions are based on power law kinetics \cite{delmar}. For example, it usually takes the form $-r_A=k(T)[C_A]^M$ for reactions of the form $A \rightarrow B$ or $-r_A=k(T)[C_A]^M[C_B]^N$ for reactions of the form $A + B \rightarrow 2C$ with $M,N$ usually a non-negative integer less than 3. The factor $k(T)$ is called the rate constant even though it is not a constant (it depends quite strongly on temperature). The Arrhenius equation is a very commonly used empirical function which describes the temperature dependence of the rate constant. It is typically expressed by (\ref{eq_arrhenius}) where $E$ is the activation energy, $R$ the ideal gas constant and $k_a$ is the pre-exponential factor at the reference temperature $T_a$. 
 \begin{equation}
 k(T) = k_a e^{(\frac{E}{R}(\frac{1}{T_a} - \frac{1}{T}))}
 \label{eq_arrhenius}
@@ -232,7 +232,7 @@ We also assume that $W_i|_z \approx U_z C_i$ which is equivalent to assuming tha
 \frac{\dot{Q}}{\delta V} + H_{rxn}r_A - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} =\sum C_i C_{p_i} \frac{\partial T}{\partial t}
 \label{eq_tcp5}
 \end{equation}
-Firstly, consider the case where the heat added to the system does not depend on the spatial dimensions (if $\dot{Q}$ is non-zero it is called non-adiabatic). In this case we can assume that in the limit as $\delta V \rightarrow 0 $ we have that $\frac{\dot{Q}}{\delta V} = U_a(T_a-T)$ where $U_a$ is the coefficient of conduction.
+Firstly, consider the case where the heat added to the system does not depend on the spatial dimensions (if $\dot{Q}$ is non-zero it is called non-adiabatic). In this case we can assume that in the limit as $\delta V \rightarrow 0 $ we have that $\frac{\dot{Q}}{\delta V} = U_a(T_a-T)$ where $U_a$ is the heat transfer coefficient.
 \begin{rmrk}
 The assumption that $\frac{\dot{Q}}{\delta V} = U_a(T_a-T)$ actually comes from a theoretical analysis of heat conduction, but since the focus of this project is on the CDR equation we just assume it. 
 \end{rmrk} 
@@ -241,11 +241,14 @@ This assumption results in the one dimensional non-adiabatic energy balance for 
 U_a(T_a-T) - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} + H_{rxn}r_A = \sum C_i C_{p_i} \frac{\partial T}{\partial t}
 \label{eq_baltb1}
 \end{equation}
-If we assume adiabatic conditions (\ref{eq_baltb1}) simplifies to (\ref{eq_baltb2}). 
+If we assume adiabatic conditions (\ref{eq_baltb1}) simplifies to (\ref{eq_baltb2}) where $X$ is the conversion of the limiting species and $C_{pm}$ is the average heat capacity of the system.
 \begin{equation}
-H_{rxn}r_A - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} = \sum C_i C_{p_i} \frac{\partial T}{\partial t}
+T = T_0 + \frac{-H_{rxn}X}{C_{pm}}
 \label{eq_baltb2}
 \end{equation}
+\begin{rmrk}
+The adiabatic energy balance actually has its roots in a simpler energy balance but, once again, for the sake of brevity we just assume the truth of (\ref{eq_baltb2}).
+\end{rmrk}
 Finally, we consider the case where the heat added has both radial and axial components. By assuming that the heat term can be written in vector form $\dot{Q} = q_r A_r \mathbf{e}_r + q_z A_z \mathbf{e}_z$  where $A_r$ and $A_z$ are the cross-sectional areas, and following the same procedure as before we have (\ref{eq_heat1}).
 \begin{equation}
 \frac{\dot{Q}}{\delta V} = -\frac{1}{r}\frac{\partial}{\partial r}(r q_r) - \frac{\partial}{\partial z}(q_z)
@@ -256,8 +259,95 @@ By substituting Fourier's laws, $q_r = -k_e\frac{\partial T}{\partial r}$ and $q
 \frac{k_e}{r}\frac{\partial}{\partial r}(\frac{r\partial T}{\partial r}) + k_e\frac{\partial ^2 T}{\partial z^2} + H_{rxn}r_A - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} =\sum C_i C_{p_i} \frac{\partial T}{\partial t}
 \label{eq_baltb3}
 \end{equation}
+Assuming further that the sum $\sum C_i C_{p_i} = C_{p_m}$ is constant and that we have laminar flow i.e. $U_z = 2U_0(1-(\frac{r}{R})^2) = U(r)$, we have a simplified model amenable to our purposes (\ref{eq_baltb4}).
+\begin{equation}
+k_e(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial T}{\partial r}) + \frac{\partial ^2 T}{\partial z^2}) - U(r) C_{p_m} \frac{\partial T}{\partial z} + H_{rxn}r_A = C_{p_m} \frac{\partial T}{\partial t}
+\label{eq_baltb4}
+\end{equation}
+\begin{rmrk}
+It is interesting to note the striking similarity between the two modelling equations (\ref{eq_baltb4}) and (\ref{eq_cdr}).
+\end{rmrk}
+\begin{rmrk}
+Boundary conditions are still required to completely formulate the model but this will be addressed in the next section.
+\end{rmrk}
+\begin{rmrk}
+In the non-adiabtic case one would also want to perform an energy balance on the cooling fluid (it would affect the $T_a$ term in (\ref{eq_baltb1}) and the boundary conditions for (\ref{eq_baltb4})) but to simplify our model even more we assume that the cooling mechanism/fluid has a much larger heat capacity than the reacting system and that it comes from an infinite reservoir at temperature $T_a$. This assumption is quite strong.
+\end{rmrk}
 
+\section{Problem Outline}
+The purpose of this project is to illustrate the use of the finite element method to solve various reactor modelling problems. Each subsequent problem increases the level of modelling complexity. 
 
+\subsection{Problem 1}
+In this problem Aris-Taylor analysis for laminar flow will be used to simplify the CDR equation. 
+\begin{defn}
+Aris-Taylor analysis is a procedure where the radial component of the CDR equation is lumped with the axial component resulting in a partial differential equation involving only one spatial variable. The lumped diffusion coefficient is defined as $D_a = D_{AB} + \frac{U^2R^2}{48D_{AB}}$.
+\end{defn}
+An isothermal, first order plug flow model with constant coefficients is assumed. This models the simple situation where $A \rightarrow B$. The full problem is shown in (\ref{eq_p1}).
+\begin{equation}
+\begin{aligned}
+&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
+&C_A(z=0, \cdot) = C_{A0} \\
+&\text{Initial Condition:} \\
+& C_A(\cdot, t= 0) = \beta(z)
+\end{aligned}
+\label{eq_p1}
+\end{equation}
+
+\subsection{Problem 2}
+In this problem the full CDR problem for the scheme $A \rightarrow B$ is solved using the same first order kinetics as before. The full problem is shown in (\ref{eq_p2}).
+\begin{equation}
+\begin{aligned}
+&D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t}\\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot, \cdot) = 0\\
+&\frac{\partial C_A}{\partial r}(\cdot, r = R, \cdot) = 0 \\
+&\frac{\partial C_A}{\partial r}(\cdot, r = 0, \cdot) = 0 \\
+&C_A(z=0,\cdot, \cdot) = C_{A0} \\
+&\text{Initial Condition:} \\
+& C_A(\cdot, \cdot, t= 0) = \beta(z)
+\end{aligned}
+\label{eq_p2}
+\end{equation}
+
+\subsection{Problem 3}
+In this problem the isothermal assumption is dropped and the somewhat weaker adiabatic assumption replaces it. The model for the scheme $A \rightarrow B$ now becomes (\ref{eq_p3}). Clearly this problem is very non-linear due to the exponential factor in the Arrhenius equation.
+\begin{equation}
+\begin{aligned}
+&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(C_A)C_A = \frac{\partial C_A}{\partial t} \\
+& \text{with }k(C_A) = k_0 \exp(\frac{E}{R}(\frac{1}{T_0}-\frac{1}{T})) \\
+& \text{and } T = T_0 + \frac{-H_{rxn}\frac{C_{A0}-C_A}{C_{A0}}}{C_{p_A}} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
+&C_A(z=0, \cdot) = C_{A0} \\
+&\text{Initial Condition:} \\
+& C_A(\cdot, t= 0) = \beta(z)
+\end{aligned}
+\label{eq_p3}
+\end{equation}
+
+\subsection{Problem 4}
+In this problem a coupled isothermal CDR equation is used to model the reaction scheme $A+B \rightarrow 2C$. The model is shown in (\ref{eq_p4}). 
+\begin{equation}
+\begin{aligned}
+&D_{e}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z} - kC_AC_B = \frac{\partial C_A}{\partial t}\\
+&D_{e}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_B}{\partial r}) + \frac{\partial^2 C_B}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_B}{\partial z} - kC_A C_B = \frac{\partial C_B}{\partial t}\\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot, \cdot) = 0\\
+&\frac{\partial C_A}{\partial r}(\cdot, r = R, \cdot) = 0 \\
+&\frac{\partial C_A}{\partial r}(\cdot, r = 0, \cdot) = 0 \\
+&C_A(z=0,\cdot, \cdot) = C_{A0} \\
+&\frac{\partial C_B}{\partial z}(z=L, \cdot, \cdot) = 0\\
+&\frac{\partial C_B}{\partial r}(\cdot, r = R, \cdot) = 0 \\
+&\frac{\partial C_B}{\partial r}(\cdot, r = 0, \cdot) = 0 \\
+&C_B(z=0,\cdot, \cdot) = C_{B0} \\
+&\text{Initial Condition:} \\
+& C_A(\cdot, \cdot, t= 0) = \beta(z)\\
+& C_B(\cdot, \cdot, t= 0) = \alpha(z)
+\end{aligned}
+\label{eq_p4}
+\end{equation}
 %References
 \newpage
 \bibliographystyle{plain}
