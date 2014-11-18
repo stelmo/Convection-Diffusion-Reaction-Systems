@@ -223,13 +223,39 @@ Now note that we can substitute in (\ref{eq_mb4}) (without the rotational term) 
 \frac{\dot{Q}}{\delta V} - \sum H_i r_i - \sum W_i|_z \frac{\partial H_i}{\partial z} =\sum C_i C_{p_i} \frac{\partial T}{\partial t}
 \label{eq_tcp4}
 \end{equation}
-Now note that $\sum H_i r_i = -H_{rxn}$ where $H_{rxn}$ is the heat of reaction which we assume constant in this project (physically it is the heat added by the reaction to the system per mole reacted). We also assume that $W_i|_z \approx U_z C_i$ which is equivalent to assuming that the convective component of the axial flux dominates the diffusional component. With these assumptions we have (\ref{eq_tcp5}).
+Now assume that $\sum H_i r_i = -H_{rxn}r_A$ where $H_{rxn}$ is the heat of reaction.
+\begin{rmrk}
+A more thorough derivation will show that it is not necessary to assume that $\sum H_i r_i = -H_{rxn}r_A$ since it follows from the definition of the reaction rate. However, we assume it for the sake of brevity. We also assume that the heat of reaction is constant in this project. Physically it is the heat added by the reaction to the system per mole reacted where the limiting species is A.
+\end{rmrk}
+We also assume that $W_i|_z \approx U_z C_i$ which is equivalent to assuming that the convective component of the axial flux dominates the diffusional component. With these assumptions we have (\ref{eq_tcp5}).
 \begin{equation}
-\frac{\dot{Q}}{\delta V} + H_{rxn} - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} =\sum C_i C_{p_i} \frac{\partial T}{\partial t}
+\frac{\dot{Q}}{\delta V} + H_{rxn}r_A - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} =\sum C_i C_{p_i} \frac{\partial T}{\partial t}
 \label{eq_tcp5}
 \end{equation}
-
-
+Firstly, consider the case where the heat added to the system does not depend on the spatial dimensions (if $\dot{Q}$ is non-zero it is called non-adiabatic). In this case we can assume that in the limit as $\delta V \rightarrow 0 $ we have that $\frac{\dot{Q}}{\delta V} = U_a(T_a-T)$ where $U_a$ is the coefficient of conduction.
+\begin{rmrk}
+The assumption that $\frac{\dot{Q}}{\delta V} = U_a(T_a-T)$ actually comes from a theoretical analysis of heat conduction, but since the focus of this project is on the CDR equation we just assume it. 
+\end{rmrk} 
+This assumption results in the one dimensional non-adiabatic energy balance for a tubular reactor shown in (\ref{eq_baltb1}).
+\begin{equation}
+U_a(T_a-T) - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} + H_{rxn}r_A = \sum C_i C_{p_i} \frac{\partial T}{\partial t}
+\label{eq_baltb1}
+\end{equation}
+If we assume adiabatic conditions (\ref{eq_baltb1}) simplifies to (\ref{eq_baltb2}). 
+\begin{equation}
+H_{rxn}r_A - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} = \sum C_i C_{p_i} \frac{\partial T}{\partial t}
+\label{eq_baltb2}
+\end{equation}
+Finally, we consider the case where the heat added has both radial and axial components. By assuming that the heat term can be written in vector form $\dot{Q} = q_r A_r \mathbf{e}_r + q_z A_z \mathbf{e}_z$  where $A_r$ and $A_z$ are the cross-sectional areas, and following the same procedure as before we have (\ref{eq_heat1}).
+\begin{equation}
+\frac{\dot{Q}}{\delta V} = -\frac{1}{r}\frac{\partial}{\partial r}(r q_r) - \frac{\partial}{\partial z}(q_z)
+\label{eq_heat1}
+\end{equation}
+By substituting Fourier's laws, $q_r = -k_e\frac{\partial T}{\partial r}$ and $q_z = -k_e\frac{\partial T}{\partial z}$ with $k_e$ the average coefficient of conduction of the species in the reactor, into (\ref{eq_heat1}) and combining this with (\ref{eq_tcp5}) we end up with the two dimensional non-adiabatic energy balance for a tubular reactor (\ref{eq_baltb3}).
+\begin{equation}
+\frac{k_e}{r}\frac{\partial}{\partial r}(\frac{r\partial T}{\partial r}) + k_e\frac{\partial ^2 T}{\partial z^2} + H_{rxn}r_A - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} =\sum C_i C_{p_i} \frac{\partial T}{\partial t}
+\label{eq_baltb3}
+\end{equation}
 
 
 %References
