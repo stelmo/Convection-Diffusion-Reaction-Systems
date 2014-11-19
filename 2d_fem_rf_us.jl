@@ -387,7 +387,7 @@ u1 = zeros(yN)
 # Left boundary condition
 for i=1:yN
   BB[:] = BB[:] +  (K1_const[:,i] + K2_const[:,i] + K3_const[:,i] + K4_const[:,i])#*(i/yN)^2
-  u1[i] = 1.0 # (i/yN)^2
+  u1[i] = 1.0 #(i/yN)^2
 end
 
 # Initial condition
