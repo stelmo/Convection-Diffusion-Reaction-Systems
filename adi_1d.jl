@@ -1,4 +1,4 @@
-# using PyPlot
+using PyPlot
 
 # Inputs
 a = 7.5 # Peclet number
