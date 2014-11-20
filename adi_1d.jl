@@ -1,16 +1,19 @@
-using PyPlot
+# using PyPlot
 
 # Inputs
 a = 7.5 # Peclet number
 b = 5.129 #  L/U
 
-N = 10 # number of nodes
+N = 100 # number of nodes
 xs = linspace(0., 1., N)
 h = xs[2] - xs[1]
 
 # Linearised functions
-kT(x) = 533253.0*exp(-4881.*(1./(300.+100.*(1.-x))))
-kTd(x) = (kT(x+0.0001)-kT(x))/0.0001 # derivative approximation
+# kT(x) = -1.75*x + 2.
+# kT(x) = -3.*x+3.2
+# kT(x) = (3.)*x.^2 -6.*x + 3.2
+kT(x) = 633253.0*exp(-4881.*(1./(300.+100.*(1.-x))))
+kTd(x) = (kT(x+0.00001)-kT(x))/0.00001 # derivative approximation
 #2 910 122.0
 
 # Guess a solution
@@ -20,36 +23,49 @@ for i=2:N
   u0[i] =u0[i-1]*0.8
 end
 
-for newton=1:200
-  # Symmetric diffusion matrices
-  dm = fill(2./h, N)
-  dm[1] = 1./h
-  dm[end] = 1./h
+# Symmetric diffusion matrices
+dm = fill(2./h, N)
+dm[1] = 1./h
+dm[end] = 1./h
 
-  dl = fill(-1./h, N-1)
-  du = fill(-1./h, N-1)
+dl = fill(-1./h, N-1)
+du = fill(-1./h, N-1)
 
-  K1 = diagm(dl,-1) + diagm(dm, 0) + diagm(du, 1)
-  # Now modify K1 to conform
-  K1 = K1[2:end, :]
-  K3 = copy(K1)
-  K1 = -1.*K1
+K1 = diagm(dl,-1) + diagm(dm, 0) + diagm(du, 1)
+# Now modify K1 to conform
+K1 = K1[2:end, :]
+K3 = copy(K1)
+K1 = -1.*K1
 
-  # Anti-symmetric convection matrices
-  dm2 = fill(0., N)
-  dm2[1] = -0.5
-  dm2[end] = 0.5
+# Anti-symmetric convection matrices
+dm2 = fill(0., N)
+dm2[1] = -0.5
+dm2[end] = 0.5
 
-  dl2 = fill(-0.5, N-1)
-  du2 = fill(0.5, N-1)
+dl2 = fill(-0.5, N-1)
+du2 = fill(0.5, N-1)
 
-  K2 = diagm(dl2,-1) + diagm(dm2, 0) + diagm(du2, 1)
-  # Now modify K1 to conform
-  K2 = K2[2:end, :]
-  K4 = copy(K2)
-  K4 = a*K4
-  K2 = -a*K2
+K2 = diagm(dl2,-1) + diagm(dm2, 0) + diagm(du2, 1)
+# Now modify K1 to conform
+K2 = K2[2:end, :]
+K4 = copy(K2)
+K4 = a*K4
+K2 = -a*K2
 
+
+# Conform the constant matrices
+K1 = K1[:, 2:end]
+K2 = K2[:, 2:end]
+
+
+newtonFlag = true
+counter = 0
+alpha = 0.8 # slow down NR - dampening
+maxIter = 1000
+
+while newtonFlag
+
+  # Assemble the non-linear non-constant matrices
   # Non-linear reaction matrices
   dm3 = fill(2.*h/3., N)
   dm3[1] = h/3.
@@ -63,6 +79,7 @@ for newton=1:200
   K6 = copy(K5)
   K6 = a*b*K6
   K5 = -a*b*K5
+
   for row=1:N-1
     K6[row, :] = kT(u0[row])*K6[row, :]
     K5[row, :] = kT(u0[row])*K5[row, :]
@@ -91,18 +108,17 @@ for newton=1:200
 
   B1 = (K3 + K4 + K6)*u0
 
-  K1 = K1[:, 2:end]
-  K2 = K2[:, 2:end]
   K5 = K5[:, 2:end]
   K7 = K7[:, 2:end]
   # du0 = 0 because we know u0 = 1 = u
 
   KK = K1 + K2 + K5 + K7
   du = \(KK, B1)
-  u0 = u0 + [0., du]
+  u0 = u0 + alpha*[0., du]
 
+  (abs(maximum(du)) < 1.E-05 || counter > maxIter) ? newtonFlag = false : newtonFlag = true
+  counter += 1
 end
-
 
 u0
 
