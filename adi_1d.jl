@@ -6,8 +6,8 @@
 using PyPlot
 
 # Inputs
-a = 7.5 # Peclet number
-b = 5.129 #  L/U
+a = 1. # 7.5 # Peclet number
+b = 1. #5.129 #  L/U
 
 N = 5 # number of nodes
 xs = linspace(0., 1., N)
@@ -22,47 +22,64 @@ u0 = zeros(N)
 u0[1] = 1.
 u0[2] = 0.6
 
-for newton=1:4
 
-  dm = fill(2./h, N)
-  dm[1] = 1./h  - a/2.
-  dm[end] = 1./h + a/2.
+# Symmetric diffusion matrices
+dm = fill(2./h, N)
+dm[1] = 1./h
+dm[end] = 1./h
 
-  dl = fill(-1./h - a/2., N-1)
-  du = fill(-1./h + a/2., N-1)
+dl = fill(-1./h, N-1)
+du = fill(-1./h, N-1)
 
-  K1 = diagm(dl,-1) + diagm(dm, 0) + diagm(du, 1) #what a pity we can't use Tridiagonal like this :(
-  # Now modify K1 to conform
-  K1 = -1.*K1
-  K1 = K1[2:end,:]
-  B1 = K1[:,1]
-  K1 = K1[:,2:end]
+K1 = diagm(dl,-1) + diagm(dm, 0) + diagm(du, 1)
+# Now modify K1 to conform
+K1 = K1[2:end, :]
+K3 = copy(K1)
+K1 = -1.*K1
 
-  dm2 = fill(2./3.*h, N)
-  dm2[1] = 1./3.*h
-  dm2[end] = 1./3.*h
+# Anti-symmetric convection matrices
+dm2 = fill(0., N)
+dm2[1] = -0.5
+dm2[end] = 0.5
 
-  dl2 = fill(1./6.*h, N-1)
-  du2 = fill(1./6.*h, N-1)
+dl2 = fill(-0.5, N-1)
+du2 = fill(0.5, N-1)
 
-  K2 = diagm(dl2,-1) + diagm(dm2, 0) + diagm(du2, 1)
-  K3 = diagm(dl2,-1) + diagm(dm2, 0) + diagm(du2, 1)
+K2 = diagm(dl2,-1) + diagm(dm2, 0) + diagm(du2, 1)
+# Now modify K1 to conform
+K2 = K2[2:end, :]
+K4 = copy(K2)
+K4 = a*K4
+K2 = -a*K2
 
-  for j=1:N
-    K2[:,j] = -a*b*kT(u0[j])
-    K3[:,j] = -a*b*kTd(u0[j])*u0[j]
-  end
+# Non-linear reaction matrices
+dm3 = fill(2.*h/3., N)
+dm3[1] = h/3.
+dm3[end] = h/3.
 
-  K2 = K2[2:end,:]
-  B2 = K2[:,1]
-  K2 = K2[:,2:end]
+dl3 = fill(h/6., N-1)
+du3 = fill(h/6., N-1)
 
-  K3 = K3[2:end,:]
-  B3 = K3[:,1]
-  K3 = K3[:,2:end]
+K5 = diagm(dl3,-1) + diagm(dm3, 0) + diagm(du3, 1)
+K5 = K5[2:end, :]
 
-  K = K1 + K2 + K3
-  Bleft = B1 + B2 + B3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # plt.show()
