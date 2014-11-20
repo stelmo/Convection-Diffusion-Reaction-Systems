@@ -40,10 +40,10 @@ m[end] = (1./3.)*h
 md = fill((1./6.)*h, N-1)
 
 M = Tridiagonal(md, m, md)
-
+M = a*M
 # Now start the time series
 Nt = 50
-ts = linspace(0., 0.2, Nt) # this is dimensionless time... but it reaches steady quickly
+ts = linspace(0., 2., Nt) # this is dimensionless time... It also takes long...
 dt = ts[2] - ts[1]
 
 us = zeros(N+1, Nt)
