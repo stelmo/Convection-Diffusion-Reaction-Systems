@@ -54,6 +54,8 @@ K2 = -a*K2
 
 
 # Conform the constant matrices
+g1 = K1[:,1]
+g2 = K2[:, 1]
 K1 = K1[:, 2:end]
 K2 = K2[:, 2:end]
 
