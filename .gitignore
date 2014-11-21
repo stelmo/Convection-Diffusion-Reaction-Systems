@@ -1,2 +1,9 @@
 # Ignore these files
 *.pdf
+*.aux
+*.bbl
+*.gz
+*.toc
+*.blg
+*.log
+
