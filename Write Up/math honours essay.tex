@@ -241,7 +241,7 @@ This assumption results in the one dimensional non-adiabatic energy balance for 
 U_a(T_a-T) - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} + H_{rxn}r_A = \sum C_i C_{p_i} \frac{\partial T}{\partial t}
 \label{eq_baltb1}
 \end{equation}
-If we assume adiabatic conditions (\ref{eq_baltb1}) simplifies to (\ref{eq_baltb2}) where $X$ is the conversion of the limiting species and $C_{pm}$ is the average heat capacity of the system.
+If we assume adiabatic conditions (\ref{eq_baltb1}) simplifies to (\ref{eq_baltb2}) where $X$ is the conversion of the limiting species and $C_{pm}$ is the average heat capacity of the system (which is constant).
 \begin{equation}
 T = T_0 + \frac{-H_{rxn}X}{C_{pm}}
 \label{eq_baltb2}
@@ -278,9 +278,9 @@ In the non-adiabtic case one would also want to perform an energy balance on the
 The purpose of this project is to illustrate the use of the finite element method to solve various reactor modelling problems. Each subsequent problem increases the level of modelling complexity. 
 
 \subsection{Problem 1}
-In this problem Aris-Taylor analysis for laminar flow will be used to simplify the CDR equation. 
+In this problem Aris-Taylor approximation for a tubular reactor under a laminar flow regime will be used to simplify the CDR equation. 
 \begin{defn}
-Aris-Taylor analysis is a procedure where the radial component of the CDR equation is lumped with the axial component resulting in a partial differential equation involving only one spatial variable. The lumped diffusion coefficient is defined as $D_a = D_{AB} + \frac{U^2R^2}{48D_{AB}}$.
+Aris-Taylor approximation is a procedure where the radial component of the CDR equation is lumped with the axial component resulting in a partial differential equation involving only one spatial variable. The lumped diffusion coefficient is defined as $D_a = D_{AB} + \frac{U^2R^2}{48D_{AB}}$.
 \end{defn}
 An isothermal, first order plug flow model with constant coefficients is assumed. This models the simple situation where $A \rightarrow B$. The full problem is shown in (\ref{eq_p1}).
 \begin{equation}
@@ -296,7 +296,7 @@ An isothermal, first order plug flow model with constant coefficients is assumed
 \end{equation}
 
 \subsection{Problem 2}
-In this problem the full CDR problem for the scheme $A \rightarrow B$ is solved using the same first order kinetics as before. The full problem is shown in (\ref{eq_p2}).
+In this problem the full CDR problem for the scheme $A \rightarrow B$ is solved using the same first order kinetics as before. The two dimensional problem is shown in (\ref{eq_p2}).
 \begin{equation}
 \begin{aligned}
 &D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t}\\
@@ -328,7 +328,7 @@ In this problem the isothermal assumption is dropped and the somewhat weaker adi
 \end{equation}
 
 \subsection{Problem 4}
-In this problem the isothermal assumption is dropped and the somewhat weaker adiabatic assumption replaces it. The model for the scheme $A + B \rightarrow 2C$ now becomes (\ref{eq_p4}). 
+In this problem the isothermal assumption again supposed. The model for the scheme $A + B \rightarrow 2C$ is shown in (\ref{eq_p4}). 
 \begin{equation}
 \begin{aligned}
 &D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B = \frac{\partial C_A}{\partial t} \\
@@ -345,27 +345,44 @@ In this problem the isothermal assumption is dropped and the somewhat weaker adi
 \label{eq_p4}
 \end{equation}
 
-\subsection{Problem 7}
-In this problem a coupled isothermal CDR equation is used to model the reaction scheme $A+B \rightarrow 2C$. The model is shown in (\ref{eq_p7}). 
+\subsection{Problem 5}
+In this problem the isothermal assumption is dropped and a more general non-adiabatic system is modelled. The model for the scheme $A \rightarrow B$ now becomes (\ref{eq_p5}). 
 \begin{equation}
 \begin{aligned}
-&D_{e}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z} - kC_AC_B = \frac{\partial C_A}{\partial t}\\
-&D_{e}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_B}{\partial r}) + \frac{\partial^2 C_B}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_B}{\partial z} - kC_A C_B = \frac{\partial C_B}{\partial t}\\
+&D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(T)C_A = \frac{\partial C_A}{\partial t} \\
+& U_a(T_a-T) - U C_{p_m} \frac{\partial T}{\partial z} + H_{rxn}k(T)C_A = C_{p_m} \frac{\partial T}{\partial t} \\
 &\text{Boundary Conditions:} \\
-&\frac{\partial C_A}{\partial z}(z=L, \cdot, \cdot) = 0\\
-&\frac{\partial C_A}{\partial r}(\cdot, r = R, \cdot) = 0 \\
-&\frac{\partial C_A}{\partial r}(\cdot, r = 0, \cdot) = 0 \\
-&C_A(z=0,\cdot, \cdot) = C_{A0} \\
-&\frac{\partial C_B}{\partial z}(z=L, \cdot, \cdot) = 0\\
-&\frac{\partial C_B}{\partial r}(\cdot, r = R, \cdot) = 0 \\
-&\frac{\partial C_B}{\partial r}(\cdot, r = 0, \cdot) = 0 \\
-&C_B(z=0,\cdot, \cdot) = C_{B0} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
+&C_A(z=0, \cdot) = C_{A0} \\
+&\frac{\partial T}{\partial z}(z=L, \cdot) = 0\\
+&T(z=0, \cdot) = T_0\\
 &\text{Initial Condition:} \\
-& C_A(\cdot, \cdot, t= 0) = \beta(z)\\
-& C_B(\cdot, \cdot, t= 0) = \alpha(z)
+& C_A(\cdot, t= 0) = \alpha(z) \\
+& T(\cdot, t= 0) = \beta(z)
 \end{aligned}
-\label{eq_p7}
+\label{eq_p5}
 \end{equation}
+
+\subsection{Problem 6}
+In this problem a general non-adiabatic model of the coupled scheme $A + B \rightarrow 2C$ is modelled by (\ref{eq_p6}). 
+\begin{equation}
+\begin{aligned}
+&D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B = \frac{\partial C_A}{\partial t} \\
+&D_e \frac{\partial^2 C_B}{\partial z^2} - U \frac{\partial C_B}{\partial z} - kC_AC_B = \frac{\partial C_B}{\partial t} \\
+& U_a(T_a-T) - U C_{p_m} \frac{\partial T}{\partial z} + H_{rxn}k(T)C_AC_B = C_{p_m} \frac{\partial T}{\partial t} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
+&C_A(z=0, \cdot) = C_{A0} \\
+&\frac{\partial C_B}{\partial z}(z=L, \cdot) = 0\\
+&C_B(z=0, \cdot) = C_{B0} \\
+&\text{Initial Condition:} \\
+& C_A(\cdot, t= 0) = \alpha(z) \\
+& C_B(\cdot, t= 0) = \beta(z)
+\end{aligned}
+\label{eq_p6}
+\end{equation}
+
+
 %References
 \newpage
 \bibliographystyle{plain}
