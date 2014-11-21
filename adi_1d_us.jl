@@ -8,8 +8,8 @@ N = 100 # number of nodes - need many of these
 xs = linspace(0., 1., N)
 h = xs[2] - xs[1]
 
-Nt = 50
-ts = linspace(0., 2., Nt) # this is dimensionless time... It also takes long...
+Nt = 100
+ts = linspace(0., 1., Nt) # this is dimensionless time... It also takes long...
 dt = ts[2] - ts[1]
 
 us = zeros(N, Nt)
@@ -19,11 +19,11 @@ us = zeros(N, Nt)
 # kT(x) = -1.75*x + 2.
 # kT(x) = -3.*x+3.2
 # kT(x) = (3.)*x.^2 -6.*x + 3.2
-# kT(x) = 1633253.0*exp(-4881.*(1./(300.+100.*(1.-x)))) # should be 2 910 122.0
+kT(x) = 1633253.0*exp(-4881.*(1./(300.+100.*(1.-x)))) # should be 2 910 122.0
 kTd(x) = (kT(x+0.00001)-kT(x))/0.00001 # derivative approximation
 
 # Initial Condition
-finit(x) = exp(-x*10)#4.0.*x.^2 -4.0.*x +1 # # Initial condition
+finit(x) = exp(-x*100) # 4.0.*x.^2 -4.0.*x +1 # ## Initial condition
 us[:,1] = finit(xs) # Initial condition
 
 # Symmetric diffusion matrices
@@ -133,10 +133,10 @@ for tloop=2:Nt
 
 end
 
-mesh(xs, ts, us')
-xlabel("Space")
-ylabel("Time")
+# mesh(xs, ts, us')
+# xlabel("Space")
+# ylabel("Time")
 
-# plot(xs, us[:, end])
+plot(xs, us[:, end])
 
 plt.show()
