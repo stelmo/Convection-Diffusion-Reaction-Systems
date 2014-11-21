@@ -316,7 +316,7 @@ In this problem the isothermal assumption is dropped and the somewhat weaker adi
 \begin{equation}
 \begin{aligned}
 &D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(C_A)C_A = \frac{\partial C_A}{\partial t} \\
-& \text{with }k(C_A) = k_0 \exp(\frac{E}{R}(\frac{1}{T_0}-\frac{1}{T})) \\
+& \text{with }k(C_A) = k_0 \exp(\frac{-E}{RT}) \\
 & \text{and } T = T_0 + \frac{-H_{rxn} (1-\frac{C_A}{C_{A0}})}{C_{p_A}} \\
 &\text{Boundary Conditions:} \\
 &\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
@@ -328,7 +328,25 @@ In this problem the isothermal assumption is dropped and the somewhat weaker adi
 \end{equation}
 
 \subsection{Problem 4}
-In this problem a coupled isothermal CDR equation is used to model the reaction scheme $A+B \rightarrow 2C$. The model is shown in (\ref{eq_p4}). 
+In this problem the isothermal assumption is dropped and the somewhat weaker adiabatic assumption replaces it. The model for the scheme $A + B \rightarrow 2C$ now becomes (\ref{eq_p4}). 
+\begin{equation}
+\begin{aligned}
+&D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B = \frac{\partial C_A}{\partial t} \\
+&D_e \frac{\partial^2 C_B}{\partial z^2} - U \frac{\partial C_B}{\partial z} - kC_AC_B = \frac{\partial C_B}{\partial t} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
+&C_A(z=0, \cdot) = C_{A0} \\
+&\frac{\partial C_B}{\partial z}(z=L, \cdot) = 0\\
+&C_B(z=0, \cdot) = C_{B0} \\
+&\text{Initial Condition:} \\
+& C_A(\cdot, t= 0) = \alpha(z) \\
+& C_B(\cdot, t= 0) = \beta(z)
+\end{aligned}
+\label{eq_p4}
+\end{equation}
+
+\subsection{Problem 7}
+In this problem a coupled isothermal CDR equation is used to model the reaction scheme $A+B \rightarrow 2C$. The model is shown in (\ref{eq_p7}). 
 \begin{equation}
 \begin{aligned}
 &D_{e}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z} - kC_AC_B = \frac{\partial C_A}{\partial t}\\
@@ -346,7 +364,7 @@ In this problem a coupled isothermal CDR equation is used to model the reaction 
 & C_A(\cdot, \cdot, t= 0) = \beta(z)\\
 & C_B(\cdot, \cdot, t= 0) = \alpha(z)
 \end{aligned}
-\label{eq_p4}
+\label{eq_p7}
 \end{equation}
 %References
 \newpage
