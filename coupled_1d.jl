@@ -8,7 +8,7 @@ b1 = 6.36^2 * Cb0 * 0.25 / 1.05
 b2 = 6.36^2 * Ca0 * 0.25 / 1.05
 
 
-N = 100 # number of nodes - need many of these
+N = 10 # number of nodes - need many of these
 xs = linspace(0., 1., N)
 h = xs[2] - xs[1]
 
@@ -58,7 +58,7 @@ K0 = zeros(N-1, N)
 newtonFlag = true
 counter = 0
 alpha = 0.8 # slow down NR - dampening
-maxIter = 10
+maxIter = 1000
 
 while newtonFlag
 # Semi-symmetric reaction matrices - depends on the interation number!
@@ -119,7 +119,7 @@ while newtonFlag
   u0 = u0 + alpha*[0.0, duw[1:N-1]]
   w0 = w0 + alpha*[0.0, duw[N:end]]
 
-  (abs(maximum(du)) < 1.E-05 || counter > maxIter) ? newtonFlag = false : newtonFlag = true
+  (abs(maximum(duw)) < 1.E-05 || counter > maxIter) ? newtonFlag = false : newtonFlag = true
   counter += 1
 end
 
