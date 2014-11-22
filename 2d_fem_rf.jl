@@ -381,6 +381,13 @@ u = \(KK, BB)
 u = [u1, u]
 u = reshape(u, (yN, xN))
 
+# Get average concentration
+aveconv = 0.0
+for i=1:yN
+  aveconv += 2.*dy*ys[i]*u[i,end]
+end
+println(1.-aveconv)
+
 contourf(xs, reverse(ys), u, 20)
 colorbar()
 xlabel("Axial Distance")

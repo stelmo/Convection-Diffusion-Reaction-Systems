@@ -9,7 +9,7 @@ using PyPlot
 a = 7.5 # Peclet number
 b = 1.29 # Damkohler number
 
-N = 10
+N = 40
 xs = linspace(0., 1., N+1)
 h = xs[2] - xs[1]
 

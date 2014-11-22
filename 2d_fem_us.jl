@@ -6,7 +6,7 @@ xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
 yN = 20 # Number of elements - 1
-ys = linspace(0., 1., yN)
+ys = linspace(0., 5., yN)
 dy = ys[2] - ys[1]
 
 tN = 20
@@ -367,8 +367,8 @@ u1 = zeros(yN)
 
 # Left boundary condition
 for i=1:yN
-  BB[:] = BB[:] +  (K1_const[:,i] + K2_const[:,i] + K3_const[:,i] + K4_const[:,i])*(i/yN)^2
-  u1[i] = (i/yN)^2
+  BB[:] = BB[:] +  (K1_const[:,i] + K2_const[:,i] + K3_const[:,i] + K4_const[:,i])#*(i/yN)^2
+  u1[i] = 1.0# (i/yN)^2
 end
 
 # Initial condition

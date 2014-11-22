@@ -1,15 +1,15 @@
 # Two dimensional problem - plug flow case + steady state
 using PyPlot
 
-xN = 20 # Number of elements - 1
+xN = 15 # Number of elements - 1
 xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
-yN = 20 # Number of elements - 1
+yN = 15 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
-tN = 20
+tN = 15
 ts = linspace(0., 5., tN) # it takes long to reach SS. Try 5.0 for the end time.
 dt = ts[2] - ts[1]
 
@@ -366,7 +366,7 @@ K2_const = K2[:, 1:yN]
 K2 = K2[:, yN+1:end]
 
 # Strip out unnecessary rows for K4
-K3 = -(U0/L)*K3[yN+1:end, :]
+K3 = -(2.*U0/L)*K3[yN+1:end, :]
 K3_const = K3[:, 1:yN]
 K3 = K3[:, yN+1:end]
 
@@ -445,3 +445,10 @@ xlabel("Axial Distance")
 ylabel("Radial Distance")
 
 plt.show()
+
+# Get average concentration
+aveconv = 0.0
+for i=1:yN
+  aveconv += 2.*dy*ys[i]*u[i,end]
+end
+println(1.-aveconv)
