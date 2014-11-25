@@ -419,27 +419,27 @@ end
 # Start
 figure(1)
 u = reshape(u_profile[:, 1], (yN, xN-1))
-u = [u1 u]
-contourf(xs, reverse(ys), u, 20)
+u1 = [u1 u]
+contourf(xs, reverse(ys), u1, 20)
 colorbar()
 xlabel("Axial Distance")
 ylabel("Radial Distance")
 
-# Middle
-figure(2)
-mid = int((tN/2))
-u = reshape(u_profile[:, mid], (yN, xN-1))
-u = [u1 u]
-contourf(xs, reverse(ys), u, 20)
-colorbar()
-xlabel("Axial Distance")
-ylabel("Radial Distance")
+# Middles
+# figure(2)
+# mid = int((tN/2))
+# u = reshape(u_profile[:, 2], (yN, xN-1))
+# u2 = [u1 u]
+# contourf(xs, reverse(ys), u2, 20)
+# colorbar()
+# xlabel("Axial Distance")
+# ylabel("Radial Distance")
 
 # End
 figure(3)
 u = reshape(u_profile[:, end], (yN, xN-1))
-u = [u1 u]
-contourf(xs, reverse(ys), u, 20)
+u3 = [u1 u]
+contourf(xs, reverse(ys), u3, 20)
 colorbar()
 xlabel("Axial Distance")
 ylabel("Radial Distance")
@@ -447,8 +447,8 @@ ylabel("Radial Distance")
 plt.show()
 
 # Get average concentration
-aveconv = 0.0
-for i=1:yN
-  aveconv += 2.*dy*ys[i]*u[i,end]
-end
-println(1.-aveconv)
+# aveconv = 0.0
+# for i=1:yN
+#   aveconv += 2.*dy*ys[i]*u[i,end]
+# end
+# println(1.-aveconv)
