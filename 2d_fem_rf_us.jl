@@ -1,15 +1,15 @@
 # Two dimensional problem - plug flow case + steady state
 using PyPlot
 
-xN = 15 # Number of elements - 1
+xN = 30 # Number of elements - 1
 xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
-yN = 15 # Number of elements - 1
+yN = 30 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
-tN = 15
+tN = 30
 ts = linspace(0., 5., tN) # it takes long to reach SS. Try 5.0 for the end time.
 dt = ts[2] - ts[1]
 
@@ -419,27 +419,27 @@ end
 # Start
 figure(1)
 u = reshape(u_profile[:, 1], (yN, xN-1))
-u1 = [u1 u]
-contourf(xs, reverse(ys), u1, 20)
+u11 = [u1 u]
+contourf(xs, reverse(ys), u11, 20)
 colorbar()
 xlabel("Axial Distance")
 ylabel("Radial Distance")
 
 # Middles
-# figure(2)
-# mid = int((tN/2))
-# u = reshape(u_profile[:, 2], (yN, xN-1))
-# u2 = [u1 u]
-# contourf(xs, reverse(ys), u2, 20)
-# colorbar()
-# xlabel("Axial Distance")
-# ylabel("Radial Distance")
+figure(2)
+mid = int((tN/2))
+u = reshape(u_profile[:, 2], (yN, xN-1))
+u22 = [u1 u]
+contourf(xs, reverse(ys), u22, 20)
+colorbar()
+xlabel("Axial Distance")
+ylabel("Radial Distance")
 
 # End
 figure(3)
 u = reshape(u_profile[:, end], (yN, xN-1))
-u3 = [u1 u]
-contourf(xs, reverse(ys), u3, 20)
+u33 = [u1 u]
+contourf(xs, reverse(ys), u33, 20)
 colorbar()
 xlabel("Axial Distance")
 ylabel("Radial Distance")

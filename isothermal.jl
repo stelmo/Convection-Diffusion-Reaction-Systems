@@ -10,12 +10,13 @@ De = 7.6E-05
 U = 1.24
 
 
-N = 50
-Nt = 50
+N = 20
+Nt = 20
+timeEnd = 5.
 xs = linspace(0., 1., N+1)
-ts = linspace(0., 5., Nt)
+ts = linspace(0., timeEnd, Nt)
 
-function fem_1d(k, L, R, De, U, N, Nt)
+function fem_1d(k, L, R, De, U, N, Nt, timeEnd)
 
   Da = De + (U^2 * R^2 )/(48*De)
   a = U*L/Da
@@ -55,7 +56,7 @@ function fem_1d(k, L, R, De, U, N, Nt)
   M = a*M
 
   # Now start the time series
-  ts = linspace(0., 5., Nt) # this is dimensionless time... It also takes long...
+  ts = linspace(0., timeEnd, Nt) # this is dimensionless time... It also takes long...
   dt = ts[2] - ts[1]
 
   us = zeros(N+1, Nt)
@@ -77,7 +78,7 @@ function fem_1d(k, L, R, De, U, N, Nt)
   return us
 end
 
-function fem_2d(kreact, L, R, De, U, N, Nt)
+function fem_2d(kreact, L, R, De, U, N, Nt, timeEnd)
 
   xN = N+1 # because for some reason I have + 1 in the 1D case
   xs = linspace(0., 1., xN)
@@ -88,7 +89,7 @@ function fem_2d(kreact, L, R, De, U, N, Nt)
   dy = ys[2] - ys[1]
 
   tN = Nt
-  ts = linspace(0., 5., tN) # it takes long to reach SS. Try 5.0 for the end time.
+  ts = linspace(0., timeEnd, tN) # it takes long to reach SS. Try 5.0 for the end time.
   dt = ts[2] - ts[1]
 
   reaction_constant = kreact # should be 0.25
@@ -510,51 +511,14 @@ function fem_2d(kreact, L, R, De, U, N, Nt)
   return uave
 end
 
+us_1d = fem_1d(k, L, R, De, U, N, Nt, timeEnd)
+us_2d = fem_2d(k, L, R, De, U, N, Nt, timeEnd)
+us_1d = round(us_1d, 3)
+us_2d = round(us_2d, 3)
 
-
-us_1d = fem_1d(k, L, R, De, U, N, Nt)
-us_2d = fem_2d(k, L, R, De, U, 30, 30)
-
-
-
-
-# # Start
-# figure(1)
-# u = reshape(u_profile[:, 1], (yN, xN-1))
-# u = [u1 u]
-# contourf(xs, reverse(ys), u, 20)
-# colorbar()
-# xlabel("Axial Distance")
-# ylabel("Radial Distance")
-#
-# # Middle
-# figure(2)
-# mid = int((tN/2))
-# u = reshape(u_profile[:, mid], (yN, xN-1))
-# u = [u1 u]
-# contourf(xs, reverse(ys), u, 20)
-# colorbar()
-# xlabel("Axial Distance")
-# ylabel("Radial Distance")
-#
-# # End
-# figure(3)
-# u = reshape(u_profile[:, end], (yN, xN-1))
-# u = [u1 u]
-# contourf(xs, reverse(ys), u, 20)
-# colorbar()
-# xlabel("Axial Distance")
-# ylabel("Radial Distance")
-#
-# plt.show()
-#
-# # Get average concentration
-# aveconv = 0.0
-# for i=1:yN
-#   aveconv += 2.*dy*ys[i]*u[i,end]
-# end
-# println(1.-aveconv)
-
-
-
+per_err = round(us_2d-us_1d, 3)*100.
+contourf(xs, ts, per_err', 20)
+colorbar()
+xlabel("Axial Distance")
+ylabel("Time")
 plt.show()
