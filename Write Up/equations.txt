@@ -1,0 +1,102 @@
+\subsection{Problem 1}
+In this problem Aris-Taylor approximation for a tubular reactor under a laminar flow regime will be used to simplify the CDR equation. 
+
+An isothermal, first order plug flow model with constant coefficients is assumed. This models the simple situation where $A \rightarrow B$. The full problem is shown in (\ref{eq_p1}).
+\begin{equation}
+\begin{aligned}
+&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
+&C_A(z=0, \cdot) = C_{A0} \\
+&\text{Initial Condition:} \\
+& C_A(\cdot, t= 0) = \beta(z)
+\end{aligned}
+\label{eq_p1}
+\end{equation}
+
+\subsection{Problem 2}
+In this problem the full CDR problem for the scheme $A \rightarrow B$ is solved using the same first order kinetics as before. The two dimensional problem is shown in (\ref{eq_p2}).
+\begin{equation}
+\begin{aligned}
+&D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t}\\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot, \cdot) = 0\\
+&\frac{\partial C_A}{\partial r}(\cdot, r = R, \cdot) = 0 \\
+&\frac{\partial C_A}{\partial r}(\cdot, r = 0, \cdot) = 0 \\
+&C_A(z=0,\cdot, \cdot) = C_{A0} \\
+&\text{Initial Condition:} \\
+& C_A(\cdot, \cdot, t= 0) = \beta(z)
+\end{aligned}
+\label{eq_p2}
+\end{equation}
+
+\subsection{Problem 3}
+In this problem the isothermal assumption is dropped and the somewhat weaker adiabatic assumption replaces it. The model for the scheme $A \rightarrow B$ now becomes (\ref{eq_p3}). Clearly this problem is very non-linear due to the exponential factor in the Arrhenius equation.
+\begin{equation}
+\begin{aligned}
+&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(C_A)C_A = \frac{\partial C_A}{\partial t} \\
+& \text{with }k(C_A) = k_0 \exp(\frac{-E}{RT}) \\
+& \text{and } T = T_0 + \frac{-H_{rxn} (1-\frac{C_A}{C_{A0}})}{C_{p_A}} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
+&C_A(z=0, \cdot) = C_{A0} \\
+&\text{Initial Condition:} \\
+& C_A(\cdot, t= 0) = \beta(z)
+\end{aligned}
+\label{eq_p3}
+\end{equation}
+
+\subsection{Problem 4}
+In this problem the isothermal assumption again supposed. The model for the scheme $A + B \rightarrow 2C$ is shown in (\ref{eq_p4}). 
+\begin{equation}
+\begin{aligned}
+&D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B = \frac{\partial C_A}{\partial t} \\
+&D_e \frac{\partial^2 C_B}{\partial z^2} - U \frac{\partial C_B}{\partial z} - kC_AC_B = \frac{\partial C_B}{\partial t} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
+&C_A(z=0, \cdot) = C_{A0} \\
+&\frac{\partial C_B}{\partial z}(z=L, \cdot) = 0\\
+&C_B(z=0, \cdot) = C_{B0} \\
+&\text{Initial Condition:} \\
+& C_A(\cdot, t= 0) = \alpha(z) \\
+& C_B(\cdot, t= 0) = \beta(z)
+\end{aligned}
+\label{eq_p4}
+\end{equation}
+
+\subsection{Problem 5}
+In this problem the isothermal assumption is dropped and a more general non-adiabatic system is modelled. The model for the scheme $A \rightarrow B$ is shown in (\ref{eq_p5}). 
+\begin{equation}
+\begin{aligned}
+&D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(T)C_A = \frac{\partial C_A}{\partial t} \\
+& U_a(T_a-T) - U C_{p_m} \frac{\partial T}{\partial z} + H_{rxn}k(T)C_A = C_{p_m} \frac{\partial T}{\partial t} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
+&C_A(z=0, \cdot) = C_{A0} \\
+&\frac{\partial T}{\partial z}(z=L, \cdot) = 0\\
+&T(z=0, \cdot) = T_0\\
+&\text{Initial Condition:} \\
+& C_A(\cdot, t= 0) = \alpha(z) \\
+& T(\cdot, t= 0) = \beta(z)
+\end{aligned}
+\label{eq_p5}
+\end{equation}
+
+\subsection{Problem 6}
+In this problem a general non-adiabatic model of the coupled scheme $A + B \rightarrow 2C$ is modelled by (\ref{eq_p6}). 
+\begin{equation}
+\begin{aligned}
+&D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B = \frac{\partial C_A}{\partial t} \\
+&D_e \frac{\partial^2 C_B}{\partial z^2} - U \frac{\partial C_B}{\partial z} - kC_AC_B = \frac{\partial C_B}{\partial t} \\
+& U_a(T_a-T) - U C_{p_m} \frac{\partial T}{\partial z} + H_{rxn}k(T)C_AC_B = C_{p_m} \frac{\partial T}{\partial t} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
+&C_A(z=0, \cdot) = C_{A0} \\
+&\frac{\partial C_B}{\partial z}(z=L, \cdot) = 0\\
+&C_B(z=0, \cdot) = C_{B0} \\
+&\text{Initial Condition:} \\
+& C_A(\cdot, t= 0) = \alpha(z) \\
+& C_B(\cdot, t= 0) = \beta(z)
+\end{aligned}
+\label{eq_p6}
+\end{equation}

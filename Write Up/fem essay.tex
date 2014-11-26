@@ -37,7 +37,7 @@
 
 %Abstract and Keywords
 \begin{center}
-\Large Finite Element Approximation for a Convection, Diffusion and Reaction System in a Tubular Reactor \\[0.5cm]
+\Large Finite Element Approximation for Convection, Diffusion and Reaction Systems in a Tubular Reactor \\[0.5cm]
 \large St. Elmo Wilken \\
 29034133
 \end{center}
@@ -72,7 +72,7 @@ The basis of the model's derivation rests on the conservation of mass principle.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.5]{volume_element}
-\caption{Control volume element for a tubular reactor} 
+\caption{Control volume for a tubular reactor} 
 \label{fig_vol_element}
 \end{figure}
 
@@ -81,41 +81,41 @@ The mole balance is shown in (\ref{eq_mole_balance}) where $r_A$ indicates the g
 \sum_{i=r, \theta, z}[F_A|_i(i) - F_A|_i(i+\delta i)] + r_A \delta V = \delta V \frac{\partial C_A}{\partial t}
 \label{eq_mole_balance}
 \end{equation}
-Consider the molar flow rate in the $\mathbf{e}_r$ direction. By using the definition of molar flux and the first order Taylor series expansion of $F_A|_r(r+\delta r)$ we have (\ref{eq_far}).
+Consider the molar flow rate in the $\mathbf{e}_r$ direction. By using the definition of molar flux and the linear approximation of $F_A|_r(r+\delta r)$ we have (\ref{eq_far}).
 \begin{equation}
 \begin{aligned}
 F_A|_r(r) &= W_A|_r(r) r \delta \theta \delta z \\
-F_A|_r(r+\delta r) &= (W_ A|_r(r) + \frac{\partial W_A|_r(r)}{\partial r} \delta r)(r+\delta r)\delta \theta \delta z
+F_A|_r(r+\delta r) &= (W_ A|_r(r) + \frac{\partial W_A|_r(r)}{\partial r} \delta r)(r+\delta r)\delta \theta \delta z + h(\delta r)
 \end{aligned}
 \label{eq_far}
 \end{equation}
-Neglecting higher order terms we have (\ref{eq_far2}).  
+For sufficiently small $\delta r$ we have $\lim_{\delta r \to 0} ||\delta r||^{-1}||h(\delta r)||$ and consequently (\ref{eq_far2}).  
 \begin{equation}
 F_A|_r(r) - F_A|_r(r+\delta r)  = - (W_ A|_r(r)  + \frac{\partial W_A|_r(r)}{\partial r}r) \delta r \delta \theta \delta z
 \label{eq_far2}
 \end{equation}
-In a similar manner, consider the molar flow rate in the $\mathbf{e}_\theta$ direction. By again using the definition of molar flux and the first order Taylor series expansion of $F_A|_\theta(\theta+\delta \theta)$ we have (\ref{eq_fat}).
+In a similar manner, consider the molar flow rate in the $\mathbf{e}_\theta$ direction. By again using the definition of molar flux and the linear approximation of $F_A|_\theta(\theta+\delta \theta)$ we have (\ref{eq_fat}).
 \begin{equation}
 \begin{aligned}
 F_A|_\theta(\theta) &= W_A|_\theta(\theta) \delta r \delta z \\
-F_A|_\theta(\theta + \delta \theta) &= W_A|_\theta(\theta) \delta r \delta z + \frac{\partial W_A|_\theta(\theta)}{r \partial \theta}\delta \theta\delta r \delta z
+F_A|_\theta(\theta + \delta \theta) &= W_A|_\theta(\theta) \delta r \delta z + \frac{\partial W_A|_\theta(\theta)}{r \partial \theta}\delta \theta\delta r \delta z + h(\delta \theta)
 \end{aligned}
 \label{eq_fat}
 \end{equation}
-Consequently we have (\ref{eq_fat2}).
+Again, for sufficiently small $\delta \theta$ we have (\ref{eq_fat2}).
 \begin{equation}
 F_A|_\theta(\theta) - F_A|_\theta(\theta + \delta \theta) =- \frac{\partial W_A|_\theta(\theta)}{r \partial \theta}\delta \theta\delta r \delta z
 \label{eq_fat2} 
 \end{equation}
-Finally, consider the molar flow rate in the $\mathbf{e}_z$ direction. By using the definition of molar flux, the first order Taylor series expansion of $F_A|_z(z+\delta z)$, approximating the cross-sectional area normal to $\mathbf{e}_z$ in Figure \ref{fig_vol_element} as a trapezium and neglecting higher order terms, we have (\ref{eq_faz}).
+Finally, consider the molar flow rate in the $\mathbf{e}_z$ direction. By using the definition of molar flux, the approximation of $F_A|_z(z+\delta z)$, approximating the cross-sectional area normal to $\mathbf{e}_z$ in Figure \ref{fig_vol_element} as a trapezium and neglecting higher order terms, we have (\ref{eq_faz}).
 \begin{equation}
 \begin{aligned}
 F_A|_z(z) &= W_A|_z(z) r \delta r \delta \theta \\
-F_A|_z(z + \delta z) &= W_A|_z(z) r \delta r \delta \theta + \frac{\partial W_A|_z(z)}{\partial z}r \delta z \delta r \delta \theta
+F_A|_z(z + \delta z) &= W_A|_z(z) r \delta r \delta \theta + \frac{\partial W_A|_z(z)}{\partial z}r \delta z \delta r \delta \theta + h(\delta z)
 \end{aligned}
 \label{eq_faz}
 \end{equation}
-Consequently we have (\ref{eq_faz2}).
+Finally, for sufficiently small $\delta z$ we have (\ref{eq_faz2}).
 \begin{equation}
 F_A|_z(z) - F_A|_z(z + \delta z) = - \frac{\partial W_A|_z(z)}{\partial z}r \delta z \delta r \delta \theta
 \label{eq_faz2}
@@ -146,12 +146,12 @@ W_A|_r &= -D_{AB}\frac{\partial C_A}{\partial r}
 \end{aligned}
 \label{eq_fick}
 \end{equation} 
-Substituting (\ref{eq_fick}) into (\ref{eq_mb3}) results in the model (\ref{eq_cdr}) we will be using for this project \cite{fogler}.
+Substituting (\ref{eq_fick}) into (\ref{eq_mb3}) results in the model (\ref{eq_cdr}) we will use for this project \cite{fogler}.
 \begin{equation}
 D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - U_z\frac{\partial C_A}{\partial z} + r_A = \frac{\partial C_A}{\partial t}
 \label{eq_cdr}
 \end{equation}
-Up to now not much has been said about the reaction term $r_A$. Typically $r_A$ is formulated as a rate equation based on experimental evidence modelling reaction kinetics. It is possible for the rate ``law" to be quite complex in character but the most commonly encountered expressions for forward, irreversible reactions are based on power law kinetics \cite{delmar}. For example, it usually takes the form $-r_A=k(T)[C_A]^M$ for reactions of the form $A \rightarrow B$ or $-r_A=k(T)[C_A]^M[C_B]^N$ for reactions of the form $A + B \rightarrow 2C$ with $M,N$ usually a non-negative integer less than 3. The factor $k(T)$ is called the rate constant even though it is not a constant (it depends quite strongly on temperature). The Arrhenius equation is a very commonly used empirical function which describes the temperature dependence of the rate constant. It is typically expressed by (\ref{eq_arrhenius}) where $E$ is the activation energy, $R$ the ideal gas constant and $k_a$ is the pre-exponential factor at the reference temperature $T_a$. 
+Up to now not much has been said about the reaction term $r_A$. Typically $r_A$ is formulated as a rate equation based on experimental evidence modelling reaction kinetics. It is possible for the rate ``law" to be quite complex in character. A class of commonly encountered expressions for forward, irreversible reactions are based on power law kinetics \cite{levenspiel}. Power law kinetics usually take the form $-r_A=k(T)[C_A]^M$ for reactions of the form $A \rightarrow B$ or $-r_A=k(T)[C_A]^M[C_B]^N$ for reactions of the form $A + B \rightarrow 2C$ with $M,N$ usually a non-negative integer less than 3. The factor $k(T)$ is called the rate constant even though it is not a constant (it depends quite strongly on temperature). The Arrhenius equation is a very commonly used empirical function which describes the temperature dependence of the rate constant. It is typically expressed by (\ref{eq_arrhenius}) where $E$ is the activation energy, $R$ the ideal gas constant and $k_a$ is the pre-exponential factor at the reference temperature $T_a$. 
 \begin{equation}
 k(T) = k_a e^{(\frac{E}{R}(\frac{1}{T_a} - \frac{1}{T}))}
 \label{eq_arrhenius}
@@ -162,7 +162,7 @@ It is prudent (in practice a necessity) to attempt to model the temperature prof
 \label{eq_ftd}
 \end{equation}
 \begin{rmrk}
-More precisely the flow terms should be vector valued due to the choice of the control volume. This is suppressed at the moment for the sake of clarity. Additionally, unless otherwise stated, $\sum$ is actually the sum over all species in the control volume i.e. $\sum_{i=1}^{N}$ where $i=1$ would indicate species 1 etc. 
+More precisely the flow terms should be vector valued due to the choice of the control volume. This is suppressed at the moment for the sake of clarity. Additionally, unless otherwise stated, $\sum$ is actually the sum over all species in the control volume i.e. $\sum_{i=1}^{N}$ where $i=1$ would indicate species 1 etc.. 
 \end{rmrk}
 It is customary to separate the work term into shaft and flow work terms as in (\ref{eq_work}). In this equation $\hat{V}_i$ indicates the specific molar volume of species $i$.
 \begin{equation}
@@ -191,16 +191,14 @@ Expanding the right hand side of (\ref{eq_syse}), assuming constant pressure and
 \end{equation}
 If we neglect shaft work we have the general form of the first law of thermodynamics we will be using in (\ref{eq_gfl}).  
 \begin{equation}
-\frac{\dot{Q}}{\delta V} + \frac{1}{\delta V}\sum F_{i0}H_{i0} -\sum F_{i}H_{i} =\sum C_i C_{p_i} \frac{\partial T}{\partial t} + \sum H_i \frac{\partial C_i}{\partial t}
+\frac{\dot{Q}}{\delta V} + \frac{1}{\delta V}(\sum F_{i0}H_{i0} -\sum F_{i}H_{i}) =\sum C_i C_{p_i} \frac{\partial T}{\partial t} + \sum H_i \frac{\partial C_i}{\partial t}
 \label{eq_gfl}
 \end{equation}
-\begin{rmrk}
 It now becomes necessary to consider the components of volume element  in Figure \ref{fig_vol_element} to take the derivation further.
-\end{rmrk}
 \begin{rmrk}
 Since we neglected rotational variance in the final form of the CDR equation we will immediately neglect the angular component of the volume element in the following analysis.  
 \end{rmrk}
-Consider energy flow terms $\frac{1}{\delta V}\sum F_{i0}H_{i0} -\sum F_{i}H_{i}$ from (\ref{eq_gfl}) in the $\mathbf{e}_r$ and $\mathbf{e}_z$ directions for a particular species A. Using the same analysis as with the CDR derivation we have (\ref{eq_tcp1}).
+Consider energy flow terms $\frac{1}{\delta V}(\sum F_{i0}H_{i0} -\sum F_{i}H_{i})$ from (\ref{eq_gfl}) in the $\mathbf{e}_r$ and $\mathbf{e}_z$ directions for a particular species A. Using the same analysis as with the CDR derivation we have (\ref{eq_tcp1}).
 \begin{equation}
 \begin{aligned}
 F_{A0}|_r H_{A0}(r) - F_{A}|_rH_{A}(r+\delta r) &= -(W_A|_r H_A(r) + \frac{\partial W_A|_r H_A(r)}{\partial r}r)\delta r \delta \theta \delta z \\
@@ -208,7 +206,7 @@ F_{A0}|_z H_{A0}(z) - F_{A}|_z H_{A}(z+\delta z) &= -\frac{\partial W_A|_z H_A(z
 \end{aligned}
 \label{eq_tcp1}
 \end{equation}
-Summing over all the components in the control volume and noticing that this resembles the flux terms in (\ref{eq_mb3}) we can rewrite (\ref{eq_gfl}) into (\ref{eq_tcp2}).
+Summing over all the components in the control volume and noticing that this (\ref{eq_tcp1}) resembles the flux terms in (\ref{eq_mb3}) we can rewrite (\ref{eq_gfl}) into (\ref{eq_tcp2}).
 \begin{equation}
 \frac{\dot{Q}}{\delta V} - \frac{1}{r}\frac{\partial}{\partial r}(r\sum W_i|_r H_i) - \frac{\partial}{\partial z}(\sum W_i|_z H_i) =\sum C_i C_{p_i} \frac{\partial T}{\partial t} + \sum H_i \frac{\partial C_i}{\partial t}
 \label{eq_tcp2}
@@ -232,18 +230,18 @@ We also assume that $W_i|_z \approx U_z C_i$ which is equivalent to assuming tha
 \frac{\dot{Q}}{\delta V} + H_{rxn}r_A - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} =\sum C_i C_{p_i} \frac{\partial T}{\partial t}
 \label{eq_tcp5}
 \end{equation}
-Firstly, consider the case where the heat added to the system does not depend on the spatial dimensions (if $\dot{Q}$ is non-zero it is called non-adiabatic). In this case we can assume that in the limit as $\delta V \rightarrow 0 $ we have that $\frac{\dot{Q}}{\delta V} = U_a(T_a-T)$ where $U_a$ is the heat transfer coefficient.
+Firstly, consider the case where the heat added to the system does not depend on the spatial dimensions (if $\dot{Q}$ is non-zero it is called non-adiabatic). In this case we can assume that in the limit as $\delta V \rightarrow 0 $ we have that $\frac{\dot{Q}}{\delta V} = U_ha(T_a-T)$ where $U_h$ is the heat transfer coefficient and $a = \frac{\pi D}{A_c}$ with $D, A_c$ the diameter and cross sectional area of the reactor.
 \begin{rmrk}
-The assumption that $\frac{\dot{Q}}{\delta V} = U_a(T_a-T)$ actually comes from a theoretical analysis of heat conduction, but since the focus of this project is on the CDR equation we just assume it. 
+The assumption that $\frac{\dot{Q}}{\delta V} = U_ha(T_a-T)$ actually comes from a theoretical analysis of heat conduction, but since the focus of this project is on the CDR equation we just assume it. 
 \end{rmrk} 
 This assumption results in the one dimensional non-adiabatic energy balance for a tubular reactor shown in (\ref{eq_baltb1}).
 \begin{equation}
-U_a(T_a-T) - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} + H_{rxn}r_A = \sum C_i C_{p_i} \frac{\partial T}{\partial t}
+U_ha(T_a-T) - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} + H_{rxn}r_A = \sum C_i C_{p_i} \frac{\partial T}{\partial t}
 \label{eq_baltb1}
 \end{equation}
-If we assume adiabatic conditions (\ref{eq_baltb1}) simplifies to (\ref{eq_baltb2}) where $X$ is the conversion of the limiting species and $C_{pm}$ is the average heat capacity of the system (which is constant).
+If we assume adiabatic conditions (\ref{eq_baltb1}) simplifies to (\ref{eq_baltb2}) where $X$ is the conversion of the limiting species and $C_{p_m}$ is the average heat capacity of the system (which is constant).
 \begin{equation}
-T = T_0 + \frac{-H_{rxn}X}{C_{pm}}
+T = T_0 + \frac{-H_{rxn}X}{C_{p_m}}
 \label{eq_baltb2}
 \end{equation}
 \begin{rmrk}
@@ -274,32 +272,144 @@ Boundary conditions are still required to completely formulate the model but thi
 In the non-adiabtic case one would also want to perform an energy balance on the cooling fluid (it would affect the $T_a$ term in (\ref{eq_baltb1}) and the boundary conditions for (\ref{eq_baltb4})) but to simplify our model even more we assume that the cooling mechanism/fluid has a much larger heat capacity than the reacting system and that it comes from an infinite reservoir at temperature $T_a$. This assumption is quite strong.
 \end{rmrk}
 
-\section{Problem Outline}
-The purpose of this project is to illustrate the use of the finite element method to solve various reactor modelling problems. Each subsequent problem increases the level of modelling complexity. 
-
-\subsection{Problem 1}
-In this problem Aris-Taylor approximation for a tubular reactor under a laminar flow regime will be used to simplify the CDR equation. 
+\section{Overview}
+The purpose of this project is twofold. Firstly, it serves as an introduction to the use of the Finite Element Method (FEM) for solving typical reactor modelling problems found in chemical engineering. Secondly, it investigates the error made by making an (engineering) simplification to the model.
 \begin{defn}
-Aris-Taylor approximation is a procedure where the radial component of the CDR equation is lumped with the axial component resulting in a partial differential equation involving only one spatial variable. The lumped diffusion coefficient is defined as $D_a = D_{AB} + \frac{U^2R^2}{48D_{AB}}$.
+The Aris-Taylor approximation is a procedure where the radial component of the two dimensional CDR equation is lumped with the axial component resulting in a simplified one dimensional partial differential equation. This simplification replaces the diffusion coefficient ($D_{AB}$) with a lumped diffusion coefficient ($D_a$). The lumped coefficient is defined as $D_a = D_{AB} + \frac{U^2R^2}{48D_{AB}}$. This simplification is valid only for reactors with a laminar flow profile. 
 \end{defn}
-An isothermal, first order plug flow model with constant coefficients is assumed. This models the simple situation where $A \rightarrow B$. The full problem is shown in (\ref{eq_p1}).
+This project is divided into two parts. In the first part an isothermal reactor is assumed. The full two dimensional CDR model is solved and compared to the simplified (by way of Aris-Taylor) one dimensional CDR model. In the second part the use of the FEM is illustrated for solving non-linear coupled systems. The goal of the second part is to lay the foundation for future work where the same system as before is analysed non-isothermally.
+
+Below follows a concise motivation for problems addressed and solved in this project. 
+\subsection{Isothermal Overview}
+In this section we model the simple first order reaction $A \rightarrow B$ using the rate expression $-r_A=kC_A$. Since we assume isothermal conditions the rate constant is constant. The CDR equation derived earlier (for laminar flow) may be used to model this situation, it is shown in (\ref{eq_iso1}) for convenience.
+\begin{equation}
+D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t}
+\label{eq_iso1}
+\end{equation} 
+If one simplifies the model using the Aris-Taylor approximation the model becomes (\ref{eq_iso2}).
+\begin{equation}
+D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t}
+\label{eq_iso2}
+\end{equation}
+As explained earlier, these two models will be compared using (\ref{eq_iso1}) as a more accurate baseline.
+\subsection{Non-Isothermal Overview}
+The isothermal assumption made in the previous subsection is not a realistic assumption. However, it does simplify the model considerably because by assuming isothermal conditions the model becomes linear and uncoupled. The non-linear non-isothermal model corresponding to (\ref{eq_iso1}) is shown in (\ref{eq_noniso1}).
 \begin{equation}
 \begin{aligned}
-&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t} \\
+&D_{AB} \frac{\partial^2 C_A}{\partial z^2} - U(r) \frac{\partial C_A}{\partial z} - k(T)C_A 
+= \frac{\partial C_A}{\partial t} \\
+& k_e(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial T}{\partial r}) + \frac{\partial ^2 T}{\partial z^2}) - U(r) C_{p_m} \frac{\partial T}{\partial z} - H_{rxn}k(T)C_A = C_{p_m} \frac{\partial T}{\partial t} \\
+&\text{with } k(T) = k_0 \exp(\frac{-E}{RT}) \text{ and } U(r)=2U(1-(\frac{r}{R})^2)
+\end{aligned}
+\label{eq_noniso1}
+\end{equation} 
+Similarly, the non-linear non-isothermal simplified model corresponding to (\ref{eq_iso2}) is shown in (\ref{eq_noniso2}).
+\begin{equation}
+\begin{aligned}
+&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(T)C_A 
+= \frac{\partial C_A}{\partial t} \\
+& k_e\frac{\partial^2 T}{\partial z^2}- U C_{p_m} \frac{\partial T}{\partial z} + H_{rxn}k(T)C_A  + U_ha(T_a-T) = C_{p_m} 
+\frac{\partial T}{\partial t} \\
+&\text{with } k(T) = k_0 \exp(\frac{-E}{RT})
+\end{aligned}
+\label{eq_noniso2}
+\end{equation} 
+It is clear that solving the non-linear coupled system is quite daunting. For this reason the factors which make it difficult to solve will be handled separately to lay the foundation for future work where they can be solved simultaneously. Inspection of (\ref{eq_noniso1}) or (\ref{eq_noniso2}) reveal that they each have the same difficult aspects: the non-linearity introduced by the non-isothermal assumption and the coupled system which needs to be solved simultaneously.
+
+With this in mind consider the uncoupled non-linear problem shown in (\ref{eq_nl1}). This corresponds to an adiabatic reactor where $A \rightarrow B$. While this may seem like a major simplification it models a situation commonly encountered in practice (e.g. an insulated reactor). This problem will illustrate one way of handeling non-linear systems using the FEM.
+\begin{equation}
+\begin{aligned}
+&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(C_A)
+C_A = \frac{\partial C_A}{\partial t} \\
+& \text{with }k(C_A) = k_0 \exp(\frac{-E}{RT}) \\
+& \text{and } T = T_0 + \frac{-H_{rxn} (1-\frac{C_A}{C_{A0}})}{C_{p_A}}
+\end{aligned}
+\label{eq_nl1}
+\end{equation}  
+
+Finally, consider the coupled problem shown in (\ref{eq_nl2}). This corresponds to an isothermal coupled reaction where $A + B \rightarrow 2C$. This problem is weakly\footnote{I use the term weakly here to indicate that it is much easier to handle than the non-linearity introduced by the Arrhenius equation in the previous problem} non-linear due to the rate equation $-r_A = kC_AC_B$.
+\begin{equation}
+\begin{aligned}
+&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B 
+= \frac{\partial C_A}{\partial t} \\
+&D_a \frac{\partial^2 C_B}{\partial z^2} - U \frac{\partial C_B}{\partial z} - kC_AC_B 
+= \frac{\partial C_B}{\partial t} \\
+\end{aligned}
+\label{eq_nl2}
+\end{equation}
+
+These two problems combined capture the difficulties one would encounter attempting to solve (\ref{eq_noniso1}) or (\ref{eq_noniso2}).
+\section{Isothermal Problem}
+In this section the isothermal models will be developed and solved using the FEM. Finally, the quality of the Aris-Taylor simplification will be analysed numerically.  
+\subsection{Problem 1}
+We start this section solving the simplified model from (\ref{eq_iso1}) because it is the least complex. The full problem is shown in (\ref{eq_p1}). It is assumed that $D_a, U, k, C_{a0},\text{ and } L$ are given because this is necessary to describe the physical reactor.  
+\begin{equation}
+\begin{aligned}
+&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_A = 
+\frac{\partial C_A}{\partial t} \\
 &\text{Boundary Conditions:} \\
 &\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
 &C_A(z=0, \cdot) = C_{A0} \\
 &\text{Initial Condition:} \\
-& C_A(\cdot, t= 0) = \beta(z)
+& C_A(\cdot, t= 0) = \alpha(z)
 \end{aligned}
 \label{eq_p1}
 \end{equation}
+The boundary conditions indicate that the concentration is known at the entrance ($z=0$) of the reactor and that no reaction (change in concentration) takes place at the end ($z=L$) of the reactor. The initial condition indicates that the concentration throughout the reactor is known at $t=0$ and takes the form $\alpha(z)$. 
 
-\subsection{Problem 2}
-In this problem the full CDR problem for the scheme $A \rightarrow B$ is solved using the same first order kinetics as before. The two dimensional problem is shown in (\ref{eq_p2}).
+It is desirable to convert (\ref{eq_p1}) into dimensionless form. By creating the dimensionless variables $u=\frac{C_A}{C_{A0}}$, $x = \frac{z}{L}$ and $\tau = \frac{tU}{L}$ it is possible to write (\ref{eq_p1}) as (\ref{eq_p1d}).
 \begin{equation}
 \begin{aligned}
-&D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t}\\
+&\frac{\partial^2 u}{\partial x^2} - c_1 \frac{\partial u}{\partial x} - c_1c_2u = 
+c_1\frac{\partial u}{\partial \tau} \\
+&\text{with } c_1 = \frac{UL}{D_a} \text{ and } c_2 = \frac{kL}{U} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial u}{\partial x}(x=1, \cdot) = 0\\
+&u(x=0, \cdot) = 1 \\
+&\text{Initial Condition:} \\
+& u(\cdot, \tau = 0) = \alpha(xL)
+\end{aligned}
+\label{eq_p1d}
+\end{equation}
+Now suppose $v$ is an arbitrary function. By abusing our notation a little bit and using the product rule we have (\ref{eq_prodrule}).
+\begin{equation}
+\begin{aligned}
+&(\partial_{xx}u)v + (\partial_xu)(\partial_xv) = \partial_x( (\partial_xu)v)\\
+&\implies (\partial_{xx}u)v = -(\partial_xu)(\partial_xv) + \partial_x( (\partial_xu)v)
+\end{aligned}
+\label{eq_prodrule}
+\end{equation}
+By multiplying the modelling equation in (\ref{eq_p1d}) by $v$ and using (\ref{eq_prodrule}) we have (\ref{eq_p1d2}).
+\begin{equation}
+ -(\partial_xu)(\partial_xv) + \partial_x( (\partial_xu)v) - c_1(\partial_xu)v - c_1c_2uv = c_1(\partial_{\tau}u)v 
+\label{eq_p1d2}
+\end{equation}
+Now if we integrate over the domain $[0, 1]$ and apply the Fundamental Theorem of Calculus we have (\ref{eq_p1d3}).
+\begin{equation}
+\int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx + [(\partial_xu(x, \cdot))v(x, \cdot)]^1_0 = \int^1_0 c_1(\partial_{\tau}u)v dx
+\label{eq_p1d3}
+\end{equation}
+From the boundary conditions we have that $\partial_xu(1,\cdot)=0$ and by making $v$ less arbitrary i.e. $v \in \{v : v(0, \cdot)=0 \} = T$ equation (\ref{eq_p1d3}) simplifies to the variational form in (\ref{eq_p1d4}).
+\begin{equation}
+\int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx = \int^1_0 c_1(\partial_{\tau}u)v dx
+\label{eq_p1d4}
+\end{equation}
+Now let $B(u, v) = \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx$ and $(c_1(\partial_{\tau}u),v) = \int^1_0 c_1(\partial_{\tau}u)v dx$. From the theory of partial differential equations, if we can find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p1d5}) for all $v \in T$ we have the solution of (\ref{eq_p1d}).
+\begin{equation}
+B(u, v) = (c_1(\partial_{\tau}u),v)
+\label{eq_p1d5}
+\end{equation}
+For the purposes of this project we will assume the existence and uniqueness of such a function. While it is certainly within the realm of possibilities to find an analytic solution to (\ref{eq_p1d5}) it will be quite difficult. We will rather attempt to find and approximate solution using the FEM. 
+
+ 
+
+\subsection{Problem 2}
+The two dimensional problem is shown in (\ref{eq_p2}).
+\begin{equation}
+\begin{aligned}
+&D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + 
+\frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}
+{\partial z} - kC_A = \frac{\partial C_A}{\partial t}\\
 &\text{Boundary Conditions:} \\
 &\frac{\partial C_A}{\partial z}(z=L, \cdot, \cdot) = 0\\
 &\frac{\partial C_A}{\partial r}(\cdot, r = R, \cdot) = 0 \\
@@ -311,11 +421,17 @@ In this problem the full CDR problem for the scheme $A \rightarrow B$ is solved 
 \label{eq_p2}
 \end{equation}
 
+\section{Non-Isothermal Problem}
+
 \subsection{Problem 3}
-In this problem the isothermal assumption is dropped and the somewhat weaker adiabatic assumption replaces it. The model for the scheme $A \rightarrow B$ now becomes (\ref{eq_p3}). Clearly this problem is very non-linear due to the exponential factor in the Arrhenius equation.
+In this problem the isothermal assumption is dropped and the somewhat weaker adiabatic 
+assumption replaces it. The model for the scheme $A \rightarrow B$ now becomes (\ref
+{eq_p3}). Clearly this problem is very non-linear due to the exponential factor in the 
+Arrhenius equation.
 \begin{equation}
 \begin{aligned}
-&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(C_A)C_A = \frac{\partial C_A}{\partial t} \\
+&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(C_A)
+C_A = \frac{\partial C_A}{\partial t} \\
 & \text{with }k(C_A) = k_0 \exp(\frac{-E}{RT}) \\
 & \text{and } T = T_0 + \frac{-H_{rxn} (1-\frac{C_A}{C_{A0}})}{C_{p_A}} \\
 &\text{Boundary Conditions:} \\
@@ -328,11 +444,14 @@ In this problem the isothermal assumption is dropped and the somewhat weaker adi
 \end{equation}
 
 \subsection{Problem 4}
-In this problem the isothermal assumption again supposed. The model for the scheme $A + B \rightarrow 2C$ is shown in (\ref{eq_p4}). 
+In this problem the isothermal assumption again supposed. The model for the scheme $A + 
+B \rightarrow 2C$ is shown in (\ref{eq_p4}). 
 \begin{equation}
 \begin{aligned}
-&D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B = \frac{\partial C_A}{\partial t} \\
-&D_e \frac{\partial^2 C_B}{\partial z^2} - U \frac{\partial C_B}{\partial z} - kC_AC_B = \frac{\partial C_B}{\partial t} \\
+&D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B 
+= \frac{\partial C_A}{\partial t} \\
+&D_e \frac{\partial^2 C_B}{\partial z^2} - U \frac{\partial C_B}{\partial z} - kC_AC_B 
+= \frac{\partial C_B}{\partial t} \\
 &\text{Boundary Conditions:} \\
 &\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
 &C_A(z=0, \cdot) = C_{A0} \\
@@ -345,42 +464,7 @@ In this problem the isothermal assumption again supposed. The model for the sche
 \label{eq_p4}
 \end{equation}
 
-\subsection{Problem 5}
-In this problem the isothermal assumption is dropped and a more general non-adiabatic system is modelled. The model for the scheme $A \rightarrow B$ is shown in (\ref{eq_p5}). 
-\begin{equation}
-\begin{aligned}
-&D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(T)C_A = \frac{\partial C_A}{\partial t} \\
-& U_a(T_a-T) - U C_{p_m} \frac{\partial T}{\partial z} + H_{rxn}k(T)C_A = C_{p_m} \frac{\partial T}{\partial t} \\
-&\text{Boundary Conditions:} \\
-&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
-&C_A(z=0, \cdot) = C_{A0} \\
-&\frac{\partial T}{\partial z}(z=L, \cdot) = 0\\
-&T(z=0, \cdot) = T_0\\
-&\text{Initial Condition:} \\
-& C_A(\cdot, t= 0) = \alpha(z) \\
-& T(\cdot, t= 0) = \beta(z)
-\end{aligned}
-\label{eq_p5}
-\end{equation}
 
-\subsection{Problem 6}
-In this problem a general non-adiabatic model of the coupled scheme $A + B \rightarrow 2C$ is modelled by (\ref{eq_p6}). 
-\begin{equation}
-\begin{aligned}
-&D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B = \frac{\partial C_A}{\partial t} \\
-&D_e \frac{\partial^2 C_B}{\partial z^2} - U \frac{\partial C_B}{\partial z} - kC_AC_B = \frac{\partial C_B}{\partial t} \\
-& U_a(T_a-T) - U C_{p_m} \frac{\partial T}{\partial z} + H_{rxn}k(T)C_AC_B = C_{p_m} \frac{\partial T}{\partial t} \\
-&\text{Boundary Conditions:} \\
-&\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
-&C_A(z=0, \cdot) = C_{A0} \\
-&\frac{\partial C_B}{\partial z}(z=L, \cdot) = 0\\
-&C_B(z=0, \cdot) = C_{B0} \\
-&\text{Initial Condition:} \\
-& C_A(\cdot, t= 0) = \alpha(z) \\
-& C_B(\cdot, t= 0) = \beta(z)
-\end{aligned}
-\label{eq_p6}
-\end{equation}
 
 %References
 \newpage
