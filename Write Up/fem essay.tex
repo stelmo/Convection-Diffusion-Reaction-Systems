@@ -394,14 +394,146 @@ From the boundary conditions we have that $\partial_xu(1,\cdot)=0$ and by making
 \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx = \int^1_0 c_1(\partial_{\tau}u)v dx
 \label{eq_p1d4}
 \end{equation}
-Now let $B(u, v) = \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx$ and $(c_1(\partial_{\tau}u),v) = \int^1_0 c_1(\partial_{\tau}u)v dx$. From the theory of partial differential equations, if we can find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p1d5}) for all $v \in T$ we have the solution of (\ref{eq_p1d}).
+Now let $B(u, v) = \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx$ and $(c_1(\partial_{\tau}u),v)_0 = \int^1_0 c_1(\partial_{\tau}u)v dx$. From the theory of partial differential equations, if we can find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p1d5}) for all $v \in T$ we have the solution of (\ref{eq_p1d}).
 \begin{equation}
-B(u, v) = (c_1(\partial_{\tau}u),v)
+B(u, v) = (c_1(\partial_{\tau}u),v)_0
 \label{eq_p1d5}
 \end{equation}
-For the purposes of this project we will assume the existence and uniqueness of such a function. While it is certainly within the realm of possibilities to find an analytic solution to (\ref{eq_p1d5}) it will be quite difficult. We will rather attempt to find and approximate solution using the FEM. 
+For the purposes of this project we will assume the existence and uniqueness of such a function. While it is certainly within the realm of possibilities to find an analytic solution to (\ref{eq_p1d5}) it is invariably quite difficult. We will rather attempt to find an approximate solution using the FEM.
 
- 
+The first step in constructing an approximation is to define a set of basis functions. To this end discretise the domain $[0,1]$ into $n$ equidistant elements $[x_{k-1}, x_k]$ where $x_k$ indicates node $k$ with $k=0,1,...,n$. Clearly $x_0=0$ and $x_n=1$ furthermore, define the constant $h = x_1-x_0$. Now define a basis function $\phi$ over each element by (\ref{eq_basis1}).  
+\begin{equation}
+\begin{aligned}
+&\text{For } k=1,2,...,n-1 \\
+&\phi_k(x) = h^{-1}(x-x_{k-1}) \text{ for } x \in [x_{k-1}, x_k] \\
+&\phi_k(x) = 1-h^{-1}(x-x_{k}) \text{ for } x \in (x_{k}, x_k+1] \\
+&\phi_k(x) = 0 \text{ for } x \notin [x_{k-1}, x_k+1] \\
+&\text{And otherwise} \\
+&\phi_0(x) = 1- h^{-1}x \text{ for } x \in [0, x_1] \\
+&\phi_0(x) = 0 \text{ for } x \notin [x_{k-1}, x_1] \\
+&\phi_n(x) = h^{-1}(x-x_{n-1}) \text{ for } x \in [x_{n-1}, 1] \\
+&\phi_n(x) = 0 \text{ for } x \notin [x_{n-1}, 1] \\
+\end{aligned}
+\label{eq_basis1}
+\end{equation}
+Now we assume that the function $u^h =\sum^n_{k=0} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p1d5}) by using the Galerkin approximation: find $u^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p1d6}) holds.
+\begin{equation}
+B(u^h, \phi) = (c_1(\partial_{\tau}u^h),\phi)_0~~\forall \phi \in S^h_0
+\label{eq_p1d6}
+\end{equation} 
+\begin{rmrk}
+Note the difference between $S^h$ and $S^h_0$. Clearly $S^h_0=S^h\setminus \{\phi_0\}$: it was required that the test functions satisfy $v(0)=0$ which $\phi_0$ does not. 
+\end{rmrk}
+Recall that $B(u, v) = \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx$. Substituting the Galerkin approximation into this expression we have (\ref{eq_p1d7}).
+\begin{equation}
+B(u^h, \phi_i) = \int_0^1 (-(\partial_xu^h)(\partial_x\phi_i) - c_1(\partial_xu^h)\phi_i - c_1c_2u^h\phi_i)dx \text{ for } i=1,2,...,n
+\label{eq_p1d7}
+\end{equation}
+Now consider each term in the integral separately. Consider the first term in $B(u^h, \phi_i)$ as shown in (\ref{eq_lindd}). We have suppressed the time dependency of $u^h$ for clarity.
+\begin{equation}
+\begin{aligned}
+\int_0^1 -(\partial_xu^h)(\partial_x\phi_i)dx &= \int_0^1 -(\partial_x \sum_{k=0}^{n} u_k\phi_k)(\partial_x\phi_i)dx \\
+&= \int_0^1 -\sum_{k=0}^{n} u_k(\partial_x\phi_k)(\partial_x\phi_i)dx \\
+&= \begin{cases}
+\int_{[x_{i-1},x_{i+1}]}-\sum_{k=i-1}^{i+1} u_k(\partial_x\phi_k)(\partial_x\phi_i)dx &\text{ for } i=1,2,..., n-1 \\
+\int_{[x_{i-1},x_{n}]}-\sum_{k=i-1}^{n} u_k(\partial_x\phi_k)(\partial_x\phi_i)dx &\text{ for } i=n
+\end{cases}
+\end{aligned}
+\label{eq_lindd}
+\end{equation}
+It is possible to recast this expression into a matrix $K^1$ with $n$ rows and $n+1$ columns. The elements of this matrix are given by (\ref{eq_K1lin}).
+\begin{equation}
+\begin{aligned}
+&K^1_{i,i+1}=K^1_{i+1,i}=\int^1_0 \partial_x(\phi_i)\partial_x(\phi_{i+1})dx = -h^{-1} \\
+&K^1_{nn} = \int^1_0 \partial_x(\phi_n)\partial_x(\phi_{n})dx = h^{-1} \\
+&K^1_{ii} = \int^1_0 \partial_x(\phi_i)\partial_x(\phi_{i})dx = 2h^{-1} \\
+\end{aligned}
+\label{eq_K1lin}
+\end{equation}
+This matrix then takes the form shown in (\ref{eq_K1matlin}).
+\begin{equation}
+K^1_{1:n,0:n} = \begin{pmatrix}
+-h^{-1} & 2h^{-1} & -h^{-1} & 0 & 0 &  0\\
+0 & -h^{-1} & 2h^{-1} & -h^{-1} & 0 & 0  \\
+\ddots & \ddots & \ddots & \ddots & \ddots & \ddots \\
+0 & 0 & 0  & -h^{-1} & 2h^{-1}& -h^{-1} \\
+0 & 0 & 0 & 0 & -h^{-1} & h^{-1}   
+\end{pmatrix}
+\begin{pmatrix}
+u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_n
+\end{pmatrix}
+\label{eq_K1matlin}
+\end{equation}
+Now consider the second term of $B(u^h, \phi_i)$ as shown in (\ref{eq_lindn}).
+\begin{equation}
+\begin{aligned}
+\int_0^1 -c_1(\partial_xu^h)\phi_i &= \int_0^1 - c_1(\partial_x \sum_{k=0}^{n} u_k\phi_k)\phi_i dx \\
+&= \int_0^1 -c_1\sum_{k=0}^{n} u_k(\partial_x\phi_k)\phi_idx \\
+&= \begin{cases}
+\int_{[x_{i-1},x_{i+1}]}-c_1\sum_{k=i-1}^{i+1} u_k(\partial_x\phi_k)\phi_idx &\text{ for } i=1,2,..., n-1 \\
+\int_{[x_{i-1},x_{n}]}-c_1\sum_{k=i-1}^{n} u_k(\partial_x\phi_k)\phi_idx &\text{ for } i=n
+\end{cases}
+\end{aligned}
+\label{eq_lindn}
+\end{equation}
+It is again possible to recast this expression as a matrix $K^2$ with $n$ rows and $n+1$ columns. The elements of this matrix are given by (\ref{eq_K2lin}).
+\begin{equation}
+\begin{aligned}
+&K^2_{i,i+1}=\int^1_0 \partial_x(\phi_i)\phi_{i}dx = \frac{1}{2}\\
+&K^2_{i+1,i}=\int^1_0 \partial_x(\phi_i)\phi_{i+1}dx = -\frac{1}{2} \\
+&K^2_{nn} = \int^1_0 \partial_x(\phi_n)\phi_{n}dx = \frac{1}{2} \\
+&K^2_{ii} = \int^1_0 \partial_x(\phi_i)\phi_{i}dx = 0 \\
+\end{aligned}
+\label{eq_K2lin}
+\end{equation}
+This matrix then takes the form shown in (\ref{eq_K2matlin}).
+\begin{equation}
+K^2_{1:n,0:n} = -c_1\begin{pmatrix}
+-\frac{1}{2} & 0 & \frac{1}{2} & 0 & 0 &  0\\
+0 & -\frac{1}{2} & 0 & \frac{1}{2} & 0 & 0  \\
+\ddots & \ddots & \ddots & \ddots & \ddots & \ddots \\
+0 & 0 & 0  & -\frac{1}{2} & 0 & \frac{1}{2} \\
+0 & 0 & 0 & 0 & -\frac{1}{2} & 0   
+\end{pmatrix}
+\begin{pmatrix}
+u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_n
+\end{pmatrix}
+\label{eq_K2matlin}
+\end{equation}
+Finally, consider the final term of $B(u^h, \phi_i)$ as shown in (\ref{eq_linnn}).
+\begin{equation}
+\begin{aligned}
+\int_0^1 -c_1c_2u^h\phi_i &= \int_0^1 - c_1c_2\sum_{k=0}^{n} u_k\phi_k\phi_i dx \\
+&= \begin{cases}
+\int_{[x_{i-1},x_{i+1}]}-c_1c_2\sum_{k=i-1}^{i+1} u_k\phi_k\phi_idx &\text{ for } i=1,2,..., n-1 \\
+\int_{[x_{i-1},x_{n}]}-c_1c_2\sum_{k=i-1}^{n} u_k\phi_k\phi_idx &\text{ for } i=n
+\end{cases}
+\end{aligned}
+\label{eq_linnn}
+\end{equation}
+It is again possible to recast this expression as a matrix $K^3$ with $n$ rows and $n+1$ columns. The elements of this matrix are given by (\ref{eq_K3lin}).
+\begin{equation}
+\begin{aligned}
+&K^3_{i,i+1}=K^3_{i+1,i}=\int^1_0 \phi_i\phi_{i+1}dx = \frac{h}{6} \\
+&K^3_{nn} = \int^1_0 \phi_n\phi_{n}dx = \frac{h}{3} \\
+&K^3_{ii} = \int^1_0 \phi_i\phi_{i}dx = \frac{2h}{3} \\
+\end{aligned}
+\label{eq_K3lin}
+\end{equation}
+This matrix then takes the form shown in (\ref{eq_K3matlin}).
+\begin{equation}
+K^3_{1:n,0:n} = \begin{pmatrix}
+\frac{h}{6} & \frac{2h}{3} & \frac{h}{6} & 0 & 0 &  0\\
+0 & \frac{h}{6} & \frac{2h}{3} & \frac{h}{6} & 0 & 0  \\
+\ddots & \ddots & \ddots & \ddots & \ddots & \ddots \\
+0 & 0 & 0  & \frac{h}{6}& \frac{2h}{3} & \frac{h}{6} \\
+0 & 0 & 0 & 0 &\frac{h}{6} & \frac{h}{3}   
+\end{pmatrix}
+\begin{pmatrix}
+u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_n
+\end{pmatrix}
+\label{eq_K3matlin}
+\end{equation} 
 
 \subsection{Problem 2}
 The two dimensional problem is shown in (\ref{eq_p2}).
@@ -420,6 +552,7 @@ The two dimensional problem is shown in (\ref{eq_p2}).
 \end{aligned}
 \label{eq_p2}
 \end{equation}
+
 
 \section{Non-Isothermal Problem}
 
