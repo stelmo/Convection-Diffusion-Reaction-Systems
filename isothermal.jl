@@ -453,7 +453,7 @@ function fem_2d(kreact, L, R, De, U, N, Nt, timeEnd)
   K4 = K4[:, yN+1:end]
 
   # Strip out unnecessary rows for K4
-  K5 = (U0/((L^2)*R))*K5[yN+1:end, :]
+  K5 = (U0/((L)))*K5[yN+1:end, :]
   K5 = K5[:, yN+1:end]
 
   # Calculate the magic!

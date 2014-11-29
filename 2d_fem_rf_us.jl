@@ -9,8 +9,8 @@ yN = 30 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
-tN = 30
-ts = linspace(0., 5., tN) # it takes long to reach SS. Try 5.0 for the end time.
+tN = 50
+ts = linspace(0., 10., tN) # it takes long to reach SS. Try 5.0 for the end time.
 dt = ts[2] - ts[1]
 
 reaction_constant = 0.25 # should be 0.25
@@ -375,8 +375,8 @@ K4 = -reaction_constant*K4[yN+1:end, :]
 K4_const = K4[:, 1:yN]
 K4 = K4[:, yN+1:end]
 
-# Strip out unnecessary rows for K4
-K5 = (U0/((L^2)*R))*K5[yN+1:end, :]
+# Strip out unnecessary rows for K5
+K5 = (U0/((L)))*K5[yN+1:end, :]
 K5 = K5[:, yN+1:end]
 
 # Calculate the magic!
@@ -447,8 +447,8 @@ ylabel("Radial Distance")
 plt.show()
 
 # Get average concentration
-# aveconv = 0.0
-# for i=1:yN
-#   aveconv += 2.*dy*ys[i]*u[i,end]
-# end
-# println(1.-aveconv)
+aveconv = 0.0
+for i=1:yN
+  aveconv += 2.*dy*ys[i]*u[i,end]
+end
+println(1.-aveconv)

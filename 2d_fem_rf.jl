@@ -1,11 +1,11 @@
 # Two dimensional problem - plug flow case + steady state
 using PyPlot
 
-xN = 15 # Number of elements - 1
+xN = 30 # Number of elements - 1
 xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
-yN = 15 # Number of elements - 1
+yN = 30 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 

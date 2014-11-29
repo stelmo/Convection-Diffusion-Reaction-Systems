@@ -71,7 +71,7 @@ The basis of the model's derivation rests on the conservation of mass principle.
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.5]{volume_element}
+\includegraphics[scale=0.5]{./pics/volume_element}
 \caption{Control volume for a tubular reactor} 
 \label{fig_vol_element}
 \end{figure}
@@ -363,7 +363,7 @@ The so-called hat (or roof) basis functions are defined on the interval $[0,1]$ 
 These basis functions are shown in Figure \ref{fig_linbasis} on the domain $[0,1]$. 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale=0.6]{hat}
+\includegraphics[scale=0.6]{./pics/hat}
 \caption{Piecewise linear basis functions} 
 \label{fig_linbasis}
 \end{figure}
@@ -437,7 +437,86 @@ u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_n
 \end{equation} 
  
 \subsection{Piecewise Bilinear Basis Functions}
+\label{section_pbbf}
+In two dimensions the previous roof functions generalise to the piecewise bilinear basis functions. We discretise our domain $[0,1] \times [0,1]$ into $n$ rectangular elements of equal size ($\delta x, \delta y$). We number the nodes of our discretisation column wise as shown in Figure \ref{fig_pbilindomain}.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.8]{./pics/pbilin}
+\caption{Domain discretisation} 
+\label{fig_pbilindomain}
+\end{figure}
+Now we define a basis function $\phi_i(x,y) = a+ bx +cy +dxy$ on each node $i$ of Figure \ref{fig_pbilindomain}. Each basis function $\phi_i$ takes on the value $1$ at node $i$ and a value of $0$ at any node not $i$. For details on the construction of the basis functions we refer the avid reader to \cite{vrb}. 
 
+Each basis function $\phi$ is composed of four constitutive functions named $P_1, P_2, P_3$ and $P_4$ defined on the element adjacent to the basis function $\phi$ in question and with orientation shown in Figure \ref{fig_pbasis}. Each function $P$ takes on the value $1$ at the corner nearest $\phi$ and $0$ at the other corners. If the rectangle corresponding to a particular function $P$ is not in the domain it is neglected in the calculation involving that $\phi$. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.8]{./pics/basis_p}
+\caption{Basis functions} 
+\label{fig_pbasis}
+\end{figure}
+For reasons which will become clear later we consider the set of integrals and corresponding matrices in (\ref{eq_pddx}), (\ref{eq_pddy}), (\ref{eq_pdnx}) and (\ref{eq_pnn}).
+\begin{equation}
+\begin{aligned}
+&m^1_{i,j} = \int_0^{\delta x} \int_0^{\delta y} \partial_x(P_i) \partial_x(P_j) dydx \implies
+M^1 = \frac{1}{12}\begin{pmatrix}
+2d & 2s_2 & -d & 2s_2 \\
+2s_1 & 2s & 2s_2 & -d \\
+-d & 2s_2 & 2d & 2s_1 \\
+2s_2 & -d & 2s_1 & 2d \\
+\end{pmatrix} \\
+&\text{with } d = 2\frac{\delta y}{\delta x}, s_1 = -2\frac{\delta y}{\delta x} \text{ and } s_2 = \frac{\delta y}{\delta x}
+\end{aligned}
+\label{eq_pddx}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+&m^2_{i,j} = \int_0^{\delta x} \int_0^{\delta y} \partial_y(P_i) \partial_y(P_j) dydx \implies
+M^2 = \frac{1}{12}\begin{pmatrix}
+2d & 2s_2 & -d & 2s_2 \\
+2s_1 & 2s & 2s_2 & -d \\
+-d & 2s_2 & 2d & 2s_1 \\
+2s_2 & -d & 2s_1 & 2d \\
+\end{pmatrix} \\
+&\text{with } d = 2\frac{\delta x}{\delta y}, s_1 = \frac{\delta x}{\delta y} \text{ and } s_2 = -2\frac{\delta x}{\delta y}
+\end{aligned}
+\label{eq_pddy}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+m^3_{i,j} = \int_0^{\delta x} \int_0^{\delta y} P_i \partial_x P_j dxdy \implies
+M^3 = \frac{\delta y}{12}\begin{pmatrix}
+-2 & 2 & 1 & -1 \\
+-2 & 2 & 1 & -1 \\
+-1 & 1 & 2 & -2 \\
+-1 & 1 & 2 & -2 \\
+\end{pmatrix}
+\end{aligned}
+\label{eq_pdnx}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+m^4_{i,j} = \int_0^{\delta x} \int_0^{\delta y} P_iP_j dxdy \implies
+M^4 = \frac{\delta x \delta y}{36}\begin{pmatrix}
+4 & 2 & 1 & 2 \\
+2 & 4 & 2 & 1 \\
+1 & 2 & 4 & 2 \\
+2 & 1 & 2 & 4 \\
+\end{pmatrix}
+\end{aligned}
+\label{eq_pnn}
+\end{equation}
+Now we are in a position to calculate matrices of the form $\int_0^1 \int_0^1 \partial_x\phi_i \partial_x\phi_j dxdy$, $\int_0^1 \int_0^1 \partial_y\phi_i \partial_y\phi_j dxdy$, $\int_0^1 \int_0^1 \phi_i \partial_x\phi_j dxdy$ and $\int_0^1 \int_0^1 \phi_i \phi_j dxdy$ for each $i=1,2,...,n$ and each $j=1,2,...,n$. Like the matrices of Section \ref{section_plb} they are each constructed in a similar manner.
+
+Consider the construction of matrix $K^4$ which uses matrix $M^4$ as the basis of its elements as an example. For each $i=1,2,...,n$ and each $j=1,2,...,n$ we wish to compute $K^4_{i,j}$. To achieve this we ``stitch" together the four constitutive functions $P$ around node $i$ and likewise we ``stitch" together four more constitutive functions $P$ around node $j$. We sum together the overlapping constitutive functions and assign this value to $K^4_{i,j}$. This is perhaps easier to understand graphically as shown in Figure \ref{fig_mat_ex}.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.8]{./pics/mat_ax}
+\caption{Construction Example} 
+\label{fig_mat_ex}
+\end{figure} 
+For example, $K^4_{1,1} = M^4_{4,4}$ because only $P_4$ overlaps with itself for nodes 1 and 1. Another example would be $K^4_{1,8} = M^4_{4,3}$ as $P_4$ overlaps with $P_3$. Another example would be $K^4_{9,9} = M^4_{1,1} + M^4_{2,2}+ M^4_{3,3}+M^4_{4,4}$ as every constitutive functions overlaps with itself. A final example is $K^4_{1,3} = 0$ as nodes 1 and 3 have no constitutive functions in common. 
+
+A similar process is repeated for matrices $K^1, K^2$ and $K^3$. 
 
 \section{Isothermal Problem}
 In this section the isothermal models will be developed and solved using the FEM. Finally, the quality of the Aris-Taylor simplification will be analysed numerically.  
@@ -607,9 +686,7 @@ The transient dynamics are shown in Figure \ref{fig_q1std}. Nothing unexpected i
 The next problem we solve is the full two dimensional model from (\ref{eq_iso1}) as shown in (\ref{eq_p2}). Again it is assumed that the physical parameters are given.
 \begin{equation}
 \begin{aligned}
-&D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + 
-\frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}
-{\partial z} - kC_A = \frac{\partial C_A}{\partial t}\\
+&D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t}\\
 &\text{Boundary Conditions:} \\
 &\frac{\partial C_A}{\partial z}(z=L, \cdot, \cdot) = 0\\
 &\frac{\partial C_A}{\partial r}(\cdot, r = R, \cdot) = 0 \\
@@ -620,7 +697,59 @@ The next problem we solve is the full two dimensional model from (\ref{eq_iso1})
 \end{aligned}
 \label{eq_p2}
 \end{equation}
-The boundary conditions indicate that no reaction occurs at the outer edge $r=R$ of the tubular reactor. We also assume that the reactor is symmetrical about $\mathbf{e}_\theta$ and hence there is no concentration gradient at $r=0$. The other boundary conditions are the same as in the one dimensional case. 
+The boundary conditions indicate that no reaction occurs at the outer edge $r=R$ of the tubular reactor. We also assume that the reactor is rotationally symmetrical (about $\mathbf{e}_\theta$) and hence there is no concentration gradient at $r=0$. The other boundary conditions are the same as in the one dimensional case. 
+
+It is desirable to convert (\ref{eq_p2}) to a dimensionless form. This time we proceed in a slightly different manner to take advantage of Green's Formula. We first multiply (\ref{eq_p2}) with an arbitrary test function $v$ and integrate over the reactor (\ref{eq_p2c1}). 
+\begin{equation}
+\int_0^R \int_0^L D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2})v - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z}v - kC_Av dzdr = \int_0^R \int_0^L \frac{\partial C_A}{\partial t}v dzdr
+\label{eq_p2c1}
+\end{equation}
+Now we use Green's Formula by noting that in two dimensions $v\nabla^2C_A = v(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2})$. This results in (\ref{eq_p2c2}).
+\begin{equation}
+\int_0^R \int_0^L D_{AB}(\text{div}(v\nabla C_A)-\nabla C_A \cdot \nabla v ) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z}v - kC_Av dzdr = \int_0^R \int_0^L \frac{\partial C_A}{\partial t}v dzdr
+\label{eq_p2c2}
+\end{equation}
+By recalling the boundary conditions and specifying that $v \in \left\{v : v(z=0,\cdot)=0 \right\} = T$ we can apply Gauss's Theorem to integrate (\ref{eq_p2c3}) where $\Gamma$ is the boundary of the reactor.
+\begin{equation}
+\int_0^R \int_0^L \text{div}(v\nabla C_A)dzdr = \int_\Gamma v\nabla C_A \cdot n ds = 0 
+\label{eq_p2c3}
+\end{equation}
+This then yields (\ref{eq_p2c4}).
+\begin{equation}
+\int_0^R \int_0^L D_{AB}(-\nabla C_A \cdot \nabla v ) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z}v - kC_Av dzdr = \int_0^R \int_0^L \frac{\partial C_A}{\partial t}v dzdr
+\label{eq_p2c4}
+\end{equation}
+Now we go to dimensionless form using $u=\frac{C_A}{C_{A0}}$, $x = \frac{z}{L}$, $y = \frac{r}{R}$ and $\tau = \frac{tU}{L}$. We also change the limits of the integrals. This then yields (\ref{eq_p2d2}) with the previous abuse of notation. 
+\begin{equation}
+\int_0^1 \int_0^1 (-D_{AB}(\frac{1}{R^2}\partial_y u \partial_y v + \frac{1}{L^2}\partial_x u \partial_xv) - 2U(1-y^2)\frac{1}{L}\partial_x(u) v - kuv)dxdy = \int_0^1 \int_0^1 
+\frac{U}{L} \partial_\tau v dxdy
+\label{eq_p2d2}
+\end{equation}
+If we let $B(u,v) = \int_0^1 \int_0^1 (-D_{AB}(\frac{1}{R^2}\partial_y u \partial_y v + \frac{1}{L^2}\partial_x u \partial_x v) - 2U(1-y^2)\frac{1}{L}\partial_x(u) v - kuv)dxdy $ and $(\frac{U}{L} \partial_\tau (u), v)_0 = \int_0^1 \int_0^1 \frac{U}{L} \partial_\tau (u) v dxdy$ we have the dimensionless variational form of (\ref{eq_p2}) in (\ref{eq_p2d3}). The goal is to find a function $u$ with $u(x=0,\cdot) = 1$ such that (\ref{eq_p2d3}) holds for all $v \in T$.
+\begin{equation}
+B(u,v) = (\frac{U}{L} \partial_\tau (u), v)_0
+\label{eq_p2d3}
+\end{equation}
+Likewise with the one dimensional case we assume the existence and uniqueness of such a function $u$. We again rely on the FEM to construct a solution -- it is perhaps more justified to rely on numerical methods like the FEM for the two dimensional non-constant coefficient problem we are currently facing than it was before.
+
+Now we recall the basis functions $\phi$ touched upon in Section \ref{section_pbbf}. We assume that the function $u^h =\sum^n_{k=1} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_1,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p2d3}) by using the Galerkin approximation: find $u^h \in S^h$ such that for $S^h_0=\{\phi_{m+1}, \phi_{m+2},...,\phi_n \}$, where $m$ is the number of functions lying on the y-axis, (\ref{eq_p2d4}) holds.
+\begin{equation}
+B(u^h,v) = (\frac{U}{L} \partial_\tau (u^h), v)_0~~ \forall v \in S^h_0
+\label{eq_p2d4}
+\end{equation}
+\begin{rmrk}
+Again, note the difference between $S^h$ and $S^h_0$. It was required that the test functions satisfy $v(x=0,\cdot)=0$ which is true for all test functions not on the y-axis. 
+\end{rmrk}
+As before we will consider each term in (\ref{eq_p2d4}) separately. First, consider $ \int_0^1 \int_0^1 -D_{AB}\frac{1}{R^2}\partial_y u^h \partial_y \phi_i dxdy$ for each $i=m+1, m+2,...,n$
+
+Second, consider $\int_0^1 \int_0^1  -D_{AB}\frac{1}{L^2}\partial_x u^h \partial_x \phi_i dxdy$ for each $i=m+1, m+2,...,n$
+
+Third, consider $\int_0^1 \int_0^1 - 2U(1-y^2)\frac{1}{L}\partial_x(u^h)  \phi_idxdy$ for each $i=m+1, m+2,...,n$
+
+Fourth, consider $\int_0^1 \int_0^1  - ku^h \phi_i dxdy$ for each $i=m+1, m+2,...,n$ 
+
+And finally, consider $\int_0^1 \int_0^1 \frac{U}{L} \partial_\tau u^h \phi_i dxdy$ for each $i=m+1, m+2,...,n$
+
 
 
 \section{Non-Isothermal Problem}
