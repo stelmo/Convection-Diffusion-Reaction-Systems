@@ -8,7 +8,7 @@ using PyPlot
 a = 7.5 # Peclet number
 b = 1.29 # Damkohler number
 
-N = 50
+N = 100
 xs = linspace(0., 1., N+1)
 h = xs[2] - xs[1]
 
@@ -43,7 +43,7 @@ M = Tridiagonal(md, m, md)
 M = a*M
 # Now start the time series
 Nt = 50
-ts = linspace(0., 2., Nt) # this is dimensionless time... It also takes long...
+ts = linspace(0., 1., Nt) # this is dimensionless time... It also takes long...
 dt = ts[2] - ts[1]
 
 us = zeros(N+1, Nt)
@@ -62,9 +62,10 @@ for (tind, t) in enumerate(ts[2:end])
 end
 
 
-mesh(xs, ts, us')
+surf(xs, ts, us')
 xlabel("Space")
 ylabel("Time")
+zlabel("Concentration")
 
 # plot(xs, us[:, end])
 

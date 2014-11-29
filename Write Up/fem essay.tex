@@ -89,7 +89,7 @@ F_A|_r(r+\delta r) &= (W_ A|_r(r) + \frac{\partial W_A|_r(r)}{\partial r} \delta
 \end{aligned}
 \label{eq_far}
 \end{equation}
-For sufficiently small $\delta r$ we have $\lim_{\delta r \to 0} ||\delta r||^{-1}||h(\delta r)||$ and consequently (\ref{eq_far2}).  
+For the linear approximation we have $\lim_{\delta r \to 0} ||\delta r||^{-1}||h(\delta r)|| = 0 $ and consequently for sufficiently small $\delta r$ we have (\ref{eq_far2}).  
 \begin{equation}
 F_A|_r(r) - F_A|_r(r+\delta r)  = - (W_ A|_r(r)  + \frac{\partial W_A|_r(r)}{\partial r}r) \delta r \delta \theta \delta z
 \label{eq_far2}
@@ -107,7 +107,7 @@ Again, for sufficiently small $\delta \theta$ we have (\ref{eq_fat2}).
 F_A|_\theta(\theta) - F_A|_\theta(\theta + \delta \theta) =- \frac{\partial W_A|_\theta(\theta)}{r \partial \theta}\delta \theta\delta r \delta z
 \label{eq_fat2} 
 \end{equation}
-Finally, consider the molar flow rate in the $\mathbf{e}_z$ direction. By using the definition of molar flux, the approximation of $F_A|_z(z+\delta z)$, approximating the cross-sectional area normal to $\mathbf{e}_z$ in Figure \ref{fig_vol_element} as a trapezium and neglecting higher order terms, we have (\ref{eq_faz}).
+Finally, consider the molar flow rate in the $\mathbf{e}_z$ direction. By using the definition of molar flux, the linear approximation of $F_A|_z(z+\delta z)$ and approximating the cross-sectional area normal to $\mathbf{e}_z$ in Figure \ref{fig_vol_element} as a trapezium we have (\ref{eq_faz}).
 \begin{equation}
 \begin{aligned}
 F_A|_z(z) &= W_A|_z(z) r \delta r \delta \theta \\
@@ -339,6 +339,106 @@ Finally, consider the coupled problem shown in (\ref{eq_nl2}). This corresponds 
 \end{equation}
 
 These two problems combined capture the difficulties one would encounter attempting to solve (\ref{eq_noniso1}) or (\ref{eq_noniso2}).
+
+\section{Basis Functions}
+To solve problems with the FEM it is desirable to construct basis functions with simple analytical properties. Ideally these basis functions should lend themselves to simple computational implementation for numerical integration. We consider two basis functions in this project. 
+
+\subsection{Piecewise Linear Basis Functions}
+\label{section_plb}
+The so-called hat (or roof) basis functions are defined on the interval $[0,1]$ for this project. Consider a discretisation of $[0,1]$ into $n$ equidistant elements $[x_{k-1}, x_k]$ where $x_k$ indicates node $k$ with $k=0,1,...,n$. Clearly $x_0=0$ and $x_n=1$ furthermore, define the constant $h = x_1-x_0$. Now define a basis function $\phi$ over each element by (\ref{eq_basis1}).  
+\begin{equation}
+\begin{aligned}
+&\text{For } k=1,2,...,n-1 \\
+&\phi_k(x) = h^{-1}(x-x_{k-1}) \text{ for } x \in [x_{k-1}, x_k] \\
+&\phi_k(x) = 1-h^{-1}(x-x_{k}) \text{ for } x \in (x_{k}, x_{k+1}] \\
+&\phi_k(x) = 0 \text{ for } x \notin [x_{k-1}, x_{k+1}] \\
+&\text{And otherwise} \\
+&\phi_0(x) = 1- h^{-1}x \text{ for } x \in [0, x_1] \\
+&\phi_0(x) = 0 \text{ for } x \notin [x_{k-1}, x_1] \\
+&\phi_n(x) = h^{-1}(x-x_{n-1}) \text{ for } x \in [x_{n-1}, 1] \\
+&\phi_n(x) = 0 \text{ for } x \notin [x_{n-1}, 1] \\
+\end{aligned}
+\label{eq_basis1}
+\end{equation}
+These basis functions are shown in Figure \ref{fig_linbasis} on the domain $[0,1]$. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.6]{hat}
+\caption{Piecewise linear basis functions} 
+\label{fig_linbasis}
+\end{figure}
+For reasons which will become clear later consider the matrix $K^1$ with elements defined by (\ref{eq_K1lin}).
+\begin{equation}
+\begin{aligned}
+&K^1_{i,i+1}=K^1_{i+1,i}=\int^1_0 \partial_x(\phi_i)\partial_x(\phi_{i+1})dx = -h^{-1} \\
+&K^1_{00} = K^1_{nn} = \int^1_0 \partial_x(\phi_n)\partial_x(\phi_{n})dx = h^{-1} \\
+&K^1_{ii} = \int^1_0 \partial_x(\phi_i)\partial_x(\phi_{i})dx = 2h^{-1} \\
+\end{aligned}
+\label{eq_K1lin}
+\end{equation}
+This matrix then takes the form shown in (\ref{eq_K1matlin}).
+\begin{equation}
+K^1 = \begin{pmatrix}
+h^{-1} & -h^{-1} & 0&0 & 0 &  0\\
+-h^{-1} & 2h^{-1} & -h^{-1} & 0 & 0 &  0\\
+0 & -h^{-1} & 2h^{-1} & -h^{-1} & 0 & 0  \\
+\ddots & \ddots & \ddots & \ddots & \ddots & \ddots \\
+0 & 0 & 0  & -h^{-1} & 2h^{-1}& -h^{-1} \\
+0 & 0 & 0 & 0 & -h^{-1} & h^{-1}   
+\end{pmatrix}
+\label{eq_K1matlin}
+\end{equation}
+Similarly, consider the matrix $K^2$ with elements defined by (\ref{eq_K2lin}).
+\begin{equation}
+\begin{aligned}
+&K^2_{i,i+1}=\int^1_0 \partial_x(\phi_i)\phi_{i}dx = \frac{1}{2}\\
+&K^2_{i+1,i}=\int^1_0 \partial_x(\phi_i)\phi_{i+1}dx = -\frac{1}{2} \\
+&K^2_{nn} = \int^1_0 \partial_x(\phi_n)\phi_{n}dx = \frac{1}{2} \\
+&K^2_{00} = \int^1_0 \partial_x(\phi_n)\phi_{n}dx = -\frac{1}{2} \\
+&K^2_{ii} = \int^1_0 \partial_x(\phi_i)\phi_{i}dx = 0 \\
+\end{aligned}
+\label{eq_K2lin}
+\end{equation}
+This matrix then takes the form shown in (\ref{eq_K2matlin}).
+\begin{equation}
+K^2 = \begin{pmatrix}
+-\frac{1}{2} & \frac{1}{2} & 0& 0 & 0 &  0 \\
+-\frac{1}{2} & 0 & \frac{1}{2} & 0 & 0 &  0\\
+0 & -\frac{1}{2} & 0 & \frac{1}{2} & 0 & 0  \\
+\ddots & \ddots & \ddots & \ddots & \ddots & \ddots \\
+0 & 0 & 0  & -\frac{1}{2} & 0 & \frac{1}{2} \\
+0 & 0 & 0 & 0 & -\frac{1}{2} & \frac{1}{2}   
+\end{pmatrix}
+\label{eq_K2matlin}
+\end{equation}
+Finally, consider the matrix $K^3$ with elements defined by (\ref{eq_K3lin}). 
+\begin{equation}
+\begin{aligned}
+&K^3_{i,i+1}=K^3_{i+1,i}=\int^1_0 \phi_i\phi_{i+1}dx = \frac{h}{6} \\
+&K^3_{00} = K^3_{nn} = \int^1_0 \phi_n\phi_{n}dx = \frac{h}{3} \\
+&K^3_{ii} = \int^1_0 \phi_i\phi_{i}dx = \frac{2h}{3} \\
+\end{aligned}
+\label{eq_K3lin}
+\end{equation}
+This matrix then takes the form shown in (\ref{eq_K3matlin}).
+\begin{equation}
+K^3 = \begin{pmatrix}
+\frac{h}{3} & \frac{h}{6} &0& 0 & 0 &  0\\
+\frac{h}{6} & \frac{2h}{3} & \frac{h}{6} & 0 & 0 &  0\\
+0 & \frac{h}{6} & \frac{2h}{3} & \frac{h}{6} & 0 & 0  \\
+\ddots & \ddots & \ddots & \ddots & \ddots & \ddots \\
+0 & 0 & 0  & \frac{h}{6}& \frac{2h}{3} & \frac{h}{6} \\
+0 & 0 & 0 & 0 &\frac{h}{6} & \frac{h}{3}   
+\end{pmatrix}
+\begin{pmatrix}
+u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_n
+\end{pmatrix}
+\label{eq_K3matlin}
+\end{equation} 
+ 
+\subsection{Piecewise Bilinear Basis Functions}
+
+
 \section{Isothermal Problem}
 In this section the isothermal models will be developed and solved using the FEM. Finally, the quality of the Aris-Taylor simplification will be analysed numerically.  
 \subsection{Problem 1}
@@ -351,11 +451,11 @@ We start this section solving the simplified model from (\ref{eq_iso1}) because 
 &\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
 &C_A(z=0, \cdot) = C_{A0} \\
 &\text{Initial Condition:} \\
-& C_A(\cdot, t= 0) = \alpha(z)
+& C_A(\cdot, t= 0) = e^{-10x}
 \end{aligned}
 \label{eq_p1}
 \end{equation}
-The boundary conditions indicate that the concentration is known at the entrance ($z=0$) of the reactor and that no reaction (change in concentration) takes place at the end ($z=L$) of the reactor. The initial condition indicates that the concentration throughout the reactor is known at $t=0$ and takes the form $\alpha(z)$. 
+The boundary conditions indicate that the concentration is known at the entrance ($z=0$) of the reactor and that no reaction (change in concentration) takes place at the end ($z=L$) of the reactor. The initial condition models the situation where the reactor is filled with an inert fluid initially - the exponential term creates an artificially smooth profile for $C_{A}$ which quickly reaches zero in the start of the reactor. 
 
 It is desirable to convert (\ref{eq_p1}) into dimensionless form. By creating the dimensionless variables $u=\frac{C_A}{C_{A0}}$, $x = \frac{z}{L}$ and $\tau = \frac{tU}{L}$ it is possible to write (\ref{eq_p1}) as (\ref{eq_p1d}).
 \begin{equation}
@@ -367,7 +467,7 @@ c_1\frac{\partial u}{\partial \tau} \\
 &\frac{\partial u}{\partial x}(x=1, \cdot) = 0\\
 &u(x=0, \cdot) = 1 \\
 &\text{Initial Condition:} \\
-& u(\cdot, \tau = 0) = \alpha(xL)
+& u(\cdot, \tau = 0) = e^{-10\frac{z}{L}}
 \end{aligned}
 \label{eq_p1d}
 \end{equation}
@@ -399,24 +499,9 @@ Now let $B(u, v) = \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c
 B(u, v) = (c_1(\partial_{\tau}u),v)_0
 \label{eq_p1d5}
 \end{equation}
-For the purposes of this project we will assume the existence and uniqueness of such a function. While it is certainly within the realm of possibilities to find an analytic solution to (\ref{eq_p1d5}) it is invariably quite difficult. We will rather attempt to find an approximate solution using the FEM.
+For the purposes of this project we will assume the existence and uniqueness of such a function. While it is certainly within the realm of possibilities to find an analytic solution to (\ref{eq_p1d5}) we will rather attempt to find an approximate solution using the FEM.
 
-The first step in constructing an approximation is to define a set of basis functions. To this end discretise the domain $[0,1]$ into $n$ equidistant elements $[x_{k-1}, x_k]$ where $x_k$ indicates node $k$ with $k=0,1,...,n$. Clearly $x_0=0$ and $x_n=1$ furthermore, define the constant $h = x_1-x_0$. Now define a basis function $\phi$ over each element by (\ref{eq_basis1}).  
-\begin{equation}
-\begin{aligned}
-&\text{For } k=1,2,...,n-1 \\
-&\phi_k(x) = h^{-1}(x-x_{k-1}) \text{ for } x \in [x_{k-1}, x_k] \\
-&\phi_k(x) = 1-h^{-1}(x-x_{k}) \text{ for } x \in (x_{k}, x_k+1] \\
-&\phi_k(x) = 0 \text{ for } x \notin [x_{k-1}, x_k+1] \\
-&\text{And otherwise} \\
-&\phi_0(x) = 1- h^{-1}x \text{ for } x \in [0, x_1] \\
-&\phi_0(x) = 0 \text{ for } x \notin [x_{k-1}, x_1] \\
-&\phi_n(x) = h^{-1}(x-x_{n-1}) \text{ for } x \in [x_{n-1}, 1] \\
-&\phi_n(x) = 0 \text{ for } x \notin [x_{n-1}, 1] \\
-\end{aligned}
-\label{eq_basis1}
-\end{equation}
-Now we assume that the function $u^h =\sum^n_{k=0} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p1d5}) by using the Galerkin approximation: find $u^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p1d6}) holds.
+Recall the definition of the piecewise linear basis functions ($\phi$) defined in Section \ref{section_plb}. We assume that the function $u^h =\sum^n_{k=0} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p1d5}) by using the Galerkin approximation: find $u^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p1d6}) holds.
 \begin{equation}
 B(u^h, \phi) = (c_1(\partial_{\tau}u^h),\phi)_0~~\forall \phi \in S^h_0
 \label{eq_p1d6}
@@ -429,7 +514,7 @@ Recall that $B(u, v) = \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v
 B(u^h, \phi_i) = \int_0^1 (-(\partial_xu^h)(\partial_x\phi_i) - c_1(\partial_xu^h)\phi_i - c_1c_2u^h\phi_i)dx \text{ for } i=1,2,...,n
 \label{eq_p1d7}
 \end{equation}
-Now consider each term in the integral separately. Consider the first term in $B(u^h, \phi_i)$ as shown in (\ref{eq_lindd}). We have suppressed the time dependency of $u^h$ for clarity.
+Now we will consider each term of (\ref{eq_p1d7}) separately. Firstly, consider $\int_0^1 -(\partial_xu^h)(\partial_x\phi_i)dx$ for each $i=1,2,...,n$ as shown in (\ref{eq_lindd}).
 \begin{equation}
 \begin{aligned}
 \int_0^1 -(\partial_xu^h)(\partial_x\phi_i)dx &= \int_0^1 -(\partial_x \sum_{k=0}^{n} u_k\phi_k)(\partial_x\phi_i)dx \\
@@ -441,33 +526,12 @@ Now consider each term in the integral separately. Consider the first term in $B
 \end{aligned}
 \label{eq_lindd}
 \end{equation}
-It is possible to recast this expression into a matrix $K^1$ with $n$ rows and $n+1$ columns. The elements of this matrix are given by (\ref{eq_K1lin}).
+After a little reflection we notice that (\ref{eq_lindd}) corresponds to $-K^1_{1:n, 0:n}\mathbf{u}$ with $\mathbf{u} = \left(u_0, u_1,...,u_{n-1}, u_n \right)^T$. 
+
+Now consider the second term $\int_0^1  -c_1(\partial_xu^h)\phi_idx$  for each $i=1,2,...,n$ as shown in (\ref{eq_lindn}).
 \begin{equation}
 \begin{aligned}
-&K^1_{i,i+1}=K^1_{i+1,i}=\int^1_0 \partial_x(\phi_i)\partial_x(\phi_{i+1})dx = -h^{-1} \\
-&K^1_{nn} = \int^1_0 \partial_x(\phi_n)\partial_x(\phi_{n})dx = h^{-1} \\
-&K^1_{ii} = \int^1_0 \partial_x(\phi_i)\partial_x(\phi_{i})dx = 2h^{-1} \\
-\end{aligned}
-\label{eq_K1lin}
-\end{equation}
-This matrix then takes the form shown in (\ref{eq_K1matlin}).
-\begin{equation}
-K^1_{1:n,0:n} = \begin{pmatrix}
--h^{-1} & 2h^{-1} & -h^{-1} & 0 & 0 &  0\\
-0 & -h^{-1} & 2h^{-1} & -h^{-1} & 0 & 0  \\
-\ddots & \ddots & \ddots & \ddots & \ddots & \ddots \\
-0 & 0 & 0  & -h^{-1} & 2h^{-1}& -h^{-1} \\
-0 & 0 & 0 & 0 & -h^{-1} & h^{-1}   
-\end{pmatrix}
-\begin{pmatrix}
-u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_n
-\end{pmatrix}
-\label{eq_K1matlin}
-\end{equation}
-Now consider the second term of $B(u^h, \phi_i)$ as shown in (\ref{eq_lindn}).
-\begin{equation}
-\begin{aligned}
-\int_0^1 -c_1(\partial_xu^h)\phi_i &= \int_0^1 - c_1(\partial_x \sum_{k=0}^{n} u_k\phi_k)\phi_i dx \\
+\int_0^1 -c_1(\partial_xu^h)\phi_idx &= \int_0^1 - c_1(\partial_x \sum_{k=0}^{n} u_k\phi_k)\phi_i dx \\
 &= \int_0^1 -c_1\sum_{k=0}^{n} u_k(\partial_x\phi_k)\phi_idx \\
 &= \begin{cases}
 \int_{[x_{i-1},x_{i+1}]}-c_1\sum_{k=i-1}^{i+1} u_k(\partial_x\phi_k)\phi_idx &\text{ for } i=1,2,..., n-1 \\
@@ -476,34 +540,12 @@ Now consider the second term of $B(u^h, \phi_i)$ as shown in (\ref{eq_lindn}).
 \end{aligned}
 \label{eq_lindn}
 \end{equation}
-It is again possible to recast this expression as a matrix $K^2$ with $n$ rows and $n+1$ columns. The elements of this matrix are given by (\ref{eq_K2lin}).
+Again, after some reflection we notice that (\ref{eq_lindn}) corresponds to $-c_1K^2_{1:n, 0:n}\mathbf{u}$. 
+
+Finally, we consider the last term $\int_0^1 - c_1c_2u^h\phi_i)dx$ for each $i=1,2,...,n$ as shown in (\ref{eq_linnn}).
 \begin{equation}
 \begin{aligned}
-&K^2_{i,i+1}=\int^1_0 \partial_x(\phi_i)\phi_{i}dx = \frac{1}{2}\\
-&K^2_{i+1,i}=\int^1_0 \partial_x(\phi_i)\phi_{i+1}dx = -\frac{1}{2} \\
-&K^2_{nn} = \int^1_0 \partial_x(\phi_n)\phi_{n}dx = \frac{1}{2} \\
-&K^2_{ii} = \int^1_0 \partial_x(\phi_i)\phi_{i}dx = 0 \\
-\end{aligned}
-\label{eq_K2lin}
-\end{equation}
-This matrix then takes the form shown in (\ref{eq_K2matlin}).
-\begin{equation}
-K^2_{1:n,0:n} = -c_1\begin{pmatrix}
--\frac{1}{2} & 0 & \frac{1}{2} & 0 & 0 &  0\\
-0 & -\frac{1}{2} & 0 & \frac{1}{2} & 0 & 0  \\
-\ddots & \ddots & \ddots & \ddots & \ddots & \ddots \\
-0 & 0 & 0  & -\frac{1}{2} & 0 & \frac{1}{2} \\
-0 & 0 & 0 & 0 & -\frac{1}{2} & 0   
-\end{pmatrix}
-\begin{pmatrix}
-u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_n
-\end{pmatrix}
-\label{eq_K2matlin}
-\end{equation}
-Finally, consider the final term of $B(u^h, \phi_i)$ as shown in (\ref{eq_linnn}).
-\begin{equation}
-\begin{aligned}
-\int_0^1 -c_1c_2u^h\phi_i &= \int_0^1 - c_1c_2\sum_{k=0}^{n} u_k\phi_k\phi_i dx \\
+\int_0^1 -c_1c_2u^h\phi_idx &= \int_0^1 - c_1c_2\sum_{k=0}^{n} u_k\phi_k\phi_i dx \\
 &= \begin{cases}
 \int_{[x_{i-1},x_{i+1}]}-c_1c_2\sum_{k=i-1}^{i+1} u_k\phi_k\phi_idx &\text{ for } i=1,2,..., n-1 \\
 \int_{[x_{i-1},x_{n}]}-c_1c_2\sum_{k=i-1}^{n} u_k\phi_k\phi_idx &\text{ for } i=n
@@ -511,32 +553,58 @@ Finally, consider the final term of $B(u^h, \phi_i)$ as shown in (\ref{eq_linnn}
 \end{aligned}
 \label{eq_linnn}
 \end{equation}
-It is again possible to recast this expression as a matrix $K^3$ with $n$ rows and $n+1$ columns. The elements of this matrix are given by (\ref{eq_K3lin}).
+Again, we notice that (\ref{eq_linnn}) corresponds to $-c_1c_2K^3_{1:n, 0:n}\mathbf{u}$.
+
+Now consider the right hand side of (\ref{eq_p1d6}). If we substitute the definition of $u^h$ into  $(c_1(\partial_{\tau}u^h),\phi)_0$ we have (\ref{eq_timelin}).
 \begin{equation}
 \begin{aligned}
-&K^3_{i,i+1}=K^3_{i+1,i}=\int^1_0 \phi_i\phi_{i+1}dx = \frac{h}{6} \\
-&K^3_{nn} = \int^1_0 \phi_n\phi_{n}dx = \frac{h}{3} \\
-&K^3_{ii} = \int^1_0 \phi_i\phi_{i}dx = \frac{2h}{3} \\
+\int_0^1 c_1\partial_t (u^h) \phi_i &= \int_0^1 c_1\sum_{k=0}^{n} u_k\prime \phi_k \phi_i dx \\
+&= \begin{cases}
+\int_{[x_{i-1},x_{i+1}]}c_1\sum_{k=i-1}^{i+1} u_k\prime \phi_k\phi_idx &\text{ for } i=1,2,..., n-1 \\
+\int_{[x_{i-1},x_{n}]}c_1\sum_{k=i-1}^{n} u_k\prime \phi_k \phi_idx &\text{ for } i=n
+\end{cases}
 \end{aligned}
-\label{eq_K3lin}
+\label{eq_timelin}
 \end{equation}
-This matrix then takes the form shown in (\ref{eq_K3matlin}).
+Now notice that (\ref{eq_timelin}) is essentially the same as (\ref{eq_linnn}) except that $u_k$ has been replaced with $u_k\prime$ and we only multiply by the constant $c_1$ as opposed to $-c_1c_2$. We can then immediately write down the matrix representation of (\ref{eq_timelin}) using (\ref{eq_K3matlin}). Then (\ref{eq_timelin}) corresponds to $c_1K^3_{1:n, 0:n}\mathbf{u}\prime$  where $\mathbf{u}\prime = \left(u_0\prime,u_1\prime,...,u_{n-1}\prime,u_n\prime \right)^T$.
+
+Combining everything we have the FEM approximation for (\ref{eq_p1d6}) as shown in (\ref{eq_femq1}). 
 \begin{equation}
-K^3_{1:n,0:n} = \begin{pmatrix}
-\frac{h}{6} & \frac{2h}{3} & \frac{h}{6} & 0 & 0 &  0\\
-0 & \frac{h}{6} & \frac{2h}{3} & \frac{h}{6} & 0 & 0  \\
-\ddots & \ddots & \ddots & \ddots & \ddots & \ddots \\
-0 & 0 & 0  & \frac{h}{6}& \frac{2h}{3} & \frac{h}{6} \\
-0 & 0 & 0 & 0 &\frac{h}{6} & \frac{h}{3}   
-\end{pmatrix}
-\begin{pmatrix}
-u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_n
-\end{pmatrix}
-\label{eq_K3matlin}
+\left(-K^1_{1:n,0:n}-c_1K^2_{1:n,0:n}-c_1c_2K^3_{1:n,0:n} \right)\mathbf{u} =  c_1K^3_{1:n,0:n}\mathbf{u}\prime
+\label{eq_femq1}
+\end{equation}
+Note that $u_0=1$ because of the boundary condition at the start of the reactor and that $u_0\prime=0$ because we assume that this boundary condition is time invariant. Making use of this information we have (\ref{eq_femq12}) where $\mathbf{u}=\left(u_1,...,u_n\right)^T$ and $\mathbf{u}\prime=\left(u_1\prime,...,u_n\prime \right)^T$ have implicitly been redefined.
+\begin{equation}
+\left(-K^1_{1:n,1:n}-c_1K^2_{1:n,1:n}-c_1c_2K^3_{1:n,1:n} \right)\mathbf{u} +\left(-K^1_{1:n,0}-c_1K^2_{1:n,0} -c_1c_2K^3_{1:n,0}\right) =  c_1K^3_{1:n,1:n}\mathbf{u}\prime
+\label{eq_femq12}
+\end{equation}
+If we were merely interested in solving for the steady state solution of (\ref{eq_p1d}) we could have set the right hand side of (\ref{eq_femq12}) equal to zero and solved the resulting system of equations for $\mathbf{u}$. However, we would like to solve for the transient response as well. For this we use the Crank-Nicholson method for solving the system of ordinary differential equations (ODEs) in (\ref{eq_femq12}). For convenience we define $K^* = \left(-K^1_{1:n,1:n}-c_1K^2_{1:n,1:n}-c_1c_2K^3_{1:n,1:n} \right)$ and $G^{*} = \left(-K^1_{1:n,0}-c_1K^2_{1:n,0} -c_1c_2K^3_{1:n,0}\right)$. We discretise the dimensionless time domain $[0,1]$ into $n$ equidistant elements with nodes $\tau_0 = 0, \tau_1=\delta \tau, \tau_2=\tau_1 + \delta \tau,...,\tau_n=1$ and approximate $\mathbf{u}\prime = \frac{\mathbf{u}_{\tau+1} -\mathbf{u}_{\tau}}{\delta \tau}$. The Crank-Nicholson scheme for (\ref{eq_femq12}) is shown in (\ref{eq_cnq1}).
+\begin{equation}
+\frac{1}{2}\left( K^*\mathbf{u}_{\tau_{m+1}} + K^*\mathbf{u}_{\tau_m} \right) + G^* = c_1K^3_{1:n,1:n}\frac{\mathbf{u}_{\tau_{m+1}} -\mathbf{u}_{\tau_{m}}}{\delta \tau}
+\label{eq_cnq1}
 \end{equation} 
+If we recall that by the initial condition we have $\mathbf{u}_0$ we can iterate using (\ref{eq_cnq1}) to get to the final time step $\mathbf{u}_1$. As an example, consider a reactor with physical properties shown in (\ref{eq_q1phys}).
+\begin{equation}
+\begin{aligned}
+&C_{A0} = 0.5~~ \frac{mol}{dm^3}
+&&D_{AB} = 7.6\times 10^{-5} ~~\frac{m^2}{min}
+&&&U = 1.24~~ \frac{m}{min} \\
+&L = 6.36~~ m 
+&&R = 0.05~~ m
+&&&k = 0.25~~ \frac{1}{min} 
+\end{aligned}
+\label{eq_q1phys}
+\end{equation}
+The transient dynamics are shown in Figure \ref{fig_q1std}. Nothing unexpected is apparent in the model approximation and thus we may safely conclude that the exercise was successful.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/q1_standard}
+\caption{Example reactor transient dynamics} 
+\label{fig_q1std}
+\end{figure}
 
 \subsection{Problem 2}
-The two dimensional problem is shown in (\ref{eq_p2}).
+The next problem we solve is the full two dimensional model from (\ref{eq_iso1}) as shown in (\ref{eq_p2}). Again it is assumed that the physical parameters are given.
 \begin{equation}
 \begin{aligned}
 &D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + 
@@ -552,6 +620,7 @@ The two dimensional problem is shown in (\ref{eq_p2}).
 \end{aligned}
 \label{eq_p2}
 \end{equation}
+The boundary conditions indicate that no reaction occurs at the outer edge $r=R$ of the tubular reactor. We also assume that the reactor is symmetrical about $\mathbf{e}_\theta$ and hence there is no concentration gradient at $r=0$. The other boundary conditions are the same as in the one dimensional case. 
 
 
 \section{Non-Isothermal Problem}
