@@ -723,7 +723,7 @@ This then yields (\ref{eq_p2c4}).
 Now we go to dimensionless form using $u=\frac{C_A}{C_{A0}}$, $x = \frac{z}{L}$, $y = \frac{r}{R}$ and $\tau = \frac{tU}{L}$. We also change the limits of the integrals. This then yields (\ref{eq_p2d2}) with the previous abuse of notation. 
 \begin{equation}
 \int_0^1 \int_0^1 (-D_{AB}(\frac{1}{R^2}\partial_y u \partial_y v + \frac{1}{L^2}\partial_x u \partial_xv) - 2U(1-y^2)\frac{1}{L}\partial_x(u) v - kuv)dxdy = \int_0^1 \int_0^1 
-\frac{U}{L} \partial_\tau v dxdy
+\frac{U}{L} \partial_\tau(u) v dxdy
 \label{eq_p2d2}
 \end{equation}
 If we let $B(u,v) = \int_0^1 \int_0^1 (-D_{AB}(\frac{1}{R^2}\partial_y u \partial_y v + \frac{1}{L^2}\partial_x u \partial_x v) - 2U(1-y^2)\frac{1}{L}\partial_x(u) v - kuv)dxdy $ and $(\frac{U}{L} \partial_\tau (u), v)_0 = \int_0^1 \int_0^1 \frac{U}{L} \partial_\tau (u) v dxdy$ we have the dimensionless variational form of (\ref{eq_p2}) in (\ref{eq_p2d3}). The goal is to find a function $u$ with $u(x=0,\cdot) = 1$ such that (\ref{eq_p2d3}) holds for all $v \in T$.
@@ -733,7 +733,7 @@ B(u,v) = (\frac{U}{L} \partial_\tau (u), v)_0
 \end{equation}
 Likewise with the one dimensional case we assume the existence and uniqueness of such a function $u$. We again rely on the FEM to construct a solution -- it is perhaps more justified to rely on numerical methods like the FEM for the two dimensional non-constant coefficient problem we are currently facing than it was before.
 
-Now we recall the basis functions $\phi$ touched upon in Section \ref{section_pbbf}. We assume that the function $u^h =\sum^n_{k=1} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_1,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p2d3}) by using the Galerkin approximation: find $u^h \in S^h$ such that for $S^h_0=\{\phi_{m+1}, \phi_{m+2},...,\phi_n \}$, where $m$ is the number of functions lying on the y-axis, (\ref{eq_p2d4}) holds.
+Now we recall the basis functions $\phi$ touched upon in Section \ref{section_pbbf}. We assume that the function $u^h =\sum^n_{k=1} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_1,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p2d3}) by using the Galerkin approximation: find $u^h \in S^h$ with $u^h(\cdot, 0,\cdot) = 1.$ such that for $S^h_0=\{\phi_{m+1}, \phi_{m+2},...,\phi_n \}$, where $m$ is the number of functions lying on the y-axis, (\ref{eq_p2d4}) holds.
 \begin{equation}
 B(u^h,v) = (\frac{U}{L} \partial_\tau (u^h), v)_0~~ \forall v \in S^h_0
 \label{eq_p2d4}
@@ -776,8 +776,8 @@ Third, consider $\int_0^1 \int_0^1 - 2U(1-y^2)\frac{1}{L}\partial_x(u^h)  \phi_i
 We proceed by assuming that for a sufficiently small mesh size the non-constant term $(1-y^2)$ can be approximated as a constant over each element. To avoid clumsy notation we supply a few example calculations of entries to the matrix $K^{3*}$ in the hope that the method will become clear. Consider (\ref{eq_intdx2}). 
 \begin{equation}
 \begin{aligned}
-K^{3*}_{1,2} = \frac{-2U}{L} u_2 \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_2)  \phi_1dxdy \approx \frac{-2U}{L} u_2 (1-y_1)K^3{1,2} \\
-K^{3*}_{2,2} = \frac{-2U}{L} u_2 \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_2)  \phi_2dxdy \approx \frac{-2U}{L} u_2 (1-y_2)K^3{2,2} \\ 
+K^{3*}_{1,2} = \frac{-2U}{L} u_2 \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_2)  \phi_1dxdy \approx \frac{-2U}{L} u_2 (1-y_1)K^3_{1,2} \\
+K^{3*}_{2,2} = \frac{-2U}{L} u_2 \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_2)  \phi_2dxdy \approx \frac{-2U}{L} u_2 (1-y_2)K^3_{2,2} \\ 
 \end{aligned}
 \label{eq_intdx2}
 \end{equation}
@@ -835,10 +835,49 @@ By recalling that the initial condition is $\mathbf{u}_0$ we can iterate with (\
 \caption{Concentration distribution at $t=5$} 
 \label{fig_rft3}
 \end{figure}
-By inspection of Figures \ref{fig_rft1} to \ref{fig_rft3} we see nothing which is physically unrealistic. We therefore conclude that solution process was successful.
+By inspection of Figures \ref{fig_rft1} to \ref{fig_rft3} we see nothing which is physically unrealistic (perhaps the jagged edges in Figure \ref{fig_rft2}, but these are due to the element size used). We therefore conclude that solution process was successful.
 
 \subsection{Isothermal Comparison}
-We now compare the
+We now discuss the accuracy of the Aris-Taylor approximation. Literature \cite{washington} suggests that the Aris-Taylor approximation is valid under the conditions in (\ref{eq_aris}).
+\begin{equation}
+\frac{L}{R} \geq 0.08\frac{UR}{D_e} \text{ and } \frac{UR}{D_e} \geq 6.9
+\label{eq_aris}
+\end{equation}
+Consider the example model in Section \ref{section_isop1} with parameters restated below for convenience.
+\begin{equation*}
+\begin{aligned}
+&C_{A0} = 0.5~~ \frac{mol}{dm^3}
+&&D_{AB} = 7.6\times 10^{-5} ~~\frac{m^2}{min}
+&&&U = 1.24~~ \frac{m}{min} \\
+&L = 6.36~~ m 
+&&R = 0.05~~ m
+&&&k = 0.25~~ \frac{1}{min} 
+\end{aligned}
+\end{equation*}
+This model satisfies the conditions in (\ref{eq_aris}). We therefore do not expect a significant error. We now plot the percentage error (with the two dimensional model used as a baseline) made over time if we use the Aris-Taylor approximation. This is shown in Figure \ref{fig_isocomp1}.
+\begin{rmrk}
+To compare the one dimensional model to the two dimensional model we have taken the average concentration at each axial point in the two dimensional model.
+\end{rmrk}
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/iso_comp_1}
+\caption{Percentage error of the example reactor} 
+\label{fig_isocomp1}
+\end{figure}
+It is apparent that the steady state (taken as the conditions at $t=3$) error is approximately 6.1\% at the end of the reactor. In this case the Aris-Taylor approximation is quite accurate. It is noticeable that the Aris-Taylor approximation is not very accurate (in the order of 20\% error) during the initial unsteady operation of the reactor. 
+
+The focus of this project is not on a detailed accuracy comparison. However, for the sake of interest we quadruple the average linear velocity in the example reactor and investigate the percentage error in Figure \ref{fig_isocomp2}.
+
+By quadrupling the average linear velocity we are no longer in the region where the approximation is deemed accurate according to \cite{washington}. We therefore expect to see appreciable error. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/iso_comp_2}
+\caption{Percentage error of the modified reactor} 
+\label{fig_isocomp2}
+\end{figure}
+It is quite interesting to note that the steady state error percentage is still small. However, in the unsteady region the error is much more appreciable than before. 
+
+We now move on the the non-isothermal problems.
 
 \section{Non-Isothermal Problem}
 

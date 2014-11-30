@@ -7,12 +7,12 @@ k = 0.25
 L = 6.36
 R = 0.05
 De = 7.6E-05
-U = 1.24
+U = 1.24*4.
 
 
-N = 20
-Nt = 20
-timeEnd = 5.
+N = 30
+Nt = 90
+timeEnd = 3.
 xs = linspace(0., 1., N+1)
 ts = linspace(0., timeEnd, Nt)
 
@@ -518,8 +518,8 @@ us_2d = round(us_2d, 3)
 
 per_err = round(us_2d-us_1d, 3)*100.
 contourf(xs, ts, per_err', 20)
-colorbar()
-# clim(-50,50)
+colorbar(label="Percentage Error")
+# clim(-35,35)
 xlabel("Axial Distance")
 ylabel("Time")
 plt.show()
