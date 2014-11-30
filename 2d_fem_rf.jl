@@ -1,11 +1,11 @@
 # Two dimensional problem - plug flow case + steady state
 using PyPlot
 
-xN = 30 # Number of elements - 1
+xN = 50 # Number of elements - 1
 xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
-yN = 30 # Number of elements - 1
+yN = 50 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
@@ -389,7 +389,7 @@ end
 println(1.-aveconv)
 
 contourf(xs, reverse(ys), u, 20)
-colorbar()
+colorbar(label="Concentration")
 xlabel("Axial Distance")
 ylabel("Radial Distance")
 plt.show()

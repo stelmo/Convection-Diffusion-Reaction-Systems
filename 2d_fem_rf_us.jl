@@ -9,8 +9,8 @@ yN = 30 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
-tN = 50
-ts = linspace(0., 10., tN) # it takes long to reach SS. Try 5.0 for the end time.
+tN = 90
+ts = linspace(0., 5., tN) # it takes long to reach SS. Try 5.0 for the end time.
 dt = ts[2] - ts[1]
 
 reaction_constant = 0.25 # should be 0.25
@@ -394,7 +394,7 @@ end
 us = zeros(yN, xN)
 us[:,1] = u1[:]
 for i=2:xN
-  us[:,i] = us[:, i-1]*exp(-5.*xs[i])
+  us[:,i] = us[:, i-1]*exp(-10.*xs[i])
 end
 ## Weird conditions for fun :)
 ## Weird one
@@ -421,17 +421,16 @@ figure(1)
 u = reshape(u_profile[:, 1], (yN, xN-1))
 u11 = [u1 u]
 contourf(xs, reverse(ys), u11, 20)
-colorbar()
+colorbar(label="Concentration")
 xlabel("Axial Distance")
 ylabel("Radial Distance")
 
 # Middles
 figure(2)
-mid = int((tN/2))
-u = reshape(u_profile[:, 2], (yN, xN-1))
+u = reshape(u_profile[:, 30], (yN, xN-1))
 u22 = [u1 u]
 contourf(xs, reverse(ys), u22, 20)
-colorbar()
+colorbar(label="Concentration")
 xlabel("Axial Distance")
 ylabel("Radial Distance")
 
@@ -440,7 +439,7 @@ figure(3)
 u = reshape(u_profile[:, end], (yN, xN-1))
 u33 = [u1 u]
 contourf(xs, reverse(ys), u33, 20)
-colorbar()
+colorbar(label="Concentration")
 xlabel("Axial Distance")
 ylabel("Radial Distance")
 

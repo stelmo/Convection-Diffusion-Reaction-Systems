@@ -519,6 +519,7 @@ us_2d = round(us_2d, 3)
 per_err = round(us_2d-us_1d, 3)*100.
 contourf(xs, ts, per_err', 20)
 colorbar()
+# clim(-50,50)
 xlabel("Axial Distance")
 ylabel("Time")
 plt.show()

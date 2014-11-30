@@ -454,24 +454,11 @@ Each basis function $\phi$ is composed of four constitutive functions named $P_1
 \caption{Basis functions} 
 \label{fig_pbasis}
 \end{figure}
-For reasons which will become clear later we consider the set of integrals and corresponding matrices in (\ref{eq_pddx}), (\ref{eq_pddy}), (\ref{eq_pdnx}) and (\ref{eq_pnn}).
+For reasons which will become clear later we consider the set of integrals and corresponding matrices in (\ref{eq_pddy}),(\ref{eq_pddx}),  (\ref{eq_pdnx}) and (\ref{eq_pnn}).
 \begin{equation}
 \begin{aligned}
-&m^1_{i,j} = \int_0^{\delta x} \int_0^{\delta y} \partial_x(P_i) \partial_x(P_j) dydx \implies
+&m^1_{i,j} = \int_0^{\delta x} \int_0^{\delta y} \partial_y(P_i) \partial_y(P_j) dydx \implies
 M^1 = \frac{1}{12}\begin{pmatrix}
-2d & 2s_2 & -d & 2s_2 \\
-2s_1 & 2s & 2s_2 & -d \\
--d & 2s_2 & 2d & 2s_1 \\
-2s_2 & -d & 2s_1 & 2d \\
-\end{pmatrix} \\
-&\text{with } d = 2\frac{\delta y}{\delta x}, s_1 = -2\frac{\delta y}{\delta x} \text{ and } s_2 = \frac{\delta y}{\delta x}
-\end{aligned}
-\label{eq_pddx}
-\end{equation}
-\begin{equation}
-\begin{aligned}
-&m^2_{i,j} = \int_0^{\delta x} \int_0^{\delta y} \partial_y(P_i) \partial_y(P_j) dydx \implies
-M^2 = \frac{1}{12}\begin{pmatrix}
 2d & 2s_2 & -d & 2s_2 \\
 2s_1 & 2s & 2s_2 & -d \\
 -d & 2s_2 & 2d & 2s_1 \\
@@ -480,6 +467,19 @@ M^2 = \frac{1}{12}\begin{pmatrix}
 &\text{with } d = 2\frac{\delta x}{\delta y}, s_1 = \frac{\delta x}{\delta y} \text{ and } s_2 = -2\frac{\delta x}{\delta y}
 \end{aligned}
 \label{eq_pddy}
+\end{equation}
+\begin{equation}
+\begin{aligned}
+&m^2_{i,j} = \int_0^{\delta x} \int_0^{\delta y} \partial_x(P_i) \partial_x(P_j) dydx \implies
+M^2 = \frac{1}{12}\begin{pmatrix}
+2d & 2s_2 & -d & 2s_2 \\
+2s_1 & 2s & 2s_2 & -d \\
+-d & 2s_2 & 2d & 2s_1 \\
+2s_2 & -d & 2s_1 & 2d \\
+\end{pmatrix} \\
+&\text{with } d = 2\frac{\delta y}{\delta x}, s_1 = -2\frac{\delta y}{\delta x} \text{ and } s_2 = \frac{\delta y}{\delta x}
+\end{aligned}
+\label{eq_pddx}
 \end{equation}
 \begin{equation}
 \begin{aligned}
@@ -521,6 +521,7 @@ A similar process is repeated for matrices $K^1, K^2$ and $K^3$.
 \section{Isothermal Problem}
 In this section the isothermal models will be developed and solved using the FEM. Finally, the quality of the Aris-Taylor simplification will be analysed numerically.  
 \subsection{Problem 1}
+\label{section_isop1}
 We start this section solving the simplified model from (\ref{eq_iso1}) because it is the least complex. The full problem is shown in (\ref{eq_p1}). It is assumed that $D_a, U, k, C_{a0},\text{ and } L$ are given because this is necessary to describe the physical reactor.  
 \begin{equation}
 \begin{aligned}
@@ -693,7 +694,7 @@ The next problem we solve is the full two dimensional model from (\ref{eq_iso1})
 &\frac{\partial C_A}{\partial r}(\cdot, r = 0, \cdot) = 0 \\
 &C_A(z=0,\cdot, \cdot) = C_{A0} \\
 &\text{Initial Condition:} \\
-& C_A(\cdot, \cdot, t= 0) = \beta(z)
+& C_A(\cdot, \cdot, t= 0) = e^{-10x}
 \end{aligned}
 \label{eq_p2}
 \end{equation}
@@ -738,19 +739,106 @@ B(u^h,v) = (\frac{U}{L} \partial_\tau (u^h), v)_0~~ \forall v \in S^h_0
 \label{eq_p2d4}
 \end{equation}
 \begin{rmrk}
-Again, note the difference between $S^h$ and $S^h_0$. It was required that the test functions satisfy $v(x=0,\cdot)=0$ which is true for all test functions not on the y-axis. 
+Again, note the difference between $S^h$ and $S^h_0$. It was required that the test functions satisfy $v(x=0,\cdot)=0$ which is true for all test functions not on the y-axis as shown in Figure \ref{fig_ttfs}. 
 \end{rmrk}
-As before we will consider each term in (\ref{eq_p2d4}) separately. First, consider $ \int_0^1 \int_0^1 -D_{AB}\frac{1}{R^2}\partial_y u^h \partial_y \phi_i dxdy$ for each $i=m+1, m+2,...,n$
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.6]{./pics/ttfs}
+\caption{Test and trial functions} 
+\label{fig_ttfs}
+\end{figure}
+As before we will consider each term in (\ref{eq_p2d4}) separately. First, consider $ \int_0^1 \int_0^1 -D_{AB}\frac{1}{R^2}\partial_y u^h \partial_y \phi_i dxdy$ for each $i=m+1, m+2,...,n$ as shown in (\ref{eq_intddx}).
+\begin{equation}
+\begin{aligned}
+\int_0^1 \int_0^1 -D_{AB}\frac{1}{R^2}\partial_y u^h \partial_y \phi_i dxdy &= \int_0^1 \int_0^1 -D_{AB}\frac{1}{R^2}\partial_y (\sum^n_{k=1} u_k \phi_k) \partial_y \phi_i dxdy \\
+&= -D_{AB}\frac{1}{R^2}\sum^n_{k=1} u_k\int_0^1 \int_0^1 \partial_y (\phi_k) \partial_y \phi_i dxdy  
+\end{aligned}
+\label{eq_intddx}
+\end{equation}
+We recall how the matrices $K^k$ were formulated in Section \ref{section_pbbf} and notice that (\ref{eq_intddx}) is essentially a summation of terms from $M^1$ in Section \ref{section_pbbf}. We can thus conclude with the leap (\ref{eq_intddx2}) where $\mathbf{u} = \left(u_1,u_2,...,u_n\right)^T$.
+\begin{equation}
+\int_0^1 \int_0^1 -D_{AB}\frac{1}{R^2}\partial_y u^h \partial_y \phi_i dxdy = -D_{AB}\frac{1}{R^2}K^1_{m+1:n, 1:n}\mathbf{u}
+\label{eq_intddx2}
+\end{equation}
+Second, consider $\int_0^1 \int_0^1  -D_{AB}\frac{1}{L^2}\partial_x u^h \partial_x \phi_i dxdy$ for each $i=m+1, m+2,...,n$. In exactly the same way we have (\ref{eq_intddy}). 
+\begin{equation}
+\int_0^1 \int_0^1  -D_{AB}\frac{1}{L^2}\partial_x u^h \partial_x \phi_i dxdy = -D_{AB}\frac{1}{L^2}K^2_{m+1:n, 1:n}\mathbf{u}
+\label{eq_intddy}
+\end{equation}
+Third, consider $\int_0^1 \int_0^1 - 2U(1-y^2)\frac{1}{L}\partial_x(u^h)  \phi_idxdy$ for each $i=m+1, m+2,...,n$. This situation is slightly different because we have a non-constant coefficient in the integral. We will again make use of Section \ref{section_pbbf}, specifically matrix $M^3$, but we will also employ a very simple numerical integration technique to drastically simplify the integral in (\ref{eq_intdnx}).
+\begin{equation}
+\begin{aligned}
+\int_0^1 \int_0^1 - 2U(1-y^2)\frac{1}{L}\partial_x(u^h)  \phi_idxdy &= \int_0^1 \int_0^1 - 2U(1-y^2)\frac{1}{L}\partial_x(\sum^n_{k=1} u_k \phi_k)  \phi_idxdy \\
+& = \frac{-2U}{L}\sum^n_{k=1} u_k \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_k)  \phi_idxdy
+\end{aligned}
+\label{eq_intdnx}
+\end{equation}
+We proceed by assuming that for a sufficiently small mesh size the non-constant term $(1-y^2)$ can be approximated as a constant over each element. To avoid clumsy notation we supply a few example calculations of entries to the matrix $K^{3*}$ in the hope that the method will become clear. Consider (\ref{eq_intdx2}). 
+\begin{equation}
+\begin{aligned}
+K^{3*}_{1,2} = \frac{-2U}{L} u_2 \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_2)  \phi_1dxdy \approx \frac{-2U}{L} u_2 (1-y_1)K^3{1,2} \\
+K^{3*}_{2,2} = \frac{-2U}{L} u_2 \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_2)  \phi_2dxdy \approx \frac{-2U}{L} u_2 (1-y_2)K^3{2,2} \\ 
+\end{aligned}
+\label{eq_intdx2}
+\end{equation}
+Where $y_1$ is the y-axis position of $\phi_1$ and $y_2$ is the y-axis position of $\phi_2$. We then construct the matrix $K^{3*}$ in a manner very similar to the other matrices. We end up with (\ref{eq_intdx3}).
+\begin{equation}
+\int_0^1 \int_0^1 - 2U(1-y^2)\frac{1}{L}\partial_x(u^h)  \phi_idxdy  = \frac{-2U}{L} K^{3*}_{m+1:n,1:n}\mathbf{u}
+\label{eq_intdx3}
+\end{equation}
+Fourth, consider $\int_0^1 \int_0^1  - ku^h \phi_i dxdy$ for each $i=m+1, m+2,...,n$. This case proceeds in the same way as for $K^1$ and $K^2$ because the coefficients are constant. We have the matrix $K^4$ in (\ref{eq_intnn}).
+\begin{equation}
+\int_0^1 \int_0^1 - ku^h \phi_i dxdy = -kK^4_{m+1:n, 1:n}\mathbf{u}
+\label{eq_intnn}
+\end{equation}
+And finally, consider $\int_0^1 \int_0^1 \frac{U}{L} \partial_\tau u^h \phi_i dxdy$ for each $i=m+1, m+2,...,n$. This is essentially the same as (\ref{eq_intnn}) except that now $\mathbf{u}$ is replaced by $\mathbf{u} \prime = \left( u_1 \prime,...,u_n \prime\right)^T$. This is shown in (\ref{eq_intnnt}).
+\begin{equation}
+\int_0^1 \int_0^1 \frac{U}{L} \partial_\tau u^h \phi_i dxdy = \frac{U}{L} K^4_{m+1:n, 1:n}\mathbf{u}\prime
+\label{eq_intnnt}
+\end{equation}
+Combining everything we have the FEM approximation of (\ref{eq_p2d4}) in (\ref{eq_p2fem}).
+\begin{equation}
+\left( -D_{AB}\frac{1}{R^2}K^1_{m+1:n, 1:n} -D_{AB}\frac{1}{L^2}K^2_{m+1:n, 1:n} \frac{-2U}{L} K^{3*}_{m+1:n,1:n} -kK^4_{m+1:n, 1:n} \right)\mathbf{u} =\frac{U}{L} K^4_{m+1:n, 1:n}\mathbf{u}\prime
+\label{eq_p2fem}
+\end{equation}
+As with the one dimensional case we recall that $\mathbf{u}_{1:m}=1$ by the boundary conditions and that this is time invariant i.e. $\mathbf{u}_{1:m}\prime=0$. Thus we may split (\ref{eq_p2fem}) into (\ref{eq_p2fem2}).
+\begin{equation}
+\begin{aligned}
+&\left( -D_{AB}\frac{1}{R^2}K^1_{m+1:n, m+1:n} -D_{AB}\frac{1}{L^2}K^2_{m+1:n, m+1:n} \frac{-2U}{L} K^{3*}_{m+1:n,m+1:n} -kK^4_{m+1:n, m+1:n} \right) = K^* \\
+&\sum_{k=1}^m \left(-D_{AB}\frac{1}{R^2}K^1_{m+1:n, k} -D_{AB}\frac{1}{L^2}K^2_{m+1:n, k} \frac{-2U}{L} K^{3*}_{m+1:n,k} -kK^4_{m+1:n,k} \right) = G^* \\
+&\frac{U}{L} K^4_{m+1:n, m+1:n} = H^* \\
+&\implies K^*\mathbf{u} + G^* = H^*\mathbf{u}\prime
+\end{aligned}
+\label{eq_p2fem2}
+\end{equation}
+If we were only interested in the steady state case we could set the right hand side of (\ref{eq_p2fem2}) equal to zero and solve the resulting set of linear algebraic equations for $\mathbf{u}$. However, we are interested in the temporal response of the system. We again use the Crank-Nicholson scheme to solve the system of ODEs in (\ref{eq_p2fem2}). Discretising the time domain as before in Section \ref{section_isop1} we have the Crank-Nicholson scheme for (\ref{eq_p2fem2}) in (\ref{eq_p2femcn}).
+\begin{equation}
+\frac{1}{2}\left(K^*\mathbf{u}_{\tau_{m+1}} +K^*\mathbf{u}_{\tau_{m}}\right) + G^* = H^*\frac{\mathbf{u}_{\tau_{m+1}}-\mathbf{u}_{\tau_{m}}}{\delta \tau}
+\label{eq_p2femcn}
+\end{equation}
+By recalling that the initial condition is $\mathbf{u}_0$ we can iterate with (\ref{eq_p2femcn}) to get to the final time step $\mathbf{u}_1$. As an example we model the same system as we did in the final example of Section \ref{section_isop1}. Note that the system takes quite long to reach steady state so we iterate over a time domain of $[0,5]$. Figures \ref{fig_rft1} to \ref{fig_rft3} show the concentration distribution over the reactor.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/rf_t1}
+\caption{Initial reactor concentration distribution} 
+\label{fig_rft1}
+\end{figure}
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/rf_t2}
+\caption{Concentration distribution at $t=0.67$} 
+\label{fig_rft2}
+\end{figure}
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/rf_t3}
+\caption{Concentration distribution at $t=5$} 
+\label{fig_rft3}
+\end{figure}
+By inspection of Figures \ref{fig_rft1} to \ref{fig_rft3} we see nothing which is physically unrealistic. We therefore conclude that solution process was successful.
 
-Second, consider $\int_0^1 \int_0^1  -D_{AB}\frac{1}{L^2}\partial_x u^h \partial_x \phi_i dxdy$ for each $i=m+1, m+2,...,n$
-
-Third, consider $\int_0^1 \int_0^1 - 2U(1-y^2)\frac{1}{L}\partial_x(u^h)  \phi_idxdy$ for each $i=m+1, m+2,...,n$
-
-Fourth, consider $\int_0^1 \int_0^1  - ku^h \phi_i dxdy$ for each $i=m+1, m+2,...,n$ 
-
-And finally, consider $\int_0^1 \int_0^1 \frac{U}{L} \partial_\tau u^h \phi_i dxdy$ for each $i=m+1, m+2,...,n$
-
-
+\subsection{Isothermal Comparison}
+We now compare the
 
 \section{Non-Isothermal Problem}
 
