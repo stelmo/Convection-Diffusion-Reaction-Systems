@@ -531,7 +531,7 @@ We start this section solving the simplified model from (\ref{eq_iso1}) because 
 &\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
 &C_A(z=0, \cdot) = C_{A0} \\
 &\text{Initial Condition:} \\
-& C_A(\cdot, t= 0) = e^{-10x}
+& C_A(\cdot, t= 0) = e^{-10\frac{z}{L}}
 \end{aligned}
 \label{eq_p1}
 \end{equation}
@@ -547,7 +547,7 @@ c_1\frac{\partial u}{\partial \tau} \\
 &\frac{\partial u}{\partial x}(x=1, \cdot) = 0\\
 &u(x=0, \cdot) = 1 \\
 &\text{Initial Condition:} \\
-& u(\cdot, \tau = 0) = e^{-10\frac{z}{L}}
+& u(\cdot, \tau = 0) = e^{-10x}
 \end{aligned}
 \label{eq_p1d}
 \end{equation}
@@ -694,7 +694,7 @@ The next problem we solve is the full two dimensional model from (\ref{eq_iso1})
 &\frac{\partial C_A}{\partial r}(\cdot, r = 0, \cdot) = 0 \\
 &C_A(z=0,\cdot, \cdot) = C_{A0} \\
 &\text{Initial Condition:} \\
-& C_A(\cdot, \cdot, t= 0) = e^{-10x}
+& C_A(\cdot, \cdot, t= 0) = e^{-10\frac{z}{L}}
 \end{aligned}
 \label{eq_p2}
 \end{equation}
@@ -882,24 +882,40 @@ We now move on the the non-isothermal problems.
 \section{Non-Isothermal Problem}
 
 \subsection{Problem 3}
-In this problem the isothermal assumption is dropped and the somewhat weaker adiabatic 
-assumption replaces it. The model for the scheme $A \rightarrow B$ now becomes (\ref
-{eq_p3}). Clearly this problem is very non-linear due to the exponential factor in the 
-Arrhenius equation.
+In this problem the isothermal assumption is dropped and the somewhat weaker adiabatic assumption replaces it. The model for the scheme $A \rightarrow B$ now becomes (\ref{eq_p3}). Clearly this problem is very non-linear due to the exponential factor in the 
+Arrhenius equation. Physically this system corresponds to an insulated reactor.
 \begin{equation}
 \begin{aligned}
 &D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(C_A)
 C_A = \frac{\partial C_A}{\partial t} \\
-& \text{with }k(C_A) = k_0 \exp(\frac{-E}{RT}) \\
-& \text{and } T = T_0 + \frac{-H_{rxn} (1-\frac{C_A}{C_{A0}})}{C_{p_A}} \\
+& \text{with }k(C_A) = k_0 \exp(\frac{-E}{RT(C_A)}) \\
+& \text{and } T(C_A) = T_0 + \frac{-H_{rxn} (1-\frac{C_A}{C_{A0}})}{C_{p_A}} \\
 &\text{Boundary Conditions:} \\
 &\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
 &C_A(z=0, \cdot) = C_{A0} \\
 &\text{Initial Condition:} \\
-& C_A(\cdot, t= 0) = \beta(z)
+& C_A(\cdot, t= 0) = e^{-10\frac{z}{L}}
 \end{aligned}
 \label{eq_p3}
 \end{equation}
+By following the same process as in Section \ref{section_isop1} we create the dimensionless system shown in (\ref{eq_p3d}).
+\begin{equation}
+\begin{aligned}
+&\frac{\partial^2 u}{\partial x^2} - \frac{UL}{D_a}\frac{\partial u}{\partial z} - \frac{L^2}{D_a} k(u)u = \frac{UL}{D_a}\frac{\partial u}{\partial \tau} \\
+& \text{with }k(u) = k_0 \exp(\frac{-E}{RT(u)}) \\
+& \text{and } T(u) = T_0 + \frac{-H_{rxn} (1-u)}{C_{p_A}} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial u}{\partial x}(x=1, \cdot) = 0\\
+&u(x=0, \cdot) = 1 \\
+&\text{Initial Condition:} \\
+& u(\cdot, t= 0) = e^{-10x}
+\end{aligned}
+\label{eq_p3d}
+\end{equation}
+
+
+
+
 
 \subsection{Problem 4}
 In this problem the isothermal assumption again supposed. The model for the scheme $A + 

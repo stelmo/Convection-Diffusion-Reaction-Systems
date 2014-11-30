@@ -133,10 +133,10 @@ for tloop=2:Nt
 
 end
 
-# mesh(xs, ts, us')
-# xlabel("Space")
-# ylabel("Time")
+mesh(xs, ts, us')
+xlabel("Space")
+ylabel("Time")
 
-plot(xs, us[:, end])
+# plot(xs, us[:, end])
 
 plt.show()
