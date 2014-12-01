@@ -293,6 +293,7 @@ D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC
 \end{equation}
 As explained earlier, these two models will be compared using (\ref{eq_iso1}) as a more accurate baseline.
 \subsection{Non-Isothermal Overview}
+\label{section_noniso}
 The isothermal assumption made in the previous subsection is not a realistic assumption. However, it does simplify the model considerably because by assuming isothermal conditions the model becomes linear and uncoupled. The non-linear non-isothermal model corresponding to (\ref{eq_iso1}) is shown in (\ref{eq_noniso1}).
 \begin{equation}
 \begin{aligned}
@@ -454,6 +455,16 @@ Each basis function $\phi$ is composed of four constitutive functions named $P_1
 \caption{Basis functions} 
 \label{fig_pbasis}
 \end{figure}
+In \cite{vrb} the definitions of the constitutive basis functions $P$ are motivated. We merely state those definitions on a rectangle $[0,\delta x] \times [0, \delta y]$ in (\ref{eq_pbasisdef}). 
+\begin{equation}
+\begin{aligned}
+&P_1(x,y) = 1 -x-y-xy \\
+&P_2(x,y) = x-xy \\
+&P_3(x,y) = xy \\
+&P_4(x,y) = y-xy 
+\label{eq_pbasisdef}
+\end{aligned}
+\end{equation}  
 For reasons which will become clear later we consider the set of integrals and corresponding matrices in (\ref{eq_pddy}),(\ref{eq_pddx}),  (\ref{eq_pdnx}) and (\ref{eq_pnn}).
 \begin{equation}
 \begin{aligned}
@@ -684,6 +695,7 @@ The transient dynamics are shown in Figure \ref{fig_q1std}. Nothing unexpected i
 \end{figure}
 
 \subsection{Problem 2}
+\label{section_iso2}
 The next problem we solve is the full two dimensional model from (\ref{eq_iso1}) as shown in (\ref{eq_p2}). Again it is assumed that the physical parameters are given.
 \begin{equation}
 \begin{aligned}
@@ -881,15 +893,17 @@ We now move on the the non-isothermal problems.
 
 \section{Non-Isothermal Problem}
 
+We now consider more complicated one dimensional problems as discussed in Section \ref{section_noniso}.
+
 \subsection{Problem 3}
-In this problem the isothermal assumption is dropped and the somewhat weaker adiabatic assumption replaces it. The model for the scheme $A \rightarrow B$ now becomes (\ref{eq_p3}). Clearly this problem is very non-linear due to the exponential factor in the 
+In this problem the isothermal assumption is dropped and the somewhat weaker adiabatic assumption replaces it. The model for the reaction $A \rightarrow B$ now becomes (\ref{eq_p3}). Clearly this problem is very non-linear due to the exponential factor in the 
 Arrhenius equation. Physically this system corresponds to an insulated reactor.
 \begin{equation}
 \begin{aligned}
 &D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(C_A)
 C_A = \frac{\partial C_A}{\partial t} \\
-& \text{with }k(C_A) = k_0 \exp(\frac{-E}{RT(C_A)}) \\
-& \text{and } T(C_A) = T_0 + \frac{-H_{rxn} (1-\frac{C_A}{C_{A0}})}{C_{p_A}} \\
+& \text{with }k(C_A) = k_0 \exp \left(\frac{-E}{RT(C_A)}\right) \\
+& \text{and } T(C_A) = T_0 + \frac{-H_{rxn} \left(1-\frac{C_A}{C_{A0}}\right)}{C_{p_A}} \\
 &\text{Boundary Conditions:} \\
 &\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
 &C_A(z=0, \cdot) = C_{A0} \\
@@ -898,12 +912,12 @@ C_A = \frac{\partial C_A}{\partial t} \\
 \end{aligned}
 \label{eq_p3}
 \end{equation}
-By following the same process as in Section \ref{section_isop1} we create the dimensionless system shown in (\ref{eq_p3d}).
+The boundary conditions retain their meaning as explained in Section \ref{section_isop1}. By following the same process as in Section \ref{section_isop1} we create the dimensionless system shown in (\ref{eq_p3d}).
 \begin{equation}
 \begin{aligned}
 &\frac{\partial^2 u}{\partial x^2} - \frac{UL}{D_a}\frac{\partial u}{\partial z} - \frac{L^2}{D_a} k(u)u = \frac{UL}{D_a}\frac{\partial u}{\partial \tau} \\
-& \text{with }k(u) = k_0 \exp(\frac{-E}{RT(u)}) \\
-& \text{and } T(u) = T_0 + \frac{-H_{rxn} (1-u)}{C_{p_A}} \\
+& \text{with }k(u) = k_0 \exp\left(\frac{-E}{RT(u)}\right) \\
+& \text{and } T(u) = T_0 + \frac{-H_{rxn} \left(1-u\right)}{C_{p_A}} \\
 &\text{Boundary Conditions:} \\
 &\frac{\partial u}{\partial x}(x=1, \cdot) = 0\\
 &u(x=0, \cdot) = 1 \\
@@ -912,9 +926,99 @@ By following the same process as in Section \ref{section_isop1} we create the di
 \end{aligned}
 \label{eq_p3d}
 \end{equation}
+If we let $B(u, v) = \int_0^1 \left(-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_2k(u)uv\right)dx$ and $(c_1(\partial_{\tau}u),v)_0 = \int^1_0 c_1(\partial_{\tau}u)v dx$ with $c_1 = \frac{UL}{D_a}$ and $c_2 = \frac{L^2}{D_a}$ we see that Section \ref{section_isop1} is very similar to the current problem. Upon brief consider we notice that it is possible to go directly to the variational form of the problem since we have already done most of the work in Section \ref{section_isop1}.  Find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p3d1}) for all $v \in T$.
+\begin{equation}
+B(u, v) = (c_1(\partial_{\tau}u),v)_0
+\label{eq_p3d1}
+\end{equation}
+For the purposes of this project we will assume the existence and uniqueness of such a function. The non-linearity of the problem will make finding an exact solution quite difficult. We proceed as before with the FEM approximation.
 
+Recall the definition of the piecewise linear basis functions ($\phi$) defined in Section \ref{section_plb}. We assume that the function $u^h =\sum^n_{k=0} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p3d1}) by using the Galerkin approximation: find $u^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p3d2}) holds.
+\begin{equation}
+B(u^h, \phi) = (c_1(\partial_{\tau}u^h),\phi)_0~~\forall \phi \in S^h_0
+\label{eq_p3d2}
+\end{equation} 
+Recall that $B(u, v) = \int_0^1 \left(-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1k(u)uv\right)dx$. Substituting the Galerkin approximation into this expression we have (\ref{eq_p3d3}).
+\begin{equation}
+B(u^h, \phi_i) = \int_0^1 \left(-(\partial_xu^h)(\partial_x\phi_i) - c_1(\partial_xu^h)\phi_i - c_2k(u^h)u^h\phi_i\right)dx \text{ for } i=1,2,...,n
+\label{eq_p3d3}
+\end{equation}
+Thus the FEM problem is to find $u^h \in S^h$ with $u^h(0)=1$ such that (\ref{eq_femp3}) holds.
+\begin{equation}
+\int_0^1 \left(-(\partial_xu^h)(\partial_x\phi_i) -c_1(\partial_xu^h)\phi_i - c_2k(u^h)u^h\phi_i\right)dx = \int_0^1 c_1(\partial_{\tau}u^h\phi_i dx \text{ for } i=1,2,...,n
+\label{eq_femp3}
+\end{equation}
+Unfortunately we cannot proceed as before because there is no linear algebraic system corresponding to (\ref{eq_femp3}). To overcome this problem we use the Newton-Galerkin Method \cite{larson}.
 
+\subsubsection{Newton-Galerkin Method}
+The aim of this section is to guess a solution to (\ref{eq_femp3}), linearise the system of non-linear equations in (\ref{eq_femp3}) about the guess and iteratively improve our guess until it converges to the true solution. To this end we suppose $u^h = u^0 + \delta u = \sum_{k=0}^n u^0_k\phi_k + \sum_{k=0}^n \delta u_k\phi_k$ where $u^0$ is the guess and $\delta u$ is some correction we need to solve for. We now consider each term in (\ref{eq_femp3}) individually and make use of Section \ref{section_plb} and Section \ref{section_isop1} as necessary.
 
+First consider $\int_0^1 -(\partial_xu^h)(\partial_x\phi_i)dx$  in (\ref{eq_p3nl1}) for $i=1,2,...,n$ with $\mathbf{u}^0 = \left(u^0_0,u^0_1,...,u^0_n\right)^T$ and $\mathbf{\delta u} = \left(\delta u^0_0,\delta u^0_1,...,\delta u^0_n\right)^T$.
+\begin{equation}
+\begin{aligned}
+\int_0^1 -(\partial_xu^h)(\partial_x\phi_i)dx &= \int_0^1 -(\partial_x(u^0 + \delta u))(\partial_x\phi_i)dx \\
+&=\int_0^1 -(\partial_xu^0)(\partial_x\phi_i)dx + \int_0^1 -(\partial_x\delta u)(\partial_x\phi_i)dx \\
+& = -K^1_{1:n,0:n}\mathbf{u}^0 - K^1_{1:n,0:n}\mathbf{\delta u}
+\end{aligned}
+\label{eq_p3nl1}
+\end{equation}
+Second, consider $\int_0^1 -c_1(\partial_xu^h)\phi_idx$ in (\ref{eq_p3nl2}) for $i=1,2,...,n$.
+\begin{equation}
+\begin{aligned}
+\int_0^1 -c_1(\partial_xu^h)\phi_idx &= \int_0^1 -c_1(\partial_x(u^0 + \delta u))\phi_idx \\
+&=\int_0^1 -(\partial_xu^0)\phi_idx + \int_0^1 -(\partial_x\delta u)\phi_idx \\
+& = -c_1K^2_{1:n,0:n}\mathbf{u}^0 - c_1K^2_{1:n,0:n}\mathbf{\delta u}
+\end{aligned}
+\label{eq_p3nl2}
+\end{equation}
+Third, consider $\int_0^1  -c_2k(u^h)u^h\phi_idx$ in (\ref{eq_p3nl3}) for $i=1,2,...,n$. We have linearised $k(u^0 + \delta u)$ about $u^0$ and ignored any terms which have $\delta u \delta u$ as a factor - we assume the correction is small and hence such terms will not contribute meaningfully.
+\begin{equation}
+\begin{aligned}
+\int_0^1  -c_2k(u^h)u^h\phi_idx &= \int_0^1  -c_2k(u^0 + \delta u)(u^0 + \delta u)\phi_idx \\
+& = \int_0^1  -c_2\left(k(u^0) + k\prime(u^0)\delta u\right)(u^0 + \delta u)\phi_idx \\
+&= \int_0^1  -c_2k(u^0)u^0\phi_i -c_2k(u^0)\delta u\phi_i -c_2 k\prime(u^0)(\delta u )(u^0) \phi_i dx \\
+&= \int_0^1  -c_2k(u^0)u^0\phi_i dx + \int_0^1 -c_2k(u^0)\delta u\phi_idx + \int_0^1 -c_2 k\prime(u^0)(\delta u )(u^0) \phi_i dx \\
+\end{aligned}
+\label{eq_p3nl3}
+\end{equation}
+Now we need to use numerical integration to take care of the $k(u^0)$ term in the integrals. Note that the factor $k(u^0)$ does not make (\ref{eq_p3nl3}) non-linear. We have assumed that $u^0$ is known, therefore it is merely a non-constant coefficient. We handle this in exactly the same way as Section \ref{section_iso2}. Consider the matrix $-c_2K^4$ created by  evaluating $\int_0^1  -c_2k(u^0)u^0\phi_i dx$ for each $i=0,1,2,...,n$  with $\mathbf{u}^0 = \left(u^0_0,u^0_1,...,u^0_n\right)^T$ in (\ref{eq_nonconst1}).
+\begin{equation}
+-c_2K^4\mathbf{u}^0 = \begin{pmatrix}
+k(u^0_0)K^3_{0,0} & k(u^0_0)K^3_{0,1} & 0 & 0 & \hdots  \\
+k(u^0_1)K^3_{1,0} & k(u^0_1)K^3_{1,1} & k(u^0_1)K^3_{1,2} &0& \hdots\\
+\ddots & \ddots & \ddots & \ddots & \ddots \\  
+\hdots & 0 & k(u^0_{n-1})K^3_{n,n-2} & k(u^0_{n-1})K^3_{n,n-1} & k(u^0_{n-1})K^3_{n,n}\\
+\hdots & \hdots & 0 & k(u^0_{n})K^3_{n,n-1} & k(u^0_{n})K^3_{n,n}\\
+\end{pmatrix}\mathbf{u}^0
+\label{eq_nonconst1}
+\end{equation}
+The trick is to notice that each row is evaluated over an element $k$ hence $k(u^0) \approx k(u^0_k)$ due to the definition of the basis function over that element. Following from this we can see that $\int_0^1  -c_2k(u^0)u^0\phi_i dx$ for each $i=1,2,...,n$ is merely the vector $-c_2K^4_{1:n,0:n}\mathbf{u}^0$. 
+
+We do essentially the same for the matrix $-c_2K^5$ created by  evaluating $\int_0^1  -c_2k(u^0)\delta u\phi_i dx$ for each $i=0,1,2,...,n$ and end up with the matrix $-c_2K^5_{1:n,0:n}\mathbf{\delta u}$. Note that this is a matrix since $\mathbf{\delta u}$ is not known. 
+
+Finally, we consider the matrix $-c_2K^6$ created by evaluating $\int_0^1 -c_2 k\prime(u^0)(\delta u )(u^0) \phi_i dx$ for each $i=0,1,2,...,n$. We handle the factor $k\prime(u^0)$ in the same manner as previously. Consider (\ref{eq_nonconst2}) which is $\int_0^1 -c_2 k\prime(u^0)(\delta u )(u^0) \phi_i dx$ for each $i=0,1,2,...,n$.
+\begin{equation}
+\begin{aligned}
+\int_0^1 -c_2 k\prime(u^0)(\delta u )(u^0) \phi_0 dx &= \int_0^1 -c_2 k\prime(u^0_0)\left(u^0_0\phi_0 + u^0_1\phi_1 \right) \left(\delta u_0\phi_0 + \delta u_1\phi_1 \right) \phi_0 dx  \\
+\int_0^1 -c_2 k\prime(u^0)(\delta u )(u^0) \phi_1 dx &= \int_0^1 -c_2 k\prime(u^0_1)\left(u^0_0\phi_0 + u^0_1\phi_1 + u^0_2\phi_2\right) \\ &~~~~~~ \left(\delta u_0\phi_0 + \delta u_1\phi_1 + \delta u_2\phi_2\right) \phi_1 dx \\
+&~~~~\vdots \\
+\int_0^1 -c_2 k\prime(u^0)(\delta u )(u^0) \phi_{n-1} dx &= \int_0^1 -c_2 k\prime(u^0_{n-1})\left(u^0_{n-2}\phi_{n-2} + u^0_{n-1}\phi_{n-1} + u^0_n\phi_n\right) \\ &~~~~~~\left(\delta u_{n-2}\phi_{n-2} + \delta u_{n-1}\phi_{n-1} + \delta u_n\phi_n\right) \phi_{n-1} dx \\
+\int_0^1 -c_2 k\prime(u^0)(\delta u )(u^0) \phi_n dx &= \int_0^1 -c_2 k\prime(u^0_n)\left(u^0_{n-1}\phi_{n-1} + u^0_n\phi_n\right) \left(\delta u_{n-1}\phi_{n-1} + \delta u_n\phi_n\right) \phi_n dx
+\end{aligned}
+\label{eq_nonconst2}
+\end{equation}
+We can convert this into matrix form shown in (\ref{eq_nonconst3}).
+\begin{equation}
+-c_2K^6\mathbf{\delta u} = -c_2\begin{pmatrix}
+k\prime(u^0_0)K^7_{0,0} & k\prime(u^0_0)K^7_{0,1} & 0 & 0 \\
+k\prime(u^0_1)K^7_{1,0} & k\prime(u^0_1)K^7_{1,1} & k\prime(u^0_1)K^7_{1,2} & \ddots \\
+ \ddots & \ddots & \ddots & \ddots \\
+ \ddots & k\prime(u^0_{n-1})K^7_{n-1,n-2} & k\prime(u^0_{n-1})K^7_{n-1,n-1} & k\prime(u^0_{n-1})K^7_{n-1,n} \\
+ \hdots & 0 & k\prime(u^0_{n})K^7_{n,n-1} & k\prime(u^0_{n}) K^7_{n,n}\\
+\end{pmatrix}\mathbf{\delta u}
+\label{eq_nonconst3}
+\end{equation}
+With $K^7$ defined in ().
 
 
 \subsection{Problem 4}
