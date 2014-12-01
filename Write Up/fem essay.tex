@@ -902,13 +902,13 @@ Arrhenius equation. Physically this system corresponds to an insulated reactor.
 \begin{aligned}
 &D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(C_A)
 C_A = \frac{\partial C_A}{\partial t} \\
-& \text{with }k(C_A) = k_0 \exp \left(\frac{-E}{RT(C_A)}\right) \\
+& \text{with }k(C_A) = k_0 \exp \left(\frac{-E}{R_gT(C_A)}\right) \\
 & \text{and } T(C_A) = T_0 + \frac{-H_{rxn} \left(1-\frac{C_A}{C_{A0}}\right)}{C_{p_A}} \\
 &\text{Boundary Conditions:} \\
 &\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
 &C_A(z=0, \cdot) = C_{A0} \\
 &\text{Initial Condition:} \\
-& C_A(\cdot, t= 0) = e^{-10\frac{z}{L}}
+& C_A(\cdot, t= 0) = C_{A0}e^{-10\frac{z}{L}}
 \end{aligned}
 \label{eq_p3}
 \end{equation}
@@ -916,7 +916,7 @@ The boundary conditions retain their meaning as explained in Section \ref{sectio
 \begin{equation}
 \begin{aligned}
 &\frac{\partial^2 u}{\partial x^2} - \frac{UL}{D_a}\frac{\partial u}{\partial z} - \frac{L^2}{D_a} k(u)u = \frac{UL}{D_a}\frac{\partial u}{\partial \tau} \\
-& \text{with }k(u) = k_0 \exp\left(\frac{-E}{RT(u)}\right) \\
+& \text{with }k(u) = k_0 \exp\left(\frac{-E}{R_gT(u)}\right) \\
 & \text{and } T(u) = T_0 + \frac{-H_{rxn} \left(1-u\right)}{C_{p_A}} \\
 &\text{Boundary Conditions:} \\
 &\frac{\partial u}{\partial x}(x=1, \cdot) = 0\\
@@ -1018,12 +1018,88 @@ k\prime(u^0_1)K^7_{1,0} & k\prime(u^0_1)K^7_{1,1} & k\prime(u^0_1)K^7_{1,2} & \d
 \end{pmatrix}\mathbf{\delta u}
 \label{eq_nonconst3}
 \end{equation}
-With $K^7$ defined in ().
+With $K^7$ defined in (\ref{eq_nonconst4}).
+\begin{equation}
+K^7 = \int_0^1\begin{pmatrix}
+u^0_0\phi_0^3 +u^0_1\phi_1^2\phi_0 & u^0_0\phi_0^2\phi_1 + u^0_1\phi_1^2\phi_0 & 0 & 0& \hdots\\
+u^0_0\phi_0^2\phi_1 + u^0_1\phi_1^2\phi_0 & u_0^0\phi_0\phi_1^2 +u^0_1\phi_1^3 + u^0_2\phi_1^2\phi_2 & u^0_1\phi_1^2\phi_2 + u^0_2\phi_2^2\phi_1 & 0 &\hdots \\
+0 & \ddots & \ddots & \ddots & \ddots  
+\end{pmatrix}
+\label{eq_nonconst4}
+\end{equation}
+We can analytically evaluate the elements of $K^7$ as shown in (\ref{eq_nonconst5}).
+\begin{equation}
+\begin{aligned}
+&\int_0^1 \phi_i^3 dx = \frac{h}{2} \text{ for } i=1,2,...,n-1\\
+&\int_0^1 \phi_i^3 dx = \frac{h}{4} \text{ for } i=0 \text{ or } n\\
+&\int_0^1 \phi_i^2\phi_{i+1} dx = \int_0^1 \phi_i\phi_{i+1}^2 dx = \frac{h}{12} \text{ for appropriate } i \\
+\end{aligned}
+\label{eq_nonconst5}
+\end{equation}
+Combining everything we have the matrix $-c_2K^6\mathbf{\delta u}$ created by evaluating $\int_0^1 -c_2 k\prime(u^0)(\delta u )(u^0) \phi_i dx$ for each $i=0,1,2,...,n$. However, we are only interested in $-c_2K^6_{1:n,0:n}\mathbf{\delta u}$ because $\phi_0$ is not a test function.
 
+Finally we consider the unsteady term $\int_0^1 c_1(\partial_{\tau}u^h)\phi_i dx$ for $i=1,2,...,n$ in (\ref{eq_unst1}).
+\begin{equation}
+\begin{aligned}
+\int_0^1 c_1(\partial_{\tau}u^h)\phi_i dx &= \int_0^1 c_1\partial_{\tau}(u^0 + \delta u) \phi_idx \\
+&=  \int_0^1 c_1\partial_{\tau}(u^0)dx + \int_0^1 c_1\partial_{\tau}(\delta u) \phi_idx \\
+&= c_1K^3_{1:n,0:n}\mathbf{u}\prime^0 + c_1K^3_{1:n,0:n}\mathbf{\delta u}\prime 
+\end{aligned}
+\label{eq_unst1}
+\end{equation}
+Thus we can write the FEM system in (\ref{eq_unst2}).
+\begin{equation}
+\begin{aligned}
+&G_1 = -K^1_{1:n,0:n} -c_1K^2_{1:n,0:n} - c_2K^4_{1:n,0:n} \\ 
+&G_2 = -K^1_{1:n,0:n} - c_1K^2_{1:n,0:n} -c_2K^5_{1:n,0:n}  - c_2K^6_{1:n,0:n} \\
+&G_1\mathbf{u}^0 + G_2 \mathbf{\delta u} =c_1K^3_{1:n,0:n}\mathbf{u}\prime^0 + c_1K^3_{1:n,0:n}\mathbf{\delta u}\prime
+\end{aligned}
+\label{eq_unst2}
+\end{equation}
+If we were merely interested in solving the steady state system we would set the right hand side of (\ref{eq_unst2}) equal to zero and have (\ref{eq_unst3}).
+\begin{equation}
+G_1\mathbf{u}^0 + G_2 \mathbf{\delta u} =0 
+\label{eq_unst3}
+\end{equation}
+Now we notice that our guess will always be of the form $\mathbf{u}^0 = \left(1, u_1,u_2,...,u_n \right)^T$ since we have the boundary condition at the left end point of the reactor. Additionally we notice that our correction will always be of the form $\mathbf{\delta u}=\left(0,\delta u_1,\delta u_2,...,\delta u_n \right)^T$ since the boundary condition is not a guess. We then proceed by guessing a solution, solving (\ref{eq_unst3}) for $\delta u$ and updating our guess by $u^0 = u^0 + \delta u$. We continue in this manner until the corrections become suitably small.  
+
+However, we are interested in solving the unsteady system. Returning to (\ref{eq_unst2}) we discretise the time domain as before and use the Crank-Nicholson method to solve the system of ODES in (\ref{eq_unst4}). Note that by the initial condition we have $\mathbf{u}_0$. 
+\begin{equation}
+\frac{1}{2} G_1\left(\mathbf{u}^0_{\tau+1}+\mathbf{u}^0_{\tau}\right) + \frac{1}{2}G_2\left(\mathbf{\delta u}_{\tau+1}+\mathbf{\delta u}_{\tau}\right) =c_1K^3_{1:n,0:n}\frac{\mathbf{u}^0_{\tau + 1}-\mathbf{u}^0_{\tau}}{\delta \tau} + c_1K^3_{1:n,0:n}\frac{\mathbf{\delta u}_{\tau + 1}-\mathbf{\delta u}_{\tau }}{\delta \tau}
+\label{eq_unst4}
+\end{equation}
+Now we recall that $\mathbf{\delta u}_{\tau} \approx 0$ because we have iterated the previous step ($\mathbf{u}^0_{\tau}$) until convergence. Thus we can simplify (\ref{eq_unst4}) to (\ref{eq_unst5}).
+\begin{equation}
+\frac{1}{2} G_1\left(\mathbf{u}^0_{\tau+1}+\mathbf{u}^0_{\tau}\right) + \frac{1}{2}G_2\mathbf{\delta u}_{\tau+1} =c_1K^3_{1:n,0:n}\frac{\mathbf{u}^0_{\tau + 1}-\mathbf{u}^0_{\tau}}{\delta \tau} + c_1K^3_{1:n,0:n}\frac{\mathbf{\delta u}_{\tau + 1}}{\delta \tau}
+\label{eq_unst5}
+\end{equation}
+Now we guess $\mathbf{u}^0_{\tau+1}$ and solve for $\mathbf{\delta u}_{\tau+1}$ by remembering that $\mathbf{u}^0_{\tau}$ will always be known since it was solved in the previous step (in the first step it is the initial condition). We update our guess each iteration with  $\mathbf{u}^0_{\tau+1} = \mathbf{u}^0_{\tau+1} + \mathbf{\delta u}_{\tau+1}$ as before.
+
+As an example we return to the example system from Section \ref{section_isop1}. We restate the physical parameters for convenience and include the additionally required parameters in (\ref{eq_physp3}).
+\begin{equation}
+\begin{aligned}
+&C_{A0} = 0.5~~ \frac{mol}{dm^3}
+&&D_{AB} = 7.6\times 10^{-5} ~~\frac{m^2}{min}
+&&&U = 1.24~~ \frac{m}{min} \\
+&L = 6.36~~ m 
+&&R = 0.05~~ m
+&&&k_0 = 1633253.0 ~~ \frac{1}{min} \\
+&E = 40580 ~~ kJ/kmol
+&&R_g = 8.314~~ \frac{kJ}{kmol. K}
+&&&T_0 = 300 ~~ K 
+\end{aligned}
+\label{eq_physp3}
+\end{equation}
+The unsteady simulation is shown in Figure \ref{fig_adi_unst}. Nothing unexpected is visible in the figure. It is clear that as the reactor heats up the reaction becomes faster and thus we see the steady state solution has a complete conversion. This is very much what one would expect in reality.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/adi_unst}
+\caption{Adiabatic reactor model} 
+\label{fig_adi_unst}
+\end{figure}
 
 \subsection{Problem 4}
-In this problem the isothermal assumption again supposed. The model for the scheme $A + 
-B \rightarrow 2C$ is shown in (\ref{eq_p4}). 
+In this problem the isothermal assumption is reinstated. However, we now model the situation where it becomes necessary to solve a coupled system of partial differential equations. The model for the reaction $A + B \rightarrow 2C$ is shown in (\ref{eq_p4}). 
 \begin{equation}
 \begin{aligned}
 &D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B 
@@ -1036,12 +1112,45 @@ B \rightarrow 2C$ is shown in (\ref{eq_p4}).
 &\frac{\partial C_B}{\partial z}(z=L, \cdot) = 0\\
 &C_B(z=0, \cdot) = C_{B0} \\
 &\text{Initial Condition:} \\
-& C_A(\cdot, t= 0) = \alpha(z) \\
-& C_B(\cdot, t= 0) = \beta(z)
+& C_A(\cdot, t= 0) = C_{A0}e^{-10\frac{z}{L}} \\
+& C_B(\cdot, t= 0) = C_{B0}e^{-10\frac{z}{L}}
 \end{aligned}
 \label{eq_p4}
 \end{equation}
-
+We follow the same procedure as in Section \ref{section_isop1} to convert (\ref{eq_p4}) into dimensionless form as shown in (\ref{eq_p4}).
+\begin{equation}
+\begin{aligned}
+&\frac{\partial^2 u}{\partial x^2} - \frac{UL}{D_e} \frac{\partial u}{\partial x} - \frac{L^2C_{B0}}{D_e}kuw 
+= \frac{UL}{D_e}\frac{\partial u}{\partial \tau} \\
+&\frac{\partial^2 w}{\partial x^2} - \frac{UL}{D_e} \frac{\partial w}{\partial x} - \frac{L^2C_{A0}}{D_e}kuw 
+= \frac{UL}{D_e}\frac{\partial u}{\partial \tau} \\
+&\text{Boundary Conditions:} \\
+&\frac{\partial w}{\partial x}(z=L, \cdot) = 0\\
+&u(z=0, \cdot) = 1 \\
+&\frac{\partial w}{\partial z}(z=L, \cdot) = 0\\
+&w(z=0, \cdot) = 1 \\
+&\text{Initial Conditions:} \\
+& u(\cdot, t= 0) = e^{-10x} \\
+& w(\cdot, t= 0) = e^{-10x}
+\end{aligned}
+\label{eq_p4d}
+\end{equation}
+Abusing our notation again and multiplying through by test functions $v$ and $z$ we have (\ref{eq_p4d1}) with $c_1 = \frac{UL}{D_e}$,  $c_{2A} = \frac{L^2C_{A0}}{D_e}$ and  $c_{2B} = \frac{L^2C_{B0}}{D_e}$.
+\begin{equation}
+\begin{aligned}
+&\partial_{xx}(u)v - c_1\partial_x(u)v - c_{2B}uwv = c_1\partial_\tau(u)v \\
+&\partial_{xx}(w)z - c_1\partial_x(w)z - c_{2A}uwz = c_1\partial_\tau(w)z 
+\end{aligned}
+\label{eq_p4d1}
+\end{equation}
+By following the same procedure as before we have the variational form in (\ref{eq_p4d2}).
+\begin{equation}
+\begin{aligned}
+&\int_0^1 -\partial_{x}(u)v - c_1\partial_x(u)v - c_{2B}uwvdx = \int_0^1 c_1\partial_\tau(u)v dx \\
+&\int_0^1-\partial_{x}(w)z - c_1\partial_x(w)z - c_{2A}uwzdx = \int_0^1 c_1\partial_\tau(w)zdx 
+\end{aligned}
+\label{eq_p4d2}
+\end{equation}
 
 
 %References

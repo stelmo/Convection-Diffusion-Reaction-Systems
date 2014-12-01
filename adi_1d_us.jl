@@ -133,9 +133,10 @@ for tloop=2:Nt
 
 end
 
-mesh(xs, ts, us')
+surf(xs, ts, us')
 xlabel("Space")
 ylabel("Time")
+zlabel("Concentration")
 
 # plot(xs, us[:, end])
 

@@ -7,12 +7,12 @@ Cb0 = 0.5
 b1 = 6.36^2 * Cb0 * 0.25 / 1.05
 b2 = 6.36^2 * Ca0 * 0.25 / 1.05
 
-N = 20 # number of nodes - need many of these
+N = 100 # number of nodes - need many of these
 xs = linspace(0., 1., N)
 h = xs[2] - xs[1]
 
-Nt = 20
-ts = linspace(0., 5., Nt) # this is dimensionless time... It also takes long...
+Nt = 100
+ts = linspace(0., 2., Nt) # this is dimensionless time... It also takes long...
 dt = ts[2] - ts[1]
 
 # Initial condition
@@ -149,11 +149,16 @@ for tloop=2:Nt
 end
 
 figure(1)
-p1 = mesh(xs, ts, us',color="r")
-p2 = mesh(xs, ts, ws', color="b")
+p1 = surf(xs, ts, us',color="r")
 xlabel("Space")
 ylabel("Time")
 zlabel("Concentration")
-legend([p1, p2], [L"C_A", L"C_B"])
+
+figure(2)
+p2 = surf(xs, ts, ws', color="b")
+xlabel("Space")
+ylabel("Time")
+zlabel("Concentration")
+# legend([p1, p2], [L"C_A", L"C_B"])
 
 plt.show()
