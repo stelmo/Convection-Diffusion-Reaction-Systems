@@ -78,20 +78,20 @@ The basis of the model's derivation rests on the conservation of mass principle.
 
 The mole balance is shown in (\ref{eq_mole_balance}) where $r_A$ indicates the generation or consumption of species A due to reaction and $C_A$ is the concentration of species A in the mixture. The term on the right hand side of (\ref{eq_mole_balance}) represents the accumulation of species A in the control volume ($\delta V$).
 \begin{equation}
-\sum_{i=r, \theta, z}[F_A|_i(i) - F_A|_i(i+\delta i)] + r_A \delta V = \delta V \frac{\partial C_A}{\partial t}
+\sum_{i=r, \theta, z}\left(F_A|_i(i) - F_A|_i(i+\delta i)\right) + r_A \delta V = \delta V \frac{\partial C_A}{\partial t}
 \label{eq_mole_balance}
 \end{equation}
 Consider the molar flow rate in the $\mathbf{e}_r$ direction. By using the definition of molar flux and the linear approximation of $F_A|_r(r+\delta r)$ we have (\ref{eq_far}).
 \begin{equation}
 \begin{aligned}
 F_A|_r(r) &= W_A|_r(r) r \delta \theta \delta z \\
-F_A|_r(r+\delta r) &= (W_ A|_r(r) + \frac{\partial W_A|_r(r)}{\partial r} \delta r)(r+\delta r)\delta \theta \delta z + h(\delta r)
+F_A|_r(r+\delta r) &= \left(W_ A|_r(r) + \frac{\partial W_A|_r(r)}{\partial r} \delta r\right)(r+\delta r)\delta \theta \delta z + h(\delta r)
 \end{aligned}
 \label{eq_far}
 \end{equation}
 For the linear approximation we have $\lim_{\delta r \to 0} ||\delta r||^{-1}||h(\delta r)|| = 0 $ and consequently for sufficiently small $\delta r$ we have (\ref{eq_far2}).  
 \begin{equation}
-F_A|_r(r) - F_A|_r(r+\delta r)  = - (W_ A|_r(r)  + \frac{\partial W_A|_r(r)}{\partial r}r) \delta r \delta \theta \delta z
+F_A|_r(r) - F_A|_r(r+\delta r)  = - \left(W_ A|_r(r)  + \frac{\partial W_A|_r(r)}{\partial r}r\right) \delta r \delta \theta \delta z
 \label{eq_far2}
 \end{equation}
 In a similar manner, consider the molar flow rate in the $\mathbf{e}_\theta$ direction. By again using the definition of molar flux and the linear approximation of $F_A|_\theta(\theta+\delta \theta)$ we have (\ref{eq_fat}).
@@ -122,7 +122,7 @@ F_A|_z(z) - F_A|_z(z + \delta z) = - \frac{\partial W_A|_z(z)}{\partial z}r \del
 \end{equation}
 Substituting (\ref{eq_far2}), (\ref{eq_fat2}) and (\ref{eq_faz2}) into (\ref{eq_mole_balance}) results in (\ref{eq_mb2}). Note that for sufficiently small $\delta r$ we have $\delta V \approx r \delta \theta \delta r \delta z$.
 \begin{equation}
-- (W_ A|_r(r)  + \frac{\partial W_A|_r(r)}{\partial r}r) \delta r \delta \theta \delta z - \frac{\partial W_A|_\theta(\theta)}{r \partial \theta}\delta \theta\delta r \delta z - \frac{\partial W_A|_z(z)}{\partial z}r \delta z \delta r \delta \theta + r_A \delta V = \delta V \frac{\partial C_A}{\partial t}
+- \left(W_ A|_r(r)  + \frac{\partial W_A|_r(r)}{\partial r}r\right) \delta r \delta \theta \delta z - \frac{\partial W_A|_\theta(\theta)}{r \partial \theta}\delta \theta\delta r \delta z - \frac{\partial W_A|_z(z)}{\partial z}r \delta z \delta r \delta \theta + r_A \delta V = \delta V \frac{\partial C_A}{\partial t}
 \label{eq_mb2}
 \end{equation}
 Dividing through by $r \delta \theta \delta r \delta z$ results in (\ref{eq_mb3}) which is equivalent to (\ref{eq_mb4}).
@@ -134,11 +134,11 @@ Dividing through by $r \delta \theta \delta r \delta z$ results in (\ref{eq_mb3}
 -\frac{1}{r} \frac{\partial (rW_A|_r)}{\partial r} - \frac{1}{r^2}\frac{\partial W_A|_\theta}{\partial \theta} - \frac{\partial W_A|_z}{\partial z}+ r_A  = \frac{\partial C_A}{\partial t}
 \label{eq_mb4}
 \end{equation}
-It is now necessary to make modelling assumptions. Firstly, we will neglect any variations in the rotational direction (modelled by assuming $\frac{\partial W_A|_\theta}{\partial \theta} \approx 0$).
+It is now necessary to make modelling assumptions. First, we will neglect any variations in the rotational direction (modelled by assuming $\frac{\partial W_A|_\theta}{\partial \theta} \approx 0$).
 
-Secondly, we assume that Fick's Law is valid, that the diffusivity ($D_{AB}$) is constant and that the total concentration of the system is constant. This last assumption limits us to considering only reactions which conserve the total number of moles e.g. $A \rightarrow B$ or $A + B \rightarrow 2C$ etc..
+Second, we assume that Fick's Law is valid, that the diffusivity ($D_{AB}$) is constant and that the total concentration of the system is constant. This last assumption limits us to considering only reactions which conserve the total number of moles e.g. $A \rightarrow B$ or $A + B \rightarrow 2C$ etc..
 
-Thirdly, we assume that the convection in the radial direction is negligible and that the velocity profile of molar flow in the axial direction only varies in the radial direction ($U(z,r)=U(r)$). These assumptions are not particularly strong but nevertheless simplify the model considerably. The resultant constitutive equations are shown in (\ref{eq_fick}).  
+Third, we assume that the convection in the radial direction is negligible and that the velocity profile of molar flow in the axial direction only varies in the radial direction ($U(z,r)=U(r)$). These assumptions are not particularly strong but nevertheless simplify the model considerably. The resultant constitutive equations are shown in (\ref{eq_fick}).  
 \begin{equation}
 \begin{aligned}
 W_A|_z &= -D_{AB}\frac{\partial C_A}{\partial z} + C_A U(r) \\
@@ -148,15 +148,15 @@ W_A|_r &= -D_{AB}\frac{\partial C_A}{\partial r}
 \end{equation} 
 Substituting (\ref{eq_fick}) into (\ref{eq_mb3}) results in the model (\ref{eq_cdr}) we will use for this project \cite{fogler}.
 \begin{equation}
-D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - U_z\frac{\partial C_A}{\partial z} + r_A = \frac{\partial C_A}{\partial t}
+D_{AB}\left(\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial C_A}{\partial r}\right) + \frac{\partial^2 C_A}{\partial z^2}\right) - U_z\frac{\partial C_A}{\partial z} + r_A = \frac{\partial C_A}{\partial t}
 \label{eq_cdr}
 \end{equation}
-Up to now not much has been said about the reaction term $r_A$. Typically $r_A$ is formulated as a rate equation based on experimental evidence modelling reaction kinetics. It is possible for the rate ``law" to be quite complex in character. A class of commonly encountered expressions for forward, irreversible reactions are based on power law kinetics \cite{levenspiel}. Power law kinetics usually take the form $-r_A=k(T)[C_A]^M$ for reactions of the form $A \rightarrow B$ or $-r_A=k(T)[C_A]^M[C_B]^N$ for reactions of the form $A + B \rightarrow 2C$ with $M,N$ usually a non-negative integer less than 3. The factor $k(T)$ is called the rate constant even though it is not a constant (it depends quite strongly on temperature). The Arrhenius equation is a very commonly used empirical function which describes the temperature dependence of the rate constant. It is typically expressed by (\ref{eq_arrhenius}) where $E$ is the activation energy, $R$ the ideal gas constant and $k_a$ is the pre-exponential factor at the reference temperature $T_a$. 
+Up to now not much has been said about the reaction term $r_A$. Typically $r_A$ is formulated as a rate equation based on experimental evidence modelling reaction kinetics. It is possible for the rate ``law" to be quite complex in character. A class of commonly encountered expressions for forward, irreversible reactions are power law kinetics \cite{levenspiel}. Power law kinetics usually take the form $-r_A=k(T)C_A^M$ for reactions of the form $A \rightarrow B$ or $-r_A=k(T)C_A^MC_B^N$ for reactions of the form $A + B \rightarrow 2C$ with $M,N$ usually a non-negative integer less than 3. The factor $k(T)$ is called the rate constant even though it is not a constant (it depends quite strongly on temperature). The Arrhenius equation is a very commonly used empirical function which describes the temperature dependence of the rate constant. It is typically expressed by (\ref{eq_arrhenius}) where $E$ is the activation energy, $R_g$ the ideal gas constant and $k_a$ is the pre-exponential factor at the reference temperature $T_a$. 
 \begin{equation}
-k(T) = k_a e^{(\frac{E}{R}(\frac{1}{T_a} - \frac{1}{T}))}
+k(T) = k_a e^{\left(\frac{E}{R_g}\left(\frac{1}{T_a} - \frac{1}{T}\right)\right)}
 \label{eq_arrhenius}
 \end{equation} 
-It is prudent (in practice a necessity) to attempt to model the temperature profile of the reactor. We start the derivation by considering the first law of thermodynamics for an open system again applied to the control volume in Figure \ref{fig_vol_element}. In (\ref{eq_ftd}) $F_{i0}$ and $F_{i}$ denotes the molar flow of species $i$ into and out of the control volume respectively, and similarly with the energy $E$. The law states that the rate of change of energy in a system is the sum of the heat flow ($\dot{Q}$) to the system minus the work done ($\dot{W}$) by the system plus the rate of energy transferred due to flow (the last two terms). 
+It is prudent (in practice a necessity) to attempt to model the temperature profile of the reactor. We start the derivation by considering the first law of thermodynamics for an open system again applied to the control volume in Figure \ref{fig_vol_element}. In (\ref{eq_ftd}) $F_{i0}$ and $F_{i}$ denotes the molar flow of species $i$ into and out of the control volume respectively; similarly with the energy $E$. The law states that the rate of change of energy in a system is the sum of the heat flow ($\dot{Q}$) to the system minus the work done ($\dot{W}$) by the system plus the rate of energy transferred due to flow (the last two terms). 
 \begin{equation}
 \frac{d E_{syst}}{dt} = \dot{Q} - \dot{W} + \sum F_{i0}E_{i0} -\sum F_{i}E_{i}
 \label{eq_ftd}
@@ -181,7 +181,7 @@ Now by assuming that the energy $E_i$ is approximately equal to the internal ene
 \end{equation} 
 Now consider the left hand side of \ref{eq_ftd3}. By definition $E_{syst} = \sum N_iE_i$ where $N_i$ is the number of moles of species $i$ in the system. By using the definition of concentration ($C_i = \frac{N_i}{\delta V}$) and noting that due to our earlier assumptions $E_i = H_i - P\hat{V}_i$  we have (\ref{eq_syse}).
 \begin{equation}
-\frac{d E_{syst}}{dt} = \delta V \frac{\partial}{\partial t}(\sum C_i (H_i - P\hat{V}_i))
+\frac{d E_{syst}}{dt} = \delta V \frac{\partial}{\partial t}\left(\sum C_i (H_i - P\hat{V}_i)\right)
 \label{eq_syse}
 \end{equation}
 Expanding the right hand side of (\ref{eq_syse}), assuming constant pressure and making use of the definitions of the specific molar volume ($\sum \hat{V}_iC_i = 1$) and enthalpy at constant pressure ($dH_i = C_{p_i}dT$) we have (\ref{eq_syse2}).
@@ -191,29 +191,29 @@ Expanding the right hand side of (\ref{eq_syse}), assuming constant pressure and
 \end{equation}
 If we neglect shaft work we have the general form of the first law of thermodynamics we will be using in (\ref{eq_gfl}).  
 \begin{equation}
-\frac{\dot{Q}}{\delta V} + \frac{1}{\delta V}(\sum F_{i0}H_{i0} -\sum F_{i}H_{i}) =\sum C_i C_{p_i} \frac{\partial T}{\partial t} + \sum H_i \frac{\partial C_i}{\partial t}
+\frac{\dot{Q}}{\delta V} + \frac{1}{\delta V}\left(\sum F_{i0}H_{i0} -\sum F_{i}H_{i}\right) =\sum C_i C_{p_i} \frac{\partial T}{\partial t} + \sum H_i \frac{\partial C_i}{\partial t}
 \label{eq_gfl}
 \end{equation}
 It now becomes necessary to consider the components of volume element  in Figure \ref{fig_vol_element} to take the derivation further.
 \begin{rmrk}
 Since we neglected rotational variance in the final form of the CDR equation we will immediately neglect the angular component of the volume element in the following analysis.  
 \end{rmrk}
-Consider energy flow terms $\frac{1}{\delta V}(\sum F_{i0}H_{i0} -\sum F_{i}H_{i})$ from (\ref{eq_gfl}) in the $\mathbf{e}_r$ and $\mathbf{e}_z$ directions for a particular species A. Using the same analysis as with the CDR derivation we have (\ref{eq_tcp1}).
+Consider energy flow terms $\frac{1}{\delta V}\left(\sum F_{i0}H_{i0} -\sum F_{i}H_{i}\right)$ from (\ref{eq_gfl}) in the $\mathbf{e}_r$ and $\mathbf{e}_z$ directions for a particular species A. Using the same analysis as with the CDR derivation we have (\ref{eq_tcp1}).
 \begin{equation}
 \begin{aligned}
-F_{A0}|_r H_{A0}(r) - F_{A}|_rH_{A}(r+\delta r) &= -(W_A|_r H_A(r) + \frac{\partial W_A|_r H_A(r)}{\partial r}r)\delta r \delta \theta \delta z \\
+F_{A0}|_r H_{A0}(r) - F_{A}|_rH_{A}(r+\delta r) &= -\left(W_A|_r H_A(r) + \frac{\partial W_A|_r H_A(r)}{\partial r}r\right)\delta r \delta \theta \delta z \\
 F_{A0}|_z H_{A0}(z) - F_{A}|_z H_{A}(z+\delta z) &= -\frac{\partial W_A|_z H_A(z)}{\partial z}r \delta r \delta \theta \delta z   
 \end{aligned}
 \label{eq_tcp1}
 \end{equation}
 Summing over all the components in the control volume and noticing that this (\ref{eq_tcp1}) resembles the flux terms in (\ref{eq_mb3}) we can rewrite (\ref{eq_gfl}) into (\ref{eq_tcp2}).
 \begin{equation}
-\frac{\dot{Q}}{\delta V} - \frac{1}{r}\frac{\partial}{\partial r}(r\sum W_i|_r H_i) - \frac{\partial}{\partial z}(\sum W_i|_z H_i) =\sum C_i C_{p_i} \frac{\partial T}{\partial t} + \sum H_i \frac{\partial C_i}{\partial t}
+\frac{\dot{Q}}{\delta V} - \frac{1}{r}\frac{\partial}{\partial r}\left(r\sum W_i|_r H_i\right) - \frac{\partial}{\partial z}\left(\sum W_i|_z H_i\right) =\sum C_i C_{p_i} \frac{\partial T}{\partial t} + \sum H_i \frac{\partial C_i}{\partial t}
 \label{eq_tcp2}
 \end{equation}
 Assuming that we can neglect the change in enthalpy in the radial direction and expanding the derivatives we have (\ref{eq_tcp3}).
 \begin{equation}
-\frac{\dot{Q}}{\delta V} - \sum H_i (\frac{1}{r}\frac{\partial}{\partial r}(r W_i|_r)+\frac{\partial}{\partial z}(W_i|_z)) - \sum W_i|_z \frac{\partial H_i}{\partial z} =\sum C_i C_{p_i} \frac{\partial T}{\partial t} + \sum H_i \frac{\partial C_i}{\partial t}
+\frac{\dot{Q}}{\delta V} - \sum H_i \left(\frac{1}{r}\frac{\partial}{\partial r}(r W_i|_r\right)+\frac{\partial}{\partial z}\left(W_i|_z\right) - \sum W_i|_z \frac{\partial H_i}{\partial z} =\sum C_i C_{p_i} \frac{\partial T}{\partial t} + \sum H_i \frac{\partial C_i}{\partial t}
 \label{eq_tcp3}
 \end{equation}
 Now note that we can substitute in (\ref{eq_mb4}) (without the rotational term) to get to (\ref{eq_tcp4}).
@@ -249,17 +249,17 @@ The adiabatic energy balance actually has its roots in a simpler energy balance 
 \end{rmrk}
 Finally, we consider the case where the heat added has both radial and axial components. By assuming that the heat term can be written in vector form $\dot{Q} = q_r A_r \mathbf{e}_r + q_z A_z \mathbf{e}_z$  where $A_r$ and $A_z$ are the cross-sectional areas, and following the same procedure as before we have (\ref{eq_heat1}).
 \begin{equation}
-\frac{\dot{Q}}{\delta V} = -\frac{1}{r}\frac{\partial}{\partial r}(r q_r) - \frac{\partial}{\partial z}(q_z)
+\frac{\dot{Q}}{\delta V} = -\frac{1}{r}\frac{\partial}{\partial r}\left(r q_r\right) - \frac{\partial}{\partial z}\left(q_z\right)
 \label{eq_heat1}
 \end{equation}
 By substituting Fourier's laws, $q_r = -k_e\frac{\partial T}{\partial r}$ and $q_z = -k_e\frac{\partial T}{\partial z}$ with $k_e$ the average coefficient of conduction of the species in the reactor, into (\ref{eq_heat1}) and combining this with (\ref{eq_tcp5}) we end up with the two dimensional non-adiabatic energy balance for a tubular reactor (\ref{eq_baltb3}).
 \begin{equation}
-\frac{k_e}{r}\frac{\partial}{\partial r}(\frac{r\partial T}{\partial r}) + k_e\frac{\partial ^2 T}{\partial z^2} + H_{rxn}r_A - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} =\sum C_i C_{p_i} \frac{\partial T}{\partial t}
+\frac{k_e}{r}\frac{\partial}{\partial r}\left(\frac{r\partial T}{\partial r}\right) + k_e\frac{\partial ^2 T}{\partial z^2} + H_{rxn}r_A - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} =\sum C_i C_{p_i} \frac{\partial T}{\partial t}
 \label{eq_baltb3}
 \end{equation}
 Assuming further that the sum $\sum C_i C_{p_i} = C_{p_m}$ is constant and that we have laminar flow i.e. $U_z = 2U_0(1-(\frac{r}{R})^2) = U(r)$, we have a simplified model amenable to our purposes (\ref{eq_baltb4}).
 \begin{equation}
-k_e(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial T}{\partial r}) + \frac{\partial ^2 T}{\partial z^2}) - U(r) C_{p_m} \frac{\partial T}{\partial z} + H_{rxn}r_A = C_{p_m} \frac{\partial T}{\partial t}
+k_e\left(\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial T}{\partial r}\right) + \frac{\partial ^2 T}{\partial z^2}\right) - U(r) C_{p_m} \frac{\partial T}{\partial z} + H_{rxn}r_A = C_{p_m} \frac{\partial T}{\partial t}
 \label{eq_baltb4}
 \end{equation}
 \begin{rmrk}
@@ -283,7 +283,7 @@ Below follows a concise motivation for problems addressed and solved in this pro
 \subsection{Isothermal Overview}
 In this section we model the simple first order reaction $A \rightarrow B$ using the rate expression $-r_A=kC_A$. Since we assume isothermal conditions the rate constant is constant. The CDR equation derived earlier (for laminar flow) may be used to model this situation, it is shown in (\ref{eq_iso1}) for convenience.
 \begin{equation}
-D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t}
+D_{AB}\left(\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial C_A}{\partial r}\right) + \frac{\partial^2 C_A}{\partial z^2}\right) - 2U\left(1-\left(\frac{r}{R}\right)^2\right)\frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t}
 \label{eq_iso1}
 \end{equation} 
 If one simplifies the model using the Aris-Taylor approximation the model becomes (\ref{eq_iso2}).
@@ -299,8 +299,8 @@ The isothermal assumption made in the previous subsection is not a realistic ass
 \begin{aligned}
 &D_{AB} \frac{\partial^2 C_A}{\partial z^2} - U(r) \frac{\partial C_A}{\partial z} - k(T)C_A 
 = \frac{\partial C_A}{\partial t} \\
-& k_e(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial T}{\partial r}) + \frac{\partial ^2 T}{\partial z^2}) - U(r) C_{p_m} \frac{\partial T}{\partial z} - H_{rxn}k(T)C_A = C_{p_m} \frac{\partial T}{\partial t} \\
-&\text{with } k(T) = k_0 \exp(\frac{-E}{RT}) \text{ and } U(r)=2U(1-(\frac{r}{R})^2)
+& k_e\left(\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial T}{\partial r}\right) + \frac{\partial ^2 T}{\partial z^2}\right) - U(r) C_{p_m} \frac{\partial T}{\partial z} - H_{rxn}k(T)C_A = C_{p_m} \frac{\partial T}{\partial t} \\
+&\text{with } k(T) = k_0 \exp\left(\frac{-E}{RT}\right) \text{ and } U(r)=2U\left(1-\left(\frac{r}{R}\right)^2\right)
 \end{aligned}
 \label{eq_noniso1}
 \end{equation} 
@@ -311,13 +311,13 @@ Similarly, the non-linear non-isothermal simplified model corresponding to (\ref
 = \frac{\partial C_A}{\partial t} \\
 & k_e\frac{\partial^2 T}{\partial z^2}- U C_{p_m} \frac{\partial T}{\partial z} + H_{rxn}k(T)C_A  + U_ha(T_a-T) = C_{p_m} 
 \frac{\partial T}{\partial t} \\
-&\text{with } k(T) = k_0 \exp(\frac{-E}{RT})
+&\text{with } k(T) = k_0 \exp\left(\frac{-E}{RT}\right)
 \end{aligned}
 \label{eq_noniso2}
 \end{equation} 
-It is clear that solving the non-linear coupled system is quite daunting. For this reason the factors which make it difficult to solve will be handled separately to lay the foundation for future work where they can be solved simultaneously. Inspection of (\ref{eq_noniso1}) or (\ref{eq_noniso2}) reveal that they each have the same difficult aspects: the non-linearity introduced by the non-isothermal assumption and the coupled system which needs to be solved simultaneously.
+Ideally we would like to do the same comparison between the two models as with the isothermal case. However, it is clear that solving the non-linear coupled system is quite daunting. For this reason the factors which make it difficult to solve will be handled separately to lay the foundation for future work where they can be solved simultaneously. Inspection of (\ref{eq_noniso1}) or (\ref{eq_noniso2}) reveal that they each have the same difficult aspects: the non-linearity introduced by the non-isothermal assumption and the coupled system which needs to be solved simultaneously.
 
-With this in mind consider the uncoupled non-linear problem shown in (\ref{eq_nl1}). This corresponds to an adiabatic reactor where $A \rightarrow B$. While this may seem like a major simplification it models a situation commonly encountered in practice (e.g. an insulated reactor). This problem will illustrate one way of handeling non-linear systems using the FEM.
+Bearing this in mind, consider the uncoupled non-linear problem shown in (\ref{eq_nl1}). This corresponds to an adiabatic reactor where $A \rightarrow B$. While this may seem like a major simplification it models a situation commonly encountered in practice (e.g. an insulated reactor). The solution to this problem will illustrate one way of handling non-linear equations using the FEM.
 \begin{equation}
 \begin{aligned}
 &D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(C_A)
@@ -328,7 +328,7 @@ C_A = \frac{\partial C_A}{\partial t} \\
 \label{eq_nl1}
 \end{equation}  
 
-Finally, consider the coupled problem shown in (\ref{eq_nl2}). This corresponds to an isothermal coupled reaction where $A + B \rightarrow 2C$. This problem is weakly\footnote{I use the term weakly here to indicate that it is much easier to handle than the non-linearity introduced by the Arrhenius equation in the previous problem} non-linear due to the rate equation $-r_A = kC_AC_B$.
+Finally, consider the coupled problem shown in (\ref{eq_nl2}). This corresponds to an isothermal coupled reaction where $A + B \rightarrow 2C$. This problem is weakly\footnote{I use the term weakly here to indicate that this type of non-linearity it is much easier to handle than the non-linearity introduced by the Arrhenius equation in the previous problem} non-linear due to the rate equation $-r_A = kC_AC_B$.
 \begin{equation}
 \begin{aligned}
 &D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B 
@@ -338,8 +338,7 @@ Finally, consider the coupled problem shown in (\ref{eq_nl2}). This corresponds 
 \end{aligned}
 \label{eq_nl2}
 \end{equation}
-
-These two problems combined capture the difficulties one would encounter attempting to solve (\ref{eq_noniso1}) or (\ref{eq_noniso2}).
+These two problems combined capture the difficulties one would encounter attempting to solve (\ref{eq_noniso1}) or (\ref{eq_noniso2}). It is hoped that concepts and methods used to solve these types of problems can be used to solve the full non-isothermal problem.
 
 \section{Basis Functions}
 To solve problems with the FEM it is desirable to construct basis functions with simple analytical properties. Ideally these basis functions should lend themselves to simple computational implementation for numerical integration. We consider two basis functions in this project. 
@@ -436,7 +435,8 @@ u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_n
 \end{pmatrix}
 \label{eq_K3matlin}
 \end{equation} 
- 
+We will make extensive use of these results in the succeeding sections.
+
 \subsection{Piecewise Bilinear Basis Functions}
 \label{section_pbbf}
 In two dimensions the previous roof functions generalise to the piecewise bilinear basis functions. We discretise our domain $[0,1] \times [0,1]$ into $n$ rectangular elements of equal size ($\delta x, \delta y$). We number the nodes of our discretisation column wise as shown in Figure \ref{fig_pbilindomain}.
@@ -448,7 +448,7 @@ In two dimensions the previous roof functions generalise to the piecewise biline
 \end{figure}
 Now we define a basis function $\phi_i(x,y) = a+ bx +cy +dxy$ on each node $i$ of Figure \ref{fig_pbilindomain}. Each basis function $\phi_i$ takes on the value $1$ at node $i$ and a value of $0$ at any node not $i$. For details on the construction of the basis functions we refer the avid reader to \cite{vrb}. 
 
-Each basis function $\phi$ is composed of four constitutive functions named $P_1, P_2, P_3$ and $P_4$ defined on the element adjacent to the basis function $\phi$ in question and with orientation shown in Figure \ref{fig_pbasis}. Each function $P$ takes on the value $1$ at the corner nearest $\phi$ and $0$ at the other corners. If the rectangle corresponding to a particular function $P$ is not in the domain it is neglected in the calculation involving that $\phi$. 
+Each basis function $\phi$ is composed of four constitutive functions named $P_1, P_2, P_3$ and $P_4$ defined on the element adjacent to the basis function $\phi$ in question and with orientation shown in Figure \ref{fig_pbasis}. Each function $P$ takes on the value $1$ at the corner nearest $\phi$ and $0$ at the other corners. If the rectangle corresponding to a particular function $P$ is not in the domain $[0,1]\times[0,1]$ it is neglected in the calculation involving that $\phi$. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.8]{./pics/basis_p}
@@ -527,7 +527,7 @@ Consider the construction of matrix $K^4$ which uses matrix $M^4$ as the basis o
 \end{figure} 
 For example, $K^4_{1,1} = M^4_{4,4}$ because only $P_4$ overlaps with itself for nodes 1 and 1. Another example would be $K^4_{1,8} = M^4_{4,3}$ as $P_4$ overlaps with $P_3$. Another example would be $K^4_{9,9} = M^4_{1,1} + M^4_{2,2}+ M^4_{3,3}+M^4_{4,4}$ as every constitutive functions overlaps with itself. A final example is $K^4_{1,3} = 0$ as nodes 1 and 3 have no constitutive functions in common. 
 
-A similar process is repeated for matrices $K^1, K^2$ and $K^3$. 
+A similar process is repeated for matrices $K^1, K^2$ and $K^3$. Again, we will make extensive use of these results in the succeeding sections.
 
 \section{Isothermal Problem}
 In this section the isothermal models will be developed and solved using the FEM. Finally, the quality of the Aris-Taylor simplification will be analysed numerically.  
@@ -542,7 +542,7 @@ We start this section solving the simplified model from (\ref{eq_iso1}) because 
 &\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
 &C_A(z=0, \cdot) = C_{A0} \\
 &\text{Initial Condition:} \\
-& C_A(\cdot, t= 0) = e^{-10\frac{z}{L}}
+& C_A(\cdot, t= 0) = C_{A0}e^{-10\frac{z}{L}}
 \end{aligned}
 \label{eq_p1}
 \end{equation}
@@ -669,12 +669,12 @@ Note that $u_0=1$ because of the boundary condition at the start of the reactor 
 \left(-K^1_{1:n,1:n}-c_1K^2_{1:n,1:n}-c_1c_2K^3_{1:n,1:n} \right)\mathbf{u} +\left(-K^1_{1:n,0}-c_1K^2_{1:n,0} -c_1c_2K^3_{1:n,0}\right) =  c_1K^3_{1:n,1:n}\mathbf{u}\prime
 \label{eq_femq12}
 \end{equation}
-If we were merely interested in solving for the steady state solution of (\ref{eq_p1d}) we could have set the right hand side of (\ref{eq_femq12}) equal to zero and solved the resulting system of equations for $\mathbf{u}$. However, we would like to solve for the transient response as well. For this we use the Crank-Nicholson method for solving the system of ordinary differential equations (ODEs) in (\ref{eq_femq12}). For convenience we define $K^* = \left(-K^1_{1:n,1:n}-c_1K^2_{1:n,1:n}-c_1c_2K^3_{1:n,1:n} \right)$ and $G^{*} = \left(-K^1_{1:n,0}-c_1K^2_{1:n,0} -c_1c_2K^3_{1:n,0}\right)$. We discretise the dimensionless time domain $[0,1]$ into $n$ equidistant elements with nodes $\tau_0 = 0, \tau_1=\delta \tau, \tau_2=\tau_1 + \delta \tau,...,\tau_n=1$ and approximate $\mathbf{u}\prime = \frac{\mathbf{u}_{\tau+1} -\mathbf{u}_{\tau}}{\delta \tau}$. The Crank-Nicholson scheme for (\ref{eq_femq12}) is shown in (\ref{eq_cnq1}).
+If we were merely interested in solving for the steady state solution of (\ref{eq_p1d}) we could have set the right hand side of (\ref{eq_femq12}) equal to zero and solved the resulting system of equations for $\mathbf{u}$. However, we would like to solve for the transient response as well. For this we use the Crank-Nicholson method for solving the system of ordinary differential equations (ODEs) in (\ref{eq_femq12}). For convenience we define $K^* = \left(-K^1_{1:n,1:n}-c_1K^2_{1:n,1:n}-c_1c_2K^3_{1:n,1:n} \right)$ and $G^{*} = \left(-K^1_{1:n,0}-c_1K^2_{1:n,0} -c_1c_2K^3_{1:n,0}\right)$. We discretise the dimensionless time domain $[0,\tau_{end}]$ into $n$ equidistant elements with nodes $\tau_0 = 0, \tau_1=\delta \tau, \tau_2=\tau_1 + \delta \tau,...,\tau_n=\tau_{end}$ and approximate $\mathbf{u}\prime = \frac{\mathbf{u}_{\tau+1} -\mathbf{u}_{\tau}}{\delta \tau}$. The Crank-Nicholson scheme for (\ref{eq_femq12}) is shown in (\ref{eq_cnq1}).
 \begin{equation}
 \frac{1}{2}\left( K^*\mathbf{u}_{\tau_{m+1}} + K^*\mathbf{u}_{\tau_m} \right) + G^* = c_1K^3_{1:n,1:n}\frac{\mathbf{u}_{\tau_{m+1}} -\mathbf{u}_{\tau_{m}}}{\delta \tau}
 \label{eq_cnq1}
 \end{equation} 
-If we recall that by the initial condition we have $\mathbf{u}_0$ we can iterate using (\ref{eq_cnq1}) to get to the final time step $\mathbf{u}_1$. As an example, consider a reactor with physical properties shown in (\ref{eq_q1phys}).
+If we recall that by the initial condition we have $\mathbf{u}_0$ we can iterate using (\ref{eq_cnq1}) to get to the final time step $\mathbf{u}_{\tau_{end}}$. As an example, consider a reactor with physical properties shown in (\ref{eq_q1phys}).
 \begin{equation}
 \begin{aligned}
 &C_{A0} = 0.5~~ \frac{mol}{dm^3}
@@ -699,27 +699,29 @@ The transient dynamics are shown in Figure \ref{fig_q1std}. Nothing unexpected i
 The next problem we solve is the full two dimensional model from (\ref{eq_iso1}) as shown in (\ref{eq_p2}). Again it is assumed that the physical parameters are given.
 \begin{equation}
 \begin{aligned}
-&D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2}) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t}\\
+&D_{AB}\left(\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial C_A}{\partial r}\right) + \frac{\partial^2 C_A}{\partial z^2}\right) - 2U\left(1-\left(\frac{r}{R}\right)^2\right)\frac{\partial C_A}{\partial z} - kC_A = \frac{\partial C_A}{\partial t}\\
 &\text{Boundary Conditions:} \\
 &\frac{\partial C_A}{\partial z}(z=L, \cdot, \cdot) = 0\\
 &\frac{\partial C_A}{\partial r}(\cdot, r = R, \cdot) = 0 \\
 &\frac{\partial C_A}{\partial r}(\cdot, r = 0, \cdot) = 0 \\
 &C_A(z=0,\cdot, \cdot) = C_{A0} \\
 &\text{Initial Condition:} \\
-& C_A(\cdot, \cdot, t= 0) = e^{-10\frac{z}{L}}
+& C_A(\cdot, \cdot, t= 0) = C_{A0}e^{-10\frac{z}{L}}
 \end{aligned}
 \label{eq_p2}
 \end{equation}
-The boundary conditions indicate that no reaction occurs at the outer edge $r=R$ of the tubular reactor. We also assume that the reactor is rotationally symmetrical (about $\mathbf{e}_\theta$) and hence there is no concentration gradient at $r=0$. The other boundary conditions are the same as in the one dimensional case. 
+The boundary conditions indicate that no reaction occurs at the outer edge $r=R$ of the tubular reactor. We also assume that the reactor is rotationally symmetrical about $\mathbf{e}_\theta$ and hence there is no concentration gradient at $r=0$. The other boundary conditions are the same as in the one dimensional case. 
 
 It is desirable to convert (\ref{eq_p2}) to a dimensionless form. This time we proceed in a slightly different manner to take advantage of Green's Formula. We first multiply (\ref{eq_p2}) with an arbitrary test function $v$ and integrate over the reactor (\ref{eq_p2c1}). 
 \begin{equation}
-\int_0^R \int_0^L D_{AB}(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2})v - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z}v - kC_Av dzdr = \int_0^R \int_0^L \frac{\partial C_A}{\partial t}v dzdr
+\begin{aligned}
+&\int_0^R \int_0^L D_{AB}\left(\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial C_A}{\partial r}\right) + \frac{\partial^2 C_A}{\partial z^2}\right)v - 2U\left(1-\left(\frac{r}{R}\right)^2\right)\frac{\partial C_A}{\partial z}v - kC_Av dzdr \\ &= \int_0^R \int_0^L \frac{\partial C_A}{\partial t}v dzdr
+\end{aligned}
 \label{eq_p2c1}
 \end{equation}
 Now we use Green's Formula by noting that in two dimensions $v\nabla^2C_A = v(\frac{1}{r}\frac{\partial}{\partial r}(r\frac{\partial C_A}{\partial r}) + \frac{\partial^2 C_A}{\partial z^2})$. This results in (\ref{eq_p2c2}).
 \begin{equation}
-\int_0^R \int_0^L D_{AB}(\text{div}(v\nabla C_A)-\nabla C_A \cdot \nabla v ) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z}v - kC_Av dzdr = \int_0^R \int_0^L \frac{\partial C_A}{\partial t}v dzdr
+\int_0^R \int_0^L D_{AB}(\text{div}(v\nabla C_A)-\nabla C_A \cdot \nabla v ) - 2U\left(1-\left(\frac{r}{R}\right)^2\right)\frac{\partial C_A}{\partial z}v - kC_Av dzdr = \int_0^R \int_0^L \frac{\partial C_A}{\partial t}v dzdr
 \label{eq_p2c2}
 \end{equation}
 By recalling the boundary conditions and specifying that $v \in \left\{v : v(z=0,\cdot)=0 \right\} = T$ we can apply Gauss's Theorem to integrate (\ref{eq_p2c3}) where $\Gamma$ is the boundary of the reactor.
@@ -729,23 +731,25 @@ By recalling the boundary conditions and specifying that $v \in \left\{v : v(z=0
 \end{equation}
 This then yields (\ref{eq_p2c4}).
 \begin{equation}
-\int_0^R \int_0^L D_{AB}(-\nabla C_A \cdot \nabla v ) - 2U(1-(\frac{r}{R})^2)\frac{\partial C_A}{\partial z}v - kC_Av dzdr = \int_0^R \int_0^L \frac{\partial C_A}{\partial t}v dzdr
+\int_0^R \int_0^L D_{AB}(-\nabla C_A \cdot \nabla v ) - 2U\left(1-\left(\frac{r}{R}\right)^2\right)\frac{\partial C_A}{\partial z}v - kC_Av dzdr = \int_0^R \int_0^L \frac{\partial C_A}{\partial t}v dzdr
 \label{eq_p2c4}
 \end{equation}
 Now we go to dimensionless form using $u=\frac{C_A}{C_{A0}}$, $x = \frac{z}{L}$, $y = \frac{r}{R}$ and $\tau = \frac{tU}{L}$. We also change the limits of the integrals. This then yields (\ref{eq_p2d2}) with the previous abuse of notation. 
 \begin{equation}
-\int_0^1 \int_0^1 (-D_{AB}(\frac{1}{R^2}\partial_y u \partial_y v + \frac{1}{L^2}\partial_x u \partial_xv) - 2U(1-y^2)\frac{1}{L}\partial_x(u) v - kuv)dxdy = \int_0^1 \int_0^1 
+\begin{aligned}
+&\int_0^1 \int_0^1 \left(-D_{AB}\left(\frac{1}{R^2}\partial_y u \partial_y v + \frac{1}{L^2}\partial_x u \partial_xv\right) - 2U\left(1-y^2\right)\frac{1}{L}\partial_x(u) v - kuv\right)dxdy \\ &= \int_0^1 \int_0^1 
 \frac{U}{L} \partial_\tau(u) v dxdy
+\end{aligned}
 \label{eq_p2d2}
 \end{equation}
-If we let $B(u,v) = \int_0^1 \int_0^1 (-D_{AB}(\frac{1}{R^2}\partial_y u \partial_y v + \frac{1}{L^2}\partial_x u \partial_x v) - 2U(1-y^2)\frac{1}{L}\partial_x(u) v - kuv)dxdy $ and $(\frac{U}{L} \partial_\tau (u), v)_0 = \int_0^1 \int_0^1 \frac{U}{L} \partial_\tau (u) v dxdy$ we have the dimensionless variational form of (\ref{eq_p2}) in (\ref{eq_p2d3}). The goal is to find a function $u$ with $u(x=0,\cdot) = 1$ such that (\ref{eq_p2d3}) holds for all $v \in T$.
+If we let $B(u,v) = \int_0^1 \int_0^1 \left(-D_{AB}\left(\frac{1}{R^2}\partial_y u \partial_y v + \frac{1}{L^2}\partial_x u \partial_xv\right) - 2U\left(1-y^2\right)\frac{1}{L}\partial_x(u) v - kuv\right)dxdy$ and $\left(\frac{U}{L} \partial_\tau (u), v\right)_0 = \int_0^1 \int_0^1 \frac{U}{L} \partial_\tau (u) v dxdy$ we have the dimensionless variational form of (\ref{eq_p2}) in (\ref{eq_p2d3}). The goal is to find a function $u$ with $u(x=0,\cdot) = 1$ such that (\ref{eq_p2d3}) holds for all $v \in T$.
 \begin{equation}
-B(u,v) = (\frac{U}{L} \partial_\tau (u), v)_0
+B(u,v) = \left(\frac{U}{L} \partial_\tau (u), v\right)_0
 \label{eq_p2d3}
 \end{equation}
 Likewise with the one dimensional case we assume the existence and uniqueness of such a function $u$. We again rely on the FEM to construct a solution -- it is perhaps more justified to rely on numerical methods like the FEM for the two dimensional non-constant coefficient problem we are currently facing than it was before.
 
-Now we recall the basis functions $\phi$ touched upon in Section \ref{section_pbbf}. We assume that the function $u^h =\sum^n_{k=1} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_1,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p2d3}) by using the Galerkin approximation: find $u^h \in S^h$ with $u^h(\cdot, 0,\cdot) = 1.$ such that for $S^h_0=\{\phi_{m+1}, \phi_{m+2},...,\phi_n \}$, where $m$ is the number of functions lying on the y-axis, (\ref{eq_p2d4}) holds.
+Now we recall the basis functions $\phi$ touched upon in Section \ref{section_pbbf}. We assume that the function $u^h =\sum^n_{k=1} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_1,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p2d3}) by using the Galerkin approximation: find $u^h \in S^h$ with $u^h(\cdot, 0,\cdot) = 1.$ such that for $S^h_0=\{\phi_{m+1}, \phi_{m+2},...,\phi_n \}$, where $m$ is the number of basis functions lying on the y-axis, (\ref{eq_p2d4}) holds.
 \begin{equation}
 B(u^h,v) = (\frac{U}{L} \partial_\tau (u^h), v)_0~~ \forall v \in S^h_0
 \label{eq_p2d4}
@@ -762,7 +766,7 @@ Again, note the difference between $S^h$ and $S^h_0$. It was required that the t
 As before we will consider each term in (\ref{eq_p2d4}) separately. First, consider $ \int_0^1 \int_0^1 -D_{AB}\frac{1}{R^2}\partial_y u^h \partial_y \phi_i dxdy$ for each $i=m+1, m+2,...,n$ as shown in (\ref{eq_intddx}).
 \begin{equation}
 \begin{aligned}
-\int_0^1 \int_0^1 -D_{AB}\frac{1}{R^2}\partial_y u^h \partial_y \phi_i dxdy &= \int_0^1 \int_0^1 -D_{AB}\frac{1}{R^2}\partial_y (\sum^n_{k=1} u_k \phi_k) \partial_y \phi_i dxdy \\
+\int_0^1 \int_0^1 -D_{AB}\frac{1}{R^2}\partial_y u^h \partial_y \phi_i dxdy &= \int_0^1 \int_0^1 -D_{AB}\frac{1}{R^2}\partial_y \left(\sum^n_{k=1} u_k \phi_k\right) \partial_y \phi_i dxdy \\
 &= -D_{AB}\frac{1}{R^2}\sum^n_{k=1} u_k\int_0^1 \int_0^1 \partial_y (\phi_k) \partial_y \phi_i dxdy  
 \end{aligned}
 \label{eq_intddx}
@@ -795,10 +799,10 @@ K^{3*}_{2,2} = \frac{-2U}{L} u_2 \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_2)  \
 \end{equation}
 Where $y_1$ is the y-axis position of $\phi_1$ and $y_2$ is the y-axis position of $\phi_2$. We then construct the matrix $K^{3*}$ in a manner very similar to the other matrices. We end up with (\ref{eq_intdx3}).
 \begin{equation}
-\int_0^1 \int_0^1 - 2U(1-y^2)\frac{1}{L}\partial_x(u^h)  \phi_idxdy  = \frac{-2U}{L} K^{3*}_{m+1:n,1:n}\mathbf{u}
+\int_0^1 \int_0^1 - 2U\left(1-y^2\right)\frac{1}{L}\partial_x(u^h)  \phi_idxdy  = \frac{-2U}{L} K^{3*}_{m+1:n,1:n}\mathbf{u}
 \label{eq_intdx3}
 \end{equation}
-Fourth, consider $\int_0^1 \int_0^1  - ku^h \phi_i dxdy$ for each $i=m+1, m+2,...,n$. This case proceeds in the same way as for $K^1$ and $K^2$ because the coefficients are constant. We have the matrix $K^4$ in (\ref{eq_intnn}).
+Fourth, consider $\int_0^1 \int_0^1  - ku^h \phi_i dxdy$ for each $i=m+1, m+2,...,n$. This case proceeds in the same way as for $K^1$ and $K^2$ because the coefficients are constant. We have the matrix $K^4_{m+1:n, 1:n}$ in (\ref{eq_intnn}).
 \begin{equation}
 \int_0^1 \int_0^1 - ku^h \phi_i dxdy = -kK^4_{m+1:n, 1:n}\mathbf{u}
 \label{eq_intnn}
@@ -810,10 +814,12 @@ And finally, consider $\int_0^1 \int_0^1 \frac{U}{L} \partial_\tau u^h \phi_i dx
 \end{equation}
 Combining everything we have the FEM approximation of (\ref{eq_p2d4}) in (\ref{eq_p2fem}).
 \begin{equation}
-\left( -D_{AB}\frac{1}{R^2}K^1_{m+1:n, 1:n} -D_{AB}\frac{1}{L^2}K^2_{m+1:n, 1:n} \frac{-2U}{L} K^{3*}_{m+1:n,1:n} -kK^4_{m+1:n, 1:n} \right)\mathbf{u} =\frac{U}{L} K^4_{m+1:n, 1:n}\mathbf{u}\prime
+\begin{aligned}
+&\left( -D_{AB}\frac{1}{R^2}K^1_{m+1:n, 1:n} -D_{AB}\frac{1}{L^2}K^2_{m+1:n, 1:n} \frac{-2U}{L} K^{3*}_{m+1:n,1:n} -kK^4_{m+1:n, 1:n} \right)\mathbf{u} \\ &=\frac{U}{L} K^4_{m+1:n, 1:n}\mathbf{u}\prime
+\end{aligned}
 \label{eq_p2fem}
 \end{equation}
-As with the one dimensional case we recall that $\mathbf{u}_{1:m}=1$ by the boundary conditions and that this is time invariant i.e. $\mathbf{u}_{1:m}\prime=0$. Thus we may split (\ref{eq_p2fem}) into (\ref{eq_p2fem2}).
+As with the one dimensional case we recall that $\mathbf{u}_{1:m}=1$ by the boundary condition and that this is time invariant i.e. $\mathbf{u}_{1:m}\prime=0$. Thus we may split (\ref{eq_p2fem}) into (\ref{eq_p2fem2}).
 \begin{equation}
 \begin{aligned}
 &\left( -D_{AB}\frac{1}{R^2}K^1_{m+1:n, m+1:n} -D_{AB}\frac{1}{L^2}K^2_{m+1:n, m+1:n} \frac{-2U}{L} K^{3*}_{m+1:n,m+1:n} -kK^4_{m+1:n, m+1:n} \right) = K^* \\
@@ -828,7 +834,7 @@ If we were only interested in the steady state case we could set the right hand 
 \frac{1}{2}\left(K^*\mathbf{u}_{\tau_{m+1}} +K^*\mathbf{u}_{\tau_{m}}\right) + G^* = H^*\frac{\mathbf{u}_{\tau_{m+1}}-\mathbf{u}_{\tau_{m}}}{\delta \tau}
 \label{eq_p2femcn}
 \end{equation}
-By recalling that the initial condition is $\mathbf{u}_0$ we can iterate with (\ref{eq_p2femcn}) to get to the final time step $\mathbf{u}_1$. As an example we model the same system as we did in the final example of Section \ref{section_isop1}. Note that the system takes quite long to reach steady state so we iterate over a time domain of $[0,5]$. Figures \ref{fig_rft1} to \ref{fig_rft3} show the concentration distribution over the reactor.
+By recalling that the initial condition is $\mathbf{u}_0$ we can iterate with (\ref{eq_p2femcn}) to get to the final time step $\mathbf{u}_{\tau_{end}}$. As an example we model the same system as we did in the final example of Section \ref{section_isop1}. Note that the system takes quite long to reach steady state so we iterate over a time domain of $[0,5]$. Figures \ref{fig_rft1} to \ref{fig_rft3} show the concentration distribution over the reactor.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/rf_t1}
@@ -896,6 +902,7 @@ We now move on the the non-isothermal problems.
 We now consider more complicated one dimensional problems as discussed in Section \ref{section_noniso}.
 
 \subsection{Problem 3}
+\label{section_p3}
 In this problem the isothermal assumption is dropped and the somewhat weaker adiabatic assumption replaces it. The model for the reaction $A \rightarrow B$ now becomes (\ref{eq_p3}). Clearly this problem is very non-linear due to the exponential factor in the 
 Arrhenius equation. Physically this system corresponds to an insulated reactor.
 \begin{equation}
@@ -1143,7 +1150,7 @@ Abusing our notation again and multiplying through by test functions $v$ and $z$
 \end{aligned}
 \label{eq_p4d1}
 \end{equation}
-By following the same procedure as before we have the variational form in (\ref{eq_p4d2}).
+By following the same procedure as before we have the variational problem: find functions $u, w$ with $w(0,\cdot)=u(0,\cdot)=1$ such that (\ref{eq_p4d2}) holds for all $v \in \left\{v : v(0,\cdot) = 0 \right\} = T_v$ and for all $z \in \left\{z : z(0,\cdot) = 0 \right\} = T_z$.
 \begin{equation}
 \begin{aligned}
 &\int_0^1 -\partial_{x}(u)v - c_1\partial_x(u)v - c_{2B}uwvdx = \int_0^1 c_1\partial_\tau(u)v dx \\
@@ -1151,6 +1158,78 @@ By following the same procedure as before we have the variational form in (\ref{
 \end{aligned}
 \label{eq_p4d2}
 \end{equation}
+As before we assume the existence and uniqueness of functions $u$ and $w$ which satisfy the variational problem. We now attempt to approximate these functions using the FEM with piecewise linear basis functions. 
+
+We assume that the functions $u^h =\sum^n_{k=0} u_k(t) \phi_k(x)$ and $w^h =\sum^n_{k=0} w_k(t) \phi_k(x)$ which by construction lie in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$ and $w$. We reformulate the variational problem in (\ref{eq_p4d2}) by using the Galerkin approximation: find $u^h, w^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p4d3}) holds.
+\begin{equation}
+\begin{aligned}
+&\int_0^1 -\partial_{x}(u^h)v - c_1\partial_x(u^h)v - c_{2B}u^hw^hvdx = \int_0^1 c_1\partial_\tau(u^h)v dx~~\forall v \in S^h_0 \\
+&\int_0^1-\partial_{x}(w^h)z - c_1\partial_x(w^h)z - c_{2A}u^hw^hzdx = \int_0^1 c_1\partial_\tau(w^h)zdx~~\forall z \in S^h_0 
+\end{aligned}
+\label{eq_p4d3}
+\end{equation}
+We now proceed with the Newton-Galerkin Method in essentially the same manner as before. Let $u^h = u^0 + \delta u$ and $w^h=w^0 +\delta w$. We wish to find $u^0$ and $w^0$ given initial guesses of $u^0$ and $w^0$ by iterating $u^0 = u^0 + \delta u$ and $w^0=w^0+\delta w$ where $\delta u$ and $\delta w$ satisfy (\ref{eq_p4d4}) for each iteration.
+\begin{equation}
+\begin{aligned}
+&\int_0^1 -\partial_{x}(u^0 + \delta u)v - c_1\partial_x(u^0 + \delta u)v - c_{2B}(u^0 + \delta u)(w^0 +\delta w)vdx \\ &= \int_0^1 c_1\partial_\tau(u^0 + \delta u)v dx ~~\forall v \in S^h_0 \\
+&\int_0^1-\partial_{x}(w^0 +\delta w)z - c_1\partial_x(w^0 +\delta w)z - c_{2A}(u^0 + \delta u)(w^0 +\delta w)zdx  \\ &= \int_0^1 c_1\partial_\tau(w^0 +\delta w)zdx  ~~\forall z \in S^h_0
+\end{aligned}
+\label{eq_p4d4}
+\end{equation}
+Bearing in mind the work done in Sections \ref{section_isop1}, \ref{section_iso2} and \ref{section_p3} we can immediately write down the linear algebraic systems corresponding to each term in (\ref{eq_p4d4}) as matrices shown in (\ref{eq_p4fem}) for each $v,z \in S^h$ excluding the reaction terms.
+\begin{equation}
+\begin{aligned}
+&\int_0^1 -\partial_{x}(u^0 + \delta u)vdx = -K^1_u\mathbf{u}^0 - K^1_u\mathbf{\delta u}  \\
+&\int_0^1 -c_1\partial_x(u^0 + \delta u)vdx= -c_1K^2_u\mathbf{u}^0 - c_1K^2_u\mathbf{\delta u}\\ 
+&\int_0^1 c_1\partial_\tau(u^0 + \delta u)v dx = c_1K^3_u\mathbf{u}\prime^0 + c_1K^3_u\mathbf{\delta u}\prime \\
+&\int_0^1 -\partial_{x}(w^0 + \delta u)z dx= -K^1_w\mathbf{w}^0 - K^1_w\mathbf{\delta w}\\
+&\int_0^1 -c_1\partial_x(w^0 + \delta w)zdx= -c_1K^2_w\mathbf{w}^0 -c_1 K^2_w\mathbf{\delta w}\\ 
+&\int_0^1 c_1\partial_\tau(w^0 + \delta w)z dx = c_1K^3_w\mathbf{w}^0\prime + c_1K^3_w\mathbf{\delta w}\prime \\ 
+\end{aligned}
+\label{eq_p4fem}
+\end{equation}
+Now we consider the reaction terms as shown in (\ref{eq_p4fem2}) for each $v,z \in S^h$.
+\begin{equation}
+\begin{aligned}
+\int_0^1 - c_{2B}(u^0 + \delta u)(w^0 +\delta w)vdx &=  \int_0^1 - c_{2B}u^0w^0v dx + \int_0^1 - c_{2B}u^0\delta wv dx + \int_0^1 - c_{2B}w^0\delta uv dx\\
+&= -c_{2B}K^4_w\mathbf{u}^0 -c_{2B}K^5_u\mathbf{\delta w} -c_{2B}K^6_w\mathbf{\delta u}  \\
+\int_0^1 - c_{2A}(u^0 + \delta u)(w^0 +\delta w)zdx &= \int_0^1 - c_{2A}u^0w^0v dx + \int_0^1 - c_{2A}u^0\delta wv dx + \int_0^1 - c_{2A}w^0\delta uv dx \\
+&= -c_{2A}K^4_u\mathbf{w}^0 -c_{2A}K^5_u\mathbf{\delta w} -c_{2A}K^6_w\mathbf{\delta u}  \\ 
+\end{aligned}
+\label{eq_p4fem2}
+\end{equation}
+Combining everything we have (\ref{eq_p4mat}).
+\begin{equation}
+\begin{aligned}
+&\begin{pmatrix}
+-K^1_u - c_1K^2_u  -c_{2B}K^6_w & -c_{2B}K^5_u \\
+-c_{2A}K^6_w & - K^1_w-c_1 K^2_w -c_{2A}K^5_u
+\end{pmatrix} \begin{pmatrix}
+\mathbf{\delta u} \\ \mathbf{\delta w} 
+\end{pmatrix} \\ 
+&+ \begin{pmatrix}
+-K^1_u -c_1K^2_u-c_{2B}K^4_w & \mathbf{0} \\
+\mathbf{0} & -K^1_w -c_1K^2_w-c_{2A}K^4_u
+\end{pmatrix}\begin{pmatrix}
+\mathbf{u}^0 \\ \mathbf{w}^0 
+\end{pmatrix} \\ 
+&= \begin{pmatrix}
+c_1K^3_u & \mathbf{0}\\
+\mathbf{0} & c_1K^3_w
+\end{pmatrix} \begin{pmatrix}
+\mathbf{u}^0\prime \\ \mathbf{w}^0\prime 
+\end{pmatrix} + \begin{pmatrix}
+c_1K^3_u & \mathbf{0} \\
+\mathbf{0} & c_1K^3_w
+\end{pmatrix}\begin{pmatrix}
+\mathbf{\delta u}\prime \\ \mathbf{\delta w}\prime 
+\end{pmatrix}
+\end{aligned}
+\label{eq_p4mat}
+\end{equation}
+We again remember that due to the boundary conditions we know that $\mathbf{u}^0 = \left(1,u^0_1,...,u^0_n \right)^T$ and $\mathbf{w}^0 = \left(1,w^0_1,...,w^0_n \right)^T$. Consequently we also know that $\mathbf{\delta u} = \left(0,\delta u^0_1,...,\delta u^0_n \right)^T$ and $\mathbf{w}^0 = \left(0,w^0_1,...,w^0_n \right)^T$. To solve the steady state problem we set the right hand side of (\ref{eq_p4mat}) equal to zero and iterate in the same way as Section \ref{section_p3}. 
+
+However, as before we are interested in the unsteady solution. We again rely on the Crank-Nicholson scheme to solve the unsteady problem. 
 
 
 %References
