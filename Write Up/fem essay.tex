@@ -1107,9 +1107,9 @@ The unsteady simulation is shown in Figure \ref{fig_adi_unst}. Nothing unexpecte
 In this problem the isothermal assumption is reinstated. However, we now model the situation where it becomes necessary to solve a coupled system of partial differential equations. The model for the reaction $A + B \rightarrow 2C$ is shown in (\ref{eq_p4}). 
 \begin{equation}
 \begin{aligned}
-&D_e \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B 
+&D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B 
 = \frac{\partial C_A}{\partial t} \\
-&D_e \frac{\partial^2 C_B}{\partial z^2} - U \frac{\partial C_B}{\partial z} - kC_AC_B 
+&D_a \frac{\partial^2 C_B}{\partial z^2} - U \frac{\partial C_B}{\partial z} - kC_AC_B 
 = \frac{\partial C_B}{\partial t} \\
 &\text{Boundary Conditions:} \\
 &\frac{\partial C_A}{\partial z}(z=L, \cdot) = 0\\
@@ -1125,9 +1125,9 @@ In this problem the isothermal assumption is reinstated. However, we now model t
 We follow the same procedure as in Section \ref{section_isop1} to convert (\ref{eq_p4}) into dimensionless form as shown in (\ref{eq_p4}).
 \begin{equation}
 \begin{aligned}
-&\frac{\partial^2 u}{\partial x^2} - \frac{UL}{D_e} \frac{\partial u}{\partial x} - \frac{L^2C_{B0}}{D_e}kuw 
+&\frac{\partial^2 u}{\partial x^2} - \frac{UL}{D_a} \frac{\partial u}{\partial x} - \frac{L^2C_{B0}}{D_a}kuw 
 = \frac{UL}{D_e}\frac{\partial u}{\partial \tau} \\
-&\frac{\partial^2 w}{\partial x^2} - \frac{UL}{D_e} \frac{\partial w}{\partial x} - \frac{L^2C_{A0}}{D_e}kuw 
+&\frac{\partial^2 w}{\partial x^2} - \frac{UL}{D_a} \frac{\partial w}{\partial x} - \frac{L^2C_{A0}}{D_a}kuw 
 = \frac{UL}{D_e}\frac{\partial w}{\partial \tau} \\
 &\text{Boundary Conditions:} \\
 &\frac{\partial u}{\partial x}(z=L, \cdot) = 0\\
@@ -1140,7 +1140,7 @@ We follow the same procedure as in Section \ref{section_isop1} to convert (\ref{
 \end{aligned}
 \label{eq_p4d}
 \end{equation}
-Abusing our notation again and multiplying through by test functions $v$ and $z$ we have (\ref{eq_p4d1}) with $c_1 = \frac{UL}{D_e}$,  $c_{2A} = \frac{L^2C_{A0}}{D_e}$ and  $c_{2B} = \frac{L^2C_{B0}}{D_e}$.
+Abusing our notation again and multiplying through by test functions $v$ and $z$ we have (\ref{eq_p4d1}) with $c_1 = \frac{UL}{D_a}$,  $c_{2A} = \frac{L^2C_{A0}}{D_a}$ and  $c_{2B} = \frac{L^2C_{B0}}{D_a}$.
 \begin{equation}
 \begin{aligned}
 &\partial_{xx}(u)v - c_1\partial_x(u)v - c_{2B}uwv = c_1\partial_\tau(u)v \\
@@ -1158,7 +1158,7 @@ By following the same procedure as in Section \ref{section_isop1} we have the va
 \end{equation}
 As before we assume the existence and uniqueness of functions $u$ and $w$ which satisfy the variational problem. We now attempt to approximate these functions using the FEM with the piecewise linear basis functions from Section \ref{section_plb}. 
 
-We assume that the functions $u^h =\sum^n_{k=0} u_k(t) \phi_k(x)$ and $w^h =\sum^n_{k=0} w_k(t) \phi_k(x)$ which by construction lie in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$ and $w$. We reformulate the variational problem in (\ref{eq_p4d2}) by using the Galerkin approximation: find $u^h, w^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p4d3}) holds.
+We assume that the functions $u^h =\sum^n_{k=0} u_k(t) \phi_k(x)$ and $w^h =\sum^n_{k=0} w_k(t) \phi_k(x)$ which by construction lie in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$ and $w$. We reformulate the variational problem in (\ref{eq_p4d2}) by using the Galerkin approximation: find $u^h, w^h \in S^h$ such that for $T_z = T_v = S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p4d3}) holds.
 \begin{equation}
 \begin{aligned}
 &\int_0^1 -\partial_{x}(u^h)v - c_1\partial_x(u^h)v - c_{2B}u^hw^hvdx = \int_0^1 c_1\partial_\tau(u^h)v dx~~\forall v \in S^h_0 \\
@@ -1199,54 +1199,129 @@ Now we consider the reaction terms as shown in (\ref{eq_p4fem2}) for each $v,z \
 Note that in (\ref{eq_p4fem2}) where integrals involving $u^0w^0$ appear we have included the contribution of $w^0$ into the matrix $K^4_w$ and the contribution of $u^0$ into the matrix $K^4_u$. Combining everything in vector form we have (\ref{eq_p4mat}).
 \begin{equation}
 \begin{aligned}
-&\begin{pmatrix}
+&G_1 = \begin{pmatrix}
 -K^1_u - c_1K^2_u  -c_{2B}K^6_w & -c_{2B}K^5_u \\
 -c_{2A}K^6_w & - K^1_w-c_1 K^2_w -c_{2A}K^5_u
-\end{pmatrix} \begin{pmatrix}
-\mathbf{\delta u} \\ \mathbf{\delta w} 
 \end{pmatrix} \\ 
-&+ \begin{pmatrix}
+&G_2 = \begin{pmatrix}
 -K^1_u -c_1K^2_u-c_{2B}K^4_w & \mathbf{0} \\
 \mathbf{0} & -K^1_w -c_1K^2_w-c_{2A}K^4_u
-\end{pmatrix}\begin{pmatrix}
-\mathbf{u}^0 \\ \mathbf{w}^0 
-\end{pmatrix} \\ 
-&= \begin{pmatrix}
+\end{pmatrix} \\
+&G_3 = \begin{pmatrix}
 c_1K^3_u & \mathbf{0}\\
 \mathbf{0} & c_1K^3_w
-\end{pmatrix} \begin{pmatrix}
-\mathbf{u}^0\prime \\ \mathbf{w}^0\prime 
-\end{pmatrix} + \begin{pmatrix}
+\end{pmatrix} \\
+&G_4 = \begin{pmatrix}
 c_1K^3_u & \mathbf{0} \\
 \mathbf{0} & c_1K^3_w
-\end{pmatrix}\begin{pmatrix}
-\mathbf{\delta u}\prime \\ \mathbf{\delta w}\prime 
 \end{pmatrix}
 \end{aligned}
 \label{eq_p4mat}
 \end{equation}
-We again remember that due to the boundary conditions we know that $\mathbf{u}^0 = \left(1,u^0_1,...,u^0_n \right)^T$ and $\mathbf{w}^0 = \left(1,w^0_1,...,w^0_n \right)^T$. Consequently we also know that $\mathbf{\delta u} = \left(0,\delta u^0_1,...,\delta u^0_n \right)^T$ and $\mathbf{w}^0 = \left(0,w^0_1,...,w^0_n \right)^T$. To solve the steady state problem we set the right hand side of (\ref{eq_p4mat}) equal to zero as shown in (\ref{eq_p4mat2}). 
-
+Now we recall that the matrices $G_1, G_2, G_3$ and $G_4$ all include rows which exist because we did not exclude $\phi_0$ from the test function spaces $T_v,T_z$. We need to remove these test functions because the test function space $T_z,T_v$ is not the same as the trial function space $S^h$. Luckily this is easily accomplished by just removing the first row and the ${n+1}^{\text{th}}$ row from $G_1, G_2, G_3$ and $G_4$. For brevity we just redefine $G_1, G_2, G_3$ and $G_4$ as those matrices sans the offending rows. Then we have the vector FEM approximation in (\ref{eq_p4mat1}).
 \begin{equation}
 \begin{aligned}
-&\begin{pmatrix}
--K^1_u - c_1K^2_u  -c_{2B}K^6_w & -c_{2B}K^5_u \\
--c_{2A}K^6_w & - K^1_w-c_1 K^2_w -c_{2A}K^5_u
-\end{pmatrix} \begin{pmatrix}
+G_1 \begin{pmatrix}
 \mathbf{\delta u} \\ \mathbf{\delta w} 
-\end{pmatrix} \\ 
-&+ \begin{pmatrix}
--K^1_u -c_1K^2_u-c_{2B}K^4_w & \mathbf{0} \\
-\mathbf{0} & -K^1_w -c_1K^2_w-c_{2A}K^4_u
-\end{pmatrix}\begin{pmatrix}
+\end{pmatrix} + G_2 \begin{pmatrix}
 \mathbf{u}^0 \\ \mathbf{w}^0 
-\end{pmatrix} = \mathbf{0}
+\end{pmatrix}
+= G_3 \begin{pmatrix}
+\mathbf{u}^0\prime \\ \mathbf{w}^0\prime 
+\end{pmatrix} + G_4 \begin{pmatrix}
+\mathbf{\delta u}\prime \\ \mathbf{\delta w}\prime 
+\end{pmatrix}
+\end{aligned}
+\label{eq_p4mat1}
+\end{equation}
+We again remember that due to the boundary conditions we know that $\mathbf{u}^0 = \left(1,u^0_1,...,u^0_n \right)^T$ and $\mathbf{w}^0 = \left(1,w^0_1,...,w^0_n \right)^T$. Consequently we also know that $\mathbf{\delta u} = \left(0,\delta u^0_1,...,\delta u^0_n \right)^T$ and $\mathbf{w}^0 = \left(0,w^0_1,...,w^0_n \right)^T$ by the same reasoning as in Section \ref{section_p3}. To solve the steady state problem we set the right hand side of (\ref{eq_p4mat1}) equal to zero as shown in (\ref{eq_p4mat2}). 
+\begin{equation}
+\begin{aligned}
+G_1 \begin{pmatrix}
+\mathbf{\delta u} \\ \mathbf{\delta w} 
+\end{pmatrix} + G_2 \begin{pmatrix}
+\mathbf{u}^0 \\ \mathbf{w}^0 
+\end{pmatrix}
+= \mathbf{0}
 \end{aligned}
 \label{eq_p4mat2}
 \end{equation}
+Solving this system of equations by Newton-Galerkin Method iteration proceeds in exactly the same was as in Section \ref{section_p3}. However, we are interested in the unsteady solution. We again rely on the Crank-Nicholson scheme to solve the unsteady problem. The Crank-Nicholson scheme is shown in (\ref{eq_p4mat3}) where we have discretised the time domain as usual.
+\begin{equation}
+\begin{aligned}
+&\frac{1}{2} \left(G_1 \begin{pmatrix}
+\mathbf{\delta u} \\ \mathbf{\delta w} 
+\end{pmatrix}_{\tau_{m+1}} + G_1 \begin{pmatrix}
+\mathbf{\delta u} \\ \mathbf{\delta w} 
+\end{pmatrix}_{\tau_{m}}\right) +\frac{1}{2} \left(G_2 \begin{pmatrix}
+\mathbf{u}^0 \\ \mathbf{w}^0 
+\end{pmatrix}_{\tau_{m+1}} + G_2 \begin{pmatrix}
+\mathbf{u}^0 \\ \mathbf{w}^0 
+\end{pmatrix}_{\tau_{m}}\right)
+\\ &= G_3 \frac{\begin{pmatrix}
+\mathbf{u}^0\prime \\ \mathbf{w}^0\prime 
+\end{pmatrix}_{\tau_{m+1}} - \begin{pmatrix}
+\mathbf{u}^0\prime \\ \mathbf{w}^0\prime 
+\end{pmatrix}_{\tau_{m}}}{\delta \tau} + G_4 \frac{\begin{pmatrix}
+\mathbf{\delta u}\prime \\ \mathbf{\delta w}\prime 
+\end{pmatrix}_{\tau_{m+1}} - \begin{pmatrix}
+\mathbf{\delta u}\prime \\ \mathbf{\delta w}\prime 
+\end{pmatrix}_{\tau_{m}}}{\delta \tau} 
+\end{aligned}
+\label{eq_p4mat3}
+\end{equation}
+As before we note that $\begin{pmatrix}
+\mathbf{\delta u}\prime \\ \mathbf{\delta w}\prime 
+\end{pmatrix}_{\tau_{m}} \approx \mathbf{0}$ because we have iterated until it was suitably small and we know what $\begin{pmatrix}
+\mathbf{u}^0 \\ \mathbf{w}^0 \end{pmatrix}_{\tau_{m}}$ is either because of the initial condition for $\tau_0$ or because it was solved in the previous time step. Thus we have the simplified scheme in (\ref{eq_p4mat4}).
+\begin{equation}
+\begin{aligned}
+&\frac{1}{2}G_1 \begin{pmatrix}
+\mathbf{\delta u} \\ \mathbf{\delta w} 
+\end{pmatrix}_{\tau_{m+1}} +\frac{1}{2} \left(G_2 \begin{pmatrix}
+\mathbf{u}^0 \\ \mathbf{w}^0 
+\end{pmatrix}_{\tau_{m+1}} + G_2 \begin{pmatrix}
+\mathbf{u}^0 \\ \mathbf{w}^0 
+\end{pmatrix}_{\tau_{m}}\right)
+\\ &= G_3 \frac{\begin{pmatrix}
+\mathbf{u}^0\prime \\ \mathbf{w}^0\prime 
+\end{pmatrix}_{\tau_{m+1}} - \begin{pmatrix}
+\mathbf{u}^0\prime \\ \mathbf{w}^0\prime 
+\end{pmatrix}_{\tau_{m}}}{\delta \tau} + G_4 \frac{\begin{pmatrix}
+\mathbf{\delta u}\prime \\ \mathbf{\delta w}\prime 
+\end{pmatrix}_{\tau_{m+1}}}{\delta \tau} 
+\end{aligned}
+\label{eq_p4mat4}
+\end{equation}
+The goal is to solve for $\begin{pmatrix} \mathbf{\delta u}\prime \\ \mathbf{\delta w}\prime 
+\end{pmatrix}_{\tau_{m+1}}$ given our guess of $\begin{pmatrix}
+\mathbf{u}^0 \\ \mathbf{w}^0 \end{pmatrix}_{\tau_{m+1}}$. We update each iteration's guess $\begin{pmatrix}
+\mathbf{u}^0 \\ \mathbf{w}^0 \end{pmatrix}_{\tau_{m+1}} = \begin{pmatrix} \mathbf{u}^0 \\ \mathbf{w}^0 \end{pmatrix}_{\tau_{m+1}} + \begin{pmatrix} \mathbf{\delta u}\prime \\ \mathbf{\delta w}\prime \end{pmatrix}_{\tau_{m+1}}$ exactly as was done in Section \ref{section_p3}. 
 
-However, as before we are interested in the unsteady solution. We again rely on the Crank-Nicholson scheme to solve the unsteady problem. 
-
+We conclude this section with an example simulation. Consider a system with physical properties shown in (\ref{eq_physp4}).
+\begin{equation}
+\begin{matrix}
+C_{A0} = 1.0 ~~ \frac{mol}{dm^3}& \phantom{-}C_{B0} = 0.5~~ \frac{mol}{dm^3} & \phantom{-}D_{AB} = 7.6\times 10^{-5} ~~\frac{m^2}{min} & \phantom{-}U = 1.24~~ \frac{m}{min} \\
+L = 6.36~~ m 
+& \phantom{-} R = 0.05~~ m
+& \phantom{-} k = 0.25 ~~ \frac{1}{min} \\
+\end{matrix} 
+\label{eq_physp4}
+\end{equation}
+The model solution is shown in Figures \ref{fig_p4A} and \ref{fig_p4B}.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/p4A}
+\caption{Concentration of Species A} 
+\label{fig_p4A}
+\end{figure}
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/p4B}
+\caption{Concentration of Species B} 
+\label{fig_p4B}
+\end{figure}
+Since the initial concentrations differ by a factor of two, we expect the steady state exit concentrations to differ by a factor of two as well (since species B limits the extent of the reaction). This is exactly what we see in Figures \ref{fig_p4A} and \ref{fig_p4B}. We conclude that the models perform as expected.
 
 %References
 \newpage
