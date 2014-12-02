@@ -1,15 +1,15 @@
 # Two dimensional problem - plug flow case + steady state
 using PyPlot
 
-xN = 30 # Number of elements - 1
+xN = 60 # Number of elements - 1
 xs = linspace(0., 1., xN)
 dx = xs[2] - xs[1]
 
-yN = 30 # Number of elements - 1
+yN = 60 # Number of elements - 1
 ys = linspace(0., 1., yN)
 dy = ys[2] - ys[1]
 
-tN = 90
+tN = 120
 ts = linspace(0., 5., tN) # it takes long to reach SS. Try 5.0 for the end time.
 dt = ts[2] - ts[1]
 
