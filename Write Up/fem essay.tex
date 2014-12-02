@@ -853,7 +853,7 @@ By recalling that the initial condition is $\mathbf{u}_0$ we can iterate with (\
 \caption{Concentration distribution at $t=5$} 
 \label{fig_rft3}
 \end{figure}
-By inspection of Figures \ref{fig_rft1} to \ref{fig_rft3} we see nothing which is physically unrealistic (perhaps the jagged edges in Figure \ref{fig_rft2}, but these are due to the element size used). We therefore conclude that solution process was successful.
+By inspection of Figures \ref{fig_rft1} to \ref{fig_rft3} we see nothing which is physically unrealistic (perhaps the jagged edges in Figure \ref{fig_rft2}, but these are due to the element size used). It is quite interesting to see the impact a laminar flow profile has on the reaction conversion. Near the middle of the reactor, where the flow is the fastest, we see the reagents are swept out of the reactor quickly, consequently we see a poor conversion. However, near the edges of the reactor, where the flow profile is slowest, we see a much better conversion. This is because the reagents spend more time in the reactor and consequently have more time to react. Since the model solution agrees with what we physically expect we can conclude that solution process was successful.
 
 \subsection{Isothermal Comparison}
 We now discuss the accuracy of the Aris-Taylor approximation. Literature \cite{washington} suggests that the Aris-Taylor approximation is valid under the conditions in (\ref{eq_aris}).
@@ -882,7 +882,7 @@ To compare the one dimensional model to the two dimensional model we have taken 
 \caption{Percentage error of the example reactor} 
 \label{fig_isocomp1}
 \end{figure}
-It is apparent that the steady state (taken as the conditions at $t=3$) error is approximately 6.1\% at the end of the reactor. In this case the Aris-Taylor approximation is quite accurate. It is noticeable that the Aris-Taylor approximation is not very accurate (in the order of 20\% error) during the initial unsteady operation of the reactor. 
+It is apparent that the steady state (taken as the conditions at $t=3$) error is approximately 6.1\% at the end of the reactor. In this case the Aris-Taylor approximation is quite accurate. It is noticeable that the Aris-Taylor approximation is not very accurate (in the order of 20\% error) during the initial unsteady operation of the reactor. We also see that on average the Aris-Taylor approximation underestimates the average axial conversion. 
 
 The focus of this project is not on a detailed accuracy comparison. However, for the sake of interest we quadruple the average linear velocity in the example reactor and investigate the percentage error in Figure \ref{fig_isocomp2}.
 
@@ -933,7 +933,7 @@ The boundary conditions retain their meaning as explained in Section \ref{sectio
 \end{aligned}
 \label{eq_p3d}
 \end{equation}
-If we let $B(u, v) = \int_0^1 \left(-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_2k(u)uv\right)dx$ and $(c_1(\partial_{\tau}u),v)_0 = \int^1_0 c_1(\partial_{\tau}u)v dx$ with $c_1 = \frac{UL}{D_a}$ and $c_2 = \frac{L^2}{D_a}$ we see that Section \ref{section_isop1} is very similar to the current problem. Upon brief consider we notice that it is possible to go directly to the variational form of the problem since we have already done most of the work in Section \ref{section_isop1}.  Find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p3d1}) for all $v \in T$.
+If we let $B(u, v) = \int_0^1 \left(-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_2k(u)uv\right)dx$ and $(c_1(\partial_{\tau}u),v)_0 = \int^1_0 c_1(\partial_{\tau}u)v dx$ with $c_1 = \frac{UL}{D_a}$ and $c_2 = \frac{L^2}{D_a}$ we see that Section \ref{section_isop1} is very similar to the current problem. Upon brief consider we notice that it is possible to go directly to the variational form of the problem since we have already done most of the work in Section \ref{section_isop1}.  Find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p3d1}) for all $v \in T=\left\{v:v(0,\cdot)=0\right\}$.
 \begin{equation}
 B(u, v) = (c_1(\partial_{\tau}u),v)_0
 \label{eq_p3d1}
@@ -950,7 +950,7 @@ Recall that $B(u, v) = \int_0^1 \left(-(\partial_xu)(\partial_xv) - c_1(\partial
 B(u^h, \phi_i) = \int_0^1 \left(-(\partial_xu^h)(\partial_x\phi_i) - c_1(\partial_xu^h)\phi_i - c_2k(u^h)u^h\phi_i\right)dx \text{ for } i=1,2,...,n
 \label{eq_p3d3}
 \end{equation}
-Thus the FEM problem is to find $u^h \in S^h$ with $u^h(0)=1$ such that (\ref{eq_femp3}) holds.
+Thus the FEM problem is to find $u^h \in S^h$ with $u^h(0,\cdot)=1$ such that (\ref{eq_femp3}) holds.
 \begin{equation}
 \int_0^1 \left(-(\partial_xu^h)(\partial_x\phi_i) -c_1(\partial_xu^h)\phi_i - c_2k(u^h)u^h\phi_i\right)dx = \int_0^1 c_1(\partial_{\tau}u^h\phi_i dx \text{ for } i=1,2,...,n
 \label{eq_femp3}
@@ -958,9 +958,9 @@ Thus the FEM problem is to find $u^h \in S^h$ with $u^h(0)=1$ such that (\ref{eq
 Unfortunately we cannot proceed as before because there is no linear algebraic system corresponding to (\ref{eq_femp3}). To overcome this problem we use the Newton-Galerkin Method \cite{larson}.
 
 \subsubsection{Newton-Galerkin Method}
-The aim of this section is to guess a solution to (\ref{eq_femp3}), linearise the system of non-linear equations in (\ref{eq_femp3}) about the guess and iteratively improve our guess until it converges to the true solution. To this end we suppose $u^h = u^0 + \delta u = \sum_{k=0}^n u^0_k\phi_k + \sum_{k=0}^n \delta u_k\phi_k$ where $u^0$ is the guess and $\delta u$ is some correction we need to solve for. We now consider each term in (\ref{eq_femp3}) individually and make use of Section \ref{section_plb} and Section \ref{section_isop1} as necessary.
+The aim of this section is to guess a solution to (\ref{eq_femp3}), linearise the system of non-linear equations in (\ref{eq_femp3}) about the guess and iteratively improve our guess until it converges to what we assume is the true solution. To this end we suppose $u^h = u^0 + \delta u = \sum_{k=0}^n u^0_k\phi_k + \sum_{k=0}^n \delta u_k\phi_k$ where $u^0$ is the guess and $\delta u$ is some correction we need to solve for. We now consider each term in (\ref{eq_femp3}) individually and make use of Section \ref{section_plb} and Section \ref{section_isop1} as necessary.
 
-First consider $\int_0^1 -(\partial_xu^h)(\partial_x\phi_i)dx$  in (\ref{eq_p3nl1}) for $i=1,2,...,n$ with $\mathbf{u}^0 = \left(u^0_0,u^0_1,...,u^0_n\right)^T$ and $\mathbf{\delta u} = \left(\delta u^0_0,\delta u^0_1,...,\delta u^0_n\right)^T$.
+First consider $\int_0^1 -(\partial_xu^h)(\partial_x\phi_i)dx$  in (\ref{eq_p3nl1}) for $i=1,2,...,n$ with $\mathbf{u}^0 = \left(u^0_0,u^0_1,...,u^0_n\right)^T$ and $\mathbf{\delta u} = \left(\delta u_0,\delta u_1,...,\delta u_n\right)^T$.
 \begin{equation}
 \begin{aligned}
 \int_0^1 -(\partial_xu^h)(\partial_x\phi_i)dx &= \int_0^1 -(\partial_x(u^0 + \delta u))(\partial_x\phi_i)dx \\
@@ -999,7 +999,7 @@ k(u^0_1)K^3_{1,0} & k(u^0_1)K^3_{1,1} & k(u^0_1)K^3_{1,2} &0& \hdots\\
 \end{pmatrix}\mathbf{u}^0
 \label{eq_nonconst1}
 \end{equation}
-The trick is to notice that each row is evaluated over an element $k$ hence $k(u^0) \approx k(u^0_k)$ due to the definition of the basis function over that element. Following from this we can see that $\int_0^1  -c_2k(u^0)u^0\phi_i dx$ for each $i=1,2,...,n$ is merely the vector $-c_2K^4_{1:n,0:n}\mathbf{u}^0$. 
+The trick is to notice that each row is non-zero over at most two elements by the definition of the basis functions. We then take the middle node over the two elements as $k$ and say $k(u^0) \approx k(u^0_k)$ due to the definition of the basis function over those elements - we will not be integrating over the other elements so we take the contribution of those basis functions in $k(u^0)$ as zero. Following from this we can see that $\int_0^1  -c_2k(u^0)u^0\phi_i dx$ for each $i=1,2,...,n$ is merely the vector $-c_2K^4_{1:n,0:n}\mathbf{u}^0$. 
 
 We do essentially the same for the matrix $-c_2K^5$ created by  evaluating $\int_0^1  -c_2k(u^0)\delta u\phi_i dx$ for each $i=0,1,2,...,n$ and end up with the matrix $-c_2K^5_{1:n,0:n}\mathbf{\delta u}$. Note that this is a matrix since $\mathbf{\delta u}$ is not known. 
 
@@ -1065,36 +1065,34 @@ Thus we can write the FEM system in (\ref{eq_unst2}).
 \end{equation}
 If we were merely interested in solving the steady state system we would set the right hand side of (\ref{eq_unst2}) equal to zero and have (\ref{eq_unst3}).
 \begin{equation}
-G_1\mathbf{u}^0 + G_2 \mathbf{\delta u} =0 
+G_1\mathbf{u}^0 + G_2 \mathbf{\delta u} = \mathbf{0} 
 \label{eq_unst3}
 \end{equation}
-Now we notice that our guess will always be of the form $\mathbf{u}^0 = \left(1, u_1,u_2,...,u_n \right)^T$ since we have the boundary condition at the left end point of the reactor. Additionally we notice that our correction will always be of the form $\mathbf{\delta u}=\left(0,\delta u_1,\delta u_2,...,\delta u_n \right)^T$ since the boundary condition is not a guess. We then proceed by guessing a solution, solving (\ref{eq_unst3}) for $\delta u$ and updating our guess by $u^0 = u^0 + \delta u$. We continue in this manner until the corrections become suitably small.  
+Now we notice that our guess will always be of the form $\mathbf{u}^0 = \left(1, u_1,u_2,...,u_n \right)^T$ since we have the boundary condition at the left end point of the reactor. Additionally we notice that our correction will always be of the form $\mathbf{\delta u}=\left(0,\delta u_1,\delta u_2,...,\delta u_n \right)^T$ since the boundary condition is not a guess. We then proceed by guessing a solution, solving (\ref{eq_unst3}) for $\delta u$ and updating our guess by $u^0 = u^0 + \delta u$. We continue in this manner until the corrections become suitably small in some sense.  
 
-However, we are interested in solving the unsteady system. Returning to (\ref{eq_unst2}) we discretise the time domain as before and use the Crank-Nicholson method to solve the system of ODES in (\ref{eq_unst4}). Note that by the initial condition we have $\mathbf{u}_0$. 
+However, we are interested in solving the unsteady system. Returning to (\ref{eq_unst2}) we discretise the time domain as before and use the Crank-Nicholson method to solve the system of ODEs in (\ref{eq_unst4}). Note that by the initial condition we have $\mathbf{u}_0$. 
 \begin{equation}
 \frac{1}{2} G_1\left(\mathbf{u}^0_{\tau+1}+\mathbf{u}^0_{\tau}\right) + \frac{1}{2}G_2\left(\mathbf{\delta u}_{\tau+1}+\mathbf{\delta u}_{\tau}\right) =c_1K^3_{1:n,0:n}\frac{\mathbf{u}^0_{\tau + 1}-\mathbf{u}^0_{\tau}}{\delta \tau} + c_1K^3_{1:n,0:n}\frac{\mathbf{\delta u}_{\tau + 1}-\mathbf{\delta u}_{\tau }}{\delta \tau}
 \label{eq_unst4}
 \end{equation}
-Now we recall that $\mathbf{\delta u}_{\tau} \approx 0$ because we have iterated the previous step ($\mathbf{u}^0_{\tau}$) until convergence. Thus we can simplify (\ref{eq_unst4}) to (\ref{eq_unst5}).
+Now we note that $\mathbf{\delta u}_{\tau} \approx 0$ because we have iterated the previous step ($\mathbf{u}^0_{\tau}$) until convergence. Thus we can simplify (\ref{eq_unst4}) to (\ref{eq_unst5}).
 \begin{equation}
 \frac{1}{2} G_1\left(\mathbf{u}^0_{\tau+1}+\mathbf{u}^0_{\tau}\right) + \frac{1}{2}G_2\mathbf{\delta u}_{\tau+1} =c_1K^3_{1:n,0:n}\frac{\mathbf{u}^0_{\tau + 1}-\mathbf{u}^0_{\tau}}{\delta \tau} + c_1K^3_{1:n,0:n}\frac{\mathbf{\delta u}_{\tau + 1}}{\delta \tau}
 \label{eq_unst5}
 \end{equation}
-Now we guess $\mathbf{u}^0_{\tau+1}$ and solve for $\mathbf{\delta u}_{\tau+1}$ by remembering that $\mathbf{u}^0_{\tau}$ will always be known since it was solved in the previous step (in the first step it is the initial condition). We update our guess each iteration with  $\mathbf{u}^0_{\tau+1} = \mathbf{u}^0_{\tau+1} + \mathbf{\delta u}_{\tau+1}$ as before.
+Now we guess $\mathbf{u}^0_{\tau+1}$ and solve for $\mathbf{\delta u}_{\tau+1}$ by remembering that $\mathbf{u}^0_{\tau}$ will always be known since it was solved in the previous step (in the first step it is the initial condition). We update our guess each iteration with  $\mathbf{u}^0_{\tau+1} = \mathbf{u}^0_{\tau+1} + \mathbf{\delta u}_{\tau+1}$ as before and when $\mathbf{\delta u}_{\tau+1}$ has become small in some suitable sense we move on to the next time step.
 
-As an example we return to the example system from Section \ref{section_isop1}. We restate the physical parameters for convenience and include the additionally required parameters in (\ref{eq_physp3}).
+As an example, we return to the example system from Section \ref{section_isop1}. We restate the physical parameters for convenience and include the additionally required parameters in (\ref{eq_physp3}).
 \begin{equation}
-\begin{aligned}
-&C_{A0} = 0.5~~ \frac{mol}{dm^3}
-&&D_{AB} = 7.6\times 10^{-5} ~~\frac{m^2}{min}
-&&&U = 1.24~~ \frac{m}{min} \\
-&L = 6.36~~ m 
-&&R = 0.05~~ m
-&&&k_0 = 1633253.0 ~~ \frac{1}{min} \\
-&E = 40580 ~~ kJ/kmol
-&&R_g = 8.314~~ \frac{kJ}{kmol. K}
-&&&T_0 = 300 ~~ K 
-\end{aligned}
+\begin{matrix}
+C_{A0} = 0.5~~ \frac{mol}{dm^3} & \phantom{-}D_{AB} = 7.6\times 10^{-5} ~~\frac{m^2}{min} & \phantom{-}U = 1.24~~ \frac{m}{min} \\
+L = 6.36~~ m 
+& \phantom{-} R = 0.05~~ m
+& \phantom{-} k_0 = 1633253.0 ~~ \frac{1}{min} \\
+E = 40580 ~~ kJ/kmol
+& \phantom{-} R_g = 8.314~~ \frac{kJ}{kmol. K}
+& \phantom{-} T_0 = 300 ~~ K
+\end{matrix} 
 \label{eq_physp3}
 \end{equation}
 The unsteady simulation is shown in Figure \ref{fig_adi_unst}. Nothing unexpected is visible in the figure. It is clear that as the reactor heats up the reaction becomes faster and thus we see the steady state solution has a complete conversion. This is very much what one would expect in reality.
@@ -1130,9 +1128,9 @@ We follow the same procedure as in Section \ref{section_isop1} to convert (\ref{
 &\frac{\partial^2 u}{\partial x^2} - \frac{UL}{D_e} \frac{\partial u}{\partial x} - \frac{L^2C_{B0}}{D_e}kuw 
 = \frac{UL}{D_e}\frac{\partial u}{\partial \tau} \\
 &\frac{\partial^2 w}{\partial x^2} - \frac{UL}{D_e} \frac{\partial w}{\partial x} - \frac{L^2C_{A0}}{D_e}kuw 
-= \frac{UL}{D_e}\frac{\partial u}{\partial \tau} \\
+= \frac{UL}{D_e}\frac{\partial w}{\partial \tau} \\
 &\text{Boundary Conditions:} \\
-&\frac{\partial w}{\partial x}(z=L, \cdot) = 0\\
+&\frac{\partial u}{\partial x}(z=L, \cdot) = 0\\
 &u(z=0, \cdot) = 1 \\
 &\frac{\partial w}{\partial z}(z=L, \cdot) = 0\\
 &w(z=0, \cdot) = 1 \\
@@ -1150,7 +1148,7 @@ Abusing our notation again and multiplying through by test functions $v$ and $z$
 \end{aligned}
 \label{eq_p4d1}
 \end{equation}
-By following the same procedure as before we have the variational problem: find functions $u, w$ with $w(0,\cdot)=u(0,\cdot)=1$ such that (\ref{eq_p4d2}) holds for all $v \in \left\{v : v(0,\cdot) = 0 \right\} = T_v$ and for all $z \in \left\{z : z(0,\cdot) = 0 \right\} = T_z$.
+By following the same procedure as in Section \ref{section_isop1} we have the variational problem: find functions $u, w$ with $w(0,\cdot)=u(0,\cdot)=1$ such that (\ref{eq_p4d2}) holds for all $v \in \left\{v : v(0,\cdot) = 0 \right\} = T_v$ and for all $z \in \left\{z : z(0,\cdot) = 0 \right\} = T_z$.
 \begin{equation}
 \begin{aligned}
 &\int_0^1 -\partial_{x}(u)v - c_1\partial_x(u)v - c_{2B}uwvdx = \int_0^1 c_1\partial_\tau(u)v dx \\
@@ -1158,7 +1156,7 @@ By following the same procedure as before we have the variational problem: find 
 \end{aligned}
 \label{eq_p4d2}
 \end{equation}
-As before we assume the existence and uniqueness of functions $u$ and $w$ which satisfy the variational problem. We now attempt to approximate these functions using the FEM with piecewise linear basis functions. 
+As before we assume the existence and uniqueness of functions $u$ and $w$ which satisfy the variational problem. We now attempt to approximate these functions using the FEM with the piecewise linear basis functions from Section \ref{section_plb}. 
 
 We assume that the functions $u^h =\sum^n_{k=0} u_k(t) \phi_k(x)$ and $w^h =\sum^n_{k=0} w_k(t) \phi_k(x)$ which by construction lie in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$ and $w$. We reformulate the variational problem in (\ref{eq_p4d2}) by using the Galerkin approximation: find $u^h, w^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p4d3}) holds.
 \begin{equation}
@@ -1176,15 +1174,15 @@ We now proceed with the Newton-Galerkin Method in essentially the same manner as
 \end{aligned}
 \label{eq_p4d4}
 \end{equation}
-Bearing in mind the work done in Sections \ref{section_isop1}, \ref{section_iso2} and \ref{section_p3} we can immediately write down the linear algebraic systems corresponding to each term in (\ref{eq_p4d4}) as matrices shown in (\ref{eq_p4fem}) for each $v,z \in S^h$ excluding the reaction terms.
+Bearing in mind the work done in Sections \ref{section_isop1}, \ref{section_iso2} and \ref{section_p3} we can immediately write down the linear algebraic systems corresponding to each term in (\ref{eq_p4d4}) as matrices shown in (\ref{eq_p4fem}) for each $v,z \in S^h$ excluding the reaction terms\footnote{Note that we are evaluating the integrals over the space of test functions $S^h$. Later on we remove the necessary entries in the resultant matrices.}$^{,}$\footnote{The reaction terms are more complicated so they are dealt with later.}. As before we have $\mathbf{u}^0=\left(u^0_0,u^0_1,...,u^0_n\right)^T$, $\mathbf{w}^0=\left(w^0_0,w^0_1,...,w^0_n\right)^T$, $\mathbf{\delta u}=\left(\delta u_0,\delta u_1,...,\delta u_n\right)^T$ and $\mathbf{\delta w}=\left(\delta w_0,\delta w_1,...,\delta w_n\right)^T$. Also note that there is not a strict correspondence between the naming convention of the matrices in Section \ref{section_plb} and here. For the sake of simplicity we assign new names to the matrices and assume that the reader has understood how these matrices are constructed from Sections \ref{section_plb}, \ref{section_isop1} and \ref{section_p3}.
 \begin{equation}
 \begin{aligned}
-&\int_0^1 -\partial_{x}(u^0 + \delta u)vdx = -K^1_u\mathbf{u}^0 - K^1_u\mathbf{\delta u}  \\
-&\int_0^1 -c_1\partial_x(u^0 + \delta u)vdx= -c_1K^2_u\mathbf{u}^0 - c_1K^2_u\mathbf{\delta u}\\ 
-&\int_0^1 c_1\partial_\tau(u^0 + \delta u)v dx = c_1K^3_u\mathbf{u}\prime^0 + c_1K^3_u\mathbf{\delta u}\prime \\
-&\int_0^1 -\partial_{x}(w^0 + \delta u)z dx= -K^1_w\mathbf{w}^0 - K^1_w\mathbf{\delta w}\\
-&\int_0^1 -c_1\partial_x(w^0 + \delta w)zdx= -c_1K^2_w\mathbf{w}^0 -c_1 K^2_w\mathbf{\delta w}\\ 
-&\int_0^1 c_1\partial_\tau(w^0 + \delta w)z dx = c_1K^3_w\mathbf{w}^0\prime + c_1K^3_w\mathbf{\delta w}\prime \\ 
+&\int_0^1 -\partial_{x}(u^0 + \delta u)vdx = \int_0^1 -\partial_{x}(u^0)vdx +\int_0^1 -\partial_{x}(\delta u)vdx  = -K^1_u\mathbf{u}^0 - K^1_u\mathbf{\delta u}  \\
+&\int_0^1 -c_1\partial_x(u^0 + \delta u)vdx= \hdots = -c_1K^2_u\mathbf{u}^0 - c_1K^2_u\mathbf{\delta u}\\ 
+&\int_0^1 c_1\partial_\tau(u^0 + \delta u)v dx =\hdots = c_1K^3_u\mathbf{u}\prime^0 + c_1K^3_u\mathbf{\delta u}\prime \\
+&\int_0^1 -\partial_{x}(w^0 + \delta u)z dx= \hdots =-K^1_w\mathbf{w}^0 - K^1_w\mathbf{\delta w}\\
+&\int_0^1 -c_1\partial_x(w^0 + \delta w)zdx= \hdots =-c_1K^2_w\mathbf{w}^0 -c_1 K^2_w\mathbf{\delta w}\\ 
+&\int_0^1 c_1\partial_\tau(w^0 + \delta w)z dx = \hdots =c_1K^3_w\mathbf{w}^0\prime + c_1K^3_w\mathbf{\delta w}\prime \\ 
 \end{aligned}
 \label{eq_p4fem}
 \end{equation}
@@ -1198,7 +1196,7 @@ Now we consider the reaction terms as shown in (\ref{eq_p4fem2}) for each $v,z \
 \end{aligned}
 \label{eq_p4fem2}
 \end{equation}
-Combining everything we have (\ref{eq_p4mat}).
+Note that in (\ref{eq_p4fem2}) where integrals involving $u^0w^0$ appear we have included the contribution of $w^0$ into the matrix $K^4_w$ and the contribution of $u^0$ into the matrix $K^4_u$. Combining everything in vector form we have (\ref{eq_p4mat}).
 \begin{equation}
 \begin{aligned}
 &\begin{pmatrix}
@@ -1227,7 +1225,25 @@ c_1K^3_u & \mathbf{0} \\
 \end{aligned}
 \label{eq_p4mat}
 \end{equation}
-We again remember that due to the boundary conditions we know that $\mathbf{u}^0 = \left(1,u^0_1,...,u^0_n \right)^T$ and $\mathbf{w}^0 = \left(1,w^0_1,...,w^0_n \right)^T$. Consequently we also know that $\mathbf{\delta u} = \left(0,\delta u^0_1,...,\delta u^0_n \right)^T$ and $\mathbf{w}^0 = \left(0,w^0_1,...,w^0_n \right)^T$. To solve the steady state problem we set the right hand side of (\ref{eq_p4mat}) equal to zero and iterate in the same way as Section \ref{section_p3}. 
+We again remember that due to the boundary conditions we know that $\mathbf{u}^0 = \left(1,u^0_1,...,u^0_n \right)^T$ and $\mathbf{w}^0 = \left(1,w^0_1,...,w^0_n \right)^T$. Consequently we also know that $\mathbf{\delta u} = \left(0,\delta u^0_1,...,\delta u^0_n \right)^T$ and $\mathbf{w}^0 = \left(0,w^0_1,...,w^0_n \right)^T$. To solve the steady state problem we set the right hand side of (\ref{eq_p4mat}) equal to zero as shown in (\ref{eq_p4mat2}). 
+
+\begin{equation}
+\begin{aligned}
+&\begin{pmatrix}
+-K^1_u - c_1K^2_u  -c_{2B}K^6_w & -c_{2B}K^5_u \\
+-c_{2A}K^6_w & - K^1_w-c_1 K^2_w -c_{2A}K^5_u
+\end{pmatrix} \begin{pmatrix}
+\mathbf{\delta u} \\ \mathbf{\delta w} 
+\end{pmatrix} \\ 
+&+ \begin{pmatrix}
+-K^1_u -c_1K^2_u-c_{2B}K^4_w & \mathbf{0} \\
+\mathbf{0} & -K^1_w -c_1K^2_w-c_{2A}K^4_u
+\end{pmatrix}\begin{pmatrix}
+\mathbf{u}^0 \\ \mathbf{w}^0 
+\end{pmatrix} = \mathbf{0}
+\end{aligned}
+\label{eq_p4mat2}
+\end{equation}
 
 However, as before we are interested in the unsteady solution. We again rely on the Crank-Nicholson scheme to solve the unsteady problem. 
 
