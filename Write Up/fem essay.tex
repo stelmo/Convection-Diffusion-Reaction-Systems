@@ -30,6 +30,7 @@
 \theoremstyle{defstyle}
 \newtheorem{defn}{Definition}[section]
 \newtheorem{rmrk}{Remark}[section]
+\newtheorem{prop}{Proposition}[section]
 
 \begin{document}
 %Title page
@@ -689,13 +690,21 @@ If we recall that by the initial condition we have $\mathbf{u}_0$ we can iterate
 \end{aligned}
 \label{eq_q1phys}
 \end{equation}
-The transient dynamics are shown in Figure \ref{fig_q1std}. Nothing unexpected is apparent in the model approximation and thus we may safely conclude that the exercise was successful.
+It is our aim to model such a reactor because it is a representative sample of the type of problem we can solve given the preceding work. Given the development of our FEM approximation we would firstly like to know if it indeed converges to some function. Figure \ref{fig_p1conv} shows the change in approximate conversion at the end point ($z=L$) of the reactor as the number of elements is increased. For example, a $y$ axis position of 10 is the difference between the end point estimate using 10 and 9 elements over the temporal horizon.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/p1_conv}
+\caption{Absolute difference between successive number of elements} 
+\label{fig_p1conv}
+\end{figure}
+From Figure \ref{fig_p1conv} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation indeed converges to some function. Now we inspect the transient dynamics as shown in Figure \ref{fig_q1std}. Nothing unexpected is apparent in the model approximation. For example, consider the concentration profile of the reactor at steady state (approximately for $\tau \geq 1$): the reagent concentration gradually reduces over time as is usual for tubular reactors at steady state.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/q1_standard}
 \caption{Example reactor transient dynamics} 
 \label{fig_q1std}
 \end{figure}
+Further analysis is now required to definitively show that $u^h$ actually converges to $u$ (and that $u$ exists and is unique). However, since the approximation is physically reasonable it is quite safe to just assume so - as we do.
 
 \subsection{Problem 2}
 \label{section_iso2}
@@ -837,7 +846,14 @@ If we were only interested in the steady state case we could set the right hand 
 \frac{1}{2}\left(K^*\mathbf{u}_{\tau_{m+1}} +K^*\mathbf{u}_{\tau_{m}}\right) + G^* = H^*\frac{\mathbf{u}_{\tau_{m+1}}-\mathbf{u}_{\tau_{m}}}{\delta \tau}
 \label{eq_p2femcn}
 \end{equation}
-By recalling that the initial condition is $\mathbf{u}_0$ we can iterate with (\ref{eq_p2femcn}) to get to the final time step $\mathbf{u}_{\tau_{end}}$. As an example we model the same system as we did in the final example of Section \ref{section_isop1}. Note that the system takes quite long to reach steady state so we iterate over a time domain of $[0,5]$. Figures \ref{fig_rft1} to \ref{fig_rft3} show the concentration distribution over the reactor.
+By recalling that the initial condition is $\mathbf{u}_0$ we can iterate with (\ref{eq_p2femcn}) to get to the final time step $\mathbf{u}_{\tau_{end}}$. As an example we model the same system as we did in the final example of Section \ref{section_isop1}. As before, we would firstly like to know if  our approximation converges to some function. Figure \ref{fig_p2conv} shows the change in approximate average axial conversion at the end point ($z=L$) of the reactor as the number of elements is increased.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/p2_conv}
+\caption{Absolute difference between successive number of elements} 
+\label{fig_p2conv}
+\end{figure}
+From Figure \ref{fig_p2conv} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation indeed converges to some function. Now we inspect the transient dynamics at specific time points as shown in Figures \ref{fig_rft1} to \ref{fig_rft3}.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/rf_t1}
@@ -857,6 +873,8 @@ By recalling that the initial condition is $\mathbf{u}_0$ we can iterate with (\
 \label{fig_rft3}
 \end{figure}
 By inspection of Figures \ref{fig_rft1} to \ref{fig_rft3} we see nothing which is physically unrealistic (perhaps the jagged edges in Figure \ref{fig_rft2}, but these are due to the element size used). It is quite interesting to see the impact a laminar flow profile has on the reaction conversion. Near the middle of the reactor, where the flow is the fastest, we see the reagents are swept out of the reactor quickly, consequently we see a poor conversion. However, near the edges of the reactor, where the flow profile is slowest, we see a much better conversion. This is because the reagents spend more time in the reactor and consequently have more time to react. Since the model solution agrees with what we physically expect we can conclude that solution process was successful.
+
+Further analysis is now required to definitively show that $u^h$ actually converges to $u$ (and that $u$ exists and is unique). However, since the approximation is physically reasonable it is quite safe to just assume so - as we do.
 
 \subsection{Isothermal Comparison}
 We now discuss the accuracy of the Aris-Taylor approximation. Literature \cite{washington} suggests that the Aris-Taylor approximation is valid under the conditions in (\ref{eq_aris}).
@@ -896,7 +914,7 @@ By quadrupling the average linear velocity we are no longer in the region where 
 \caption{Percentage error of the modified reactor} 
 \label{fig_isocomp2}
 \end{figure}
-It is quite interesting to note that the steady state error percentage is still small. However, in the unsteady region the error is much more appreciable than before. 
+It is quite interesting to note that the steady state error percentage is still small. However, in the unsteady region the error is much more appreciable than before. The accuracy of the approximation might have to do with the simple reaction kinetics. Future work could establish the accuracy of the approximation for more general reaction kinetics.
 
 We now move on the the non-isothermal problems.
 
@@ -1098,6 +1116,15 @@ E = 40580 ~~ kJ/kmol
 \end{matrix} 
 \label{eq_physp3}
 \end{equation}
+As before, we would firstly like to know if our approximation converges to some function. Figure \ref{fig_p3conv} shows the change in approximate conversion at the end point ($z=L$) of the reactor as the number of elements is increased.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/p3_conv}
+\caption{Absolute difference between successive number of elements} 
+\label{fig_p3conv}
+\end{figure}
+From Figure \ref{fig_p3conv} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation indeed converges to some function. It is also quite interesting to note the difference between Figures \ref{fig_p2conv} and \ref{fig_p3conv}. In Figure \ref{fig_p3conv} we see that for a small number of elements (i.e. large elements) the approximation changes appreciably as more elements are used. In Figure \ref{fig_p2conv} the changes are more than two orders of magnitude smaller. Thus it is clear that the non-linearity requires a greater number of elements for the same measure of accuracy. 
+
 The unsteady simulation is shown in Figure \ref{fig_adi_unst}. Nothing unexpected is visible in the figure. It is clear that as the reactor heats up the reaction becomes faster and thus we see the steady state solution has a complete conversion. This is very much what one would expect in reality.
 \begin{figure}[H] 
 \centering
@@ -1105,6 +1132,8 @@ The unsteady simulation is shown in Figure \ref{fig_adi_unst}. Nothing unexpecte
 \caption{Adiabatic reactor model} 
 \label{fig_adi_unst}
 \end{figure}
+
+As before, further analysis is now required to definitively show that $u^h$ actually converges to $u$ (and that $u$ exists and is unique). However, since the approximation is physically reasonable it is quite safe to just assume so - as we do.
 
 \subsection{Problem 4}
 In this problem the isothermal assumption is reinstated. However, we now model the situation where it becomes necessary to solve a coupled system of partial differential equations. The model for the reaction $A + B \rightarrow 2C$ is shown in (\ref{eq_p4}). 
@@ -1125,7 +1154,7 @@ In this problem the isothermal assumption is reinstated. However, we now model t
 \end{aligned}
 \label{eq_p4}
 \end{equation}
-We follow the same procedure as in Section \ref{section_isop1} to convert (\ref{eq_p4}) into dimensionless form as shown in (\ref{eq_p4}).
+We follow the same procedure as in Section \ref{section_isop1} to convert (\ref{eq_p4}) into dimensionless form. By creating the dimensionless variables $u=\frac{C_A}{C_{A0}}$, $w=\frac{C_B}{C_{B0}}$, $x = \frac{z}{L}$ and $\tau = \frac{tU}{L}$ we have (\ref{eq_p4d}).
 \begin{equation}
 \begin{aligned}
 &\frac{\partial^2 u}{\partial x^2} - \frac{UL}{D_a} \frac{\partial u}{\partial x} - \frac{L^2C_{B0}}{D_a}kuw 
@@ -1143,7 +1172,7 @@ We follow the same procedure as in Section \ref{section_isop1} to convert (\ref{
 \end{aligned}
 \label{eq_p4d}
 \end{equation}
-Abusing our notation again and multiplying through by test functions $v$ and $z$ we have (\ref{eq_p4d1}) with $c_1 = \frac{UL}{D_a}$,  $c_{2A} = \frac{L^2C_{A0}}{D_a}$ and  $c_{2B} = \frac{L^2C_{B0}}{D_a}$.
+Abusing our notation again and multiplying through by arbitrary test functions $v$ and $z$ we have (\ref{eq_p4d1}) with $c_1 = \frac{UL}{D_a}$,  $c_{2A} = \frac{L^2C_{A0}}{D_a}$ and  $c_{2B} = \frac{L^2C_{B0}}{D_a}$.
 \begin{equation}
 \begin{aligned}
 &\partial_{xx}(u)v - c_1\partial_x(u)v - c_{2B}uwv = c_1\partial_\tau(u)v \\
@@ -1249,7 +1278,7 @@ G_1 \begin{pmatrix}
 \end{aligned}
 \label{eq_p4mat2}
 \end{equation}
-Solving this system of equations by Newton-Galerkin Method iteration proceeds in exactly the same was as in Section \ref{section_p3}. However, we are interested in the unsteady solution. We again rely on the Crank-Nicholson scheme to solve the unsteady problem. The Crank-Nicholson scheme is shown in (\ref{eq_p4mat3}) where we have discretised the time domain as usual.
+Solving this system of equations by Newton-Galerkin Method iteration proceeds in exactly the same way as in Section \ref{section_p3}. However, we are interested in the unsteady solution. We again rely on the Crank-Nicholson scheme to solve the unsteady problem. The Crank-Nicholson scheme is shown in (\ref{eq_p4mat3}) where we have discretised the time domain as usual.
 \begin{equation}
 \begin{aligned}
 &\frac{1}{2} \left(G_1 \begin{pmatrix}
@@ -1311,7 +1340,20 @@ L = 6.36~~ m
 \end{matrix} 
 \label{eq_physp4}
 \end{equation}
-The model solution is shown in Figures \ref{fig_p4A} and \ref{fig_p4B}.
+As before, we would firstly like to know if our approximation converges to some function. Figures \ref{fig_p4convA} and \ref{fig_p4convB} shows the change in approximate conversion at the end point ($z=L$) of the reactor as the number of elements is increased for species A and B.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/p4_convA}
+\caption{Absolute difference between successive number of elements for species A} 
+\label{fig_p4convA}
+\end{figure}
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/p4_convB}
+\caption{Absolute difference between successive number of elements for Species B} 
+\label{fig_p4convB}
+\end{figure}
+From Figures \ref{fig_p4convA} and \ref{fig_p4convB} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation for $u^h$ and $w^h$ indeed converges to some function each. We now consider the transient response of the model as shown in Figures \ref{fig_p4A} and \ref{fig_p4B}.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/p4A}
@@ -1325,6 +1367,11 @@ The model solution is shown in Figures \ref{fig_p4A} and \ref{fig_p4B}.
 \label{fig_p4B}
 \end{figure}
 Since the initial concentrations differ by a factor of two, we expect the steady state exit concentrations to differ by a factor of two as well (since species B limits the extent of the reaction). This is exactly what we see in Figures \ref{fig_p4A} and \ref{fig_p4B}. We conclude that the models perform as expected.
+
+Finally and as before, further analysis is now required to definitively show that $u^h$ actually converges to $u$ and that $w^h$ actually converges to $w$. However, since the approximation is physically reasonable it is quite safe to just assume so - as we do.
+
+\section{Conclusion}
+Still to do!
 
 %References
 \newpage

@@ -7,76 +7,12 @@ k = 0.25
 L = 6.36
 R = 0.05
 De = 7.6E-05
-U = 1.24*4.
+U = 1.24
 
-
-N = 30
 Nt = 90
 timeEnd = 3.
 xs = linspace(0., 1., N+1)
 ts = linspace(0., timeEnd, Nt)
-
-function fem_1d(k, L, R, De, U, N, Nt, timeEnd)
-
-  Da = De + (U^2 * R^2 )/(48*De)
-  a = U*L/Da
-  b = L*k/U
-
-  xs = linspace(0., 1., N+1)
-  h = xs[2] - xs[1]
-
-
-  d = fill(2./h, N)
-  d[end] = 1./h + a/2.
-
-  dl = fill(-1./h - a/2., N-1)
-  du = fill(-1./h + a/2., N-1)
-
-  K1 = Tridiagonal(dl, d, du)
-
-  d2 = fill(2./3.*h, N)
-  d2[end] = 1./3.*h
-
-  dl2 = fill(1./6.*h, N-1)
-  du2 = fill(1./6.*h, N-1)
-
-  K2 = Tridiagonal(dl2, d2, du2)
-
-  K = (-1.)*K1 - a*b*K2
-
-  B = zeros(N)
-  B[1] = (-(-1./h - a/2.) - a*b*h/6.)
-
-  m = fill((2./3.)*h, N)
-  m[end] = (1./3.)*h
-
-  md = fill((1./6.)*h, N-1)
-
-  M = Tridiagonal(md, m, md)
-  M = a*M
-
-  # Now start the time series
-  ts = linspace(0., timeEnd, Nt) # this is dimensionless time... It also takes long...
-  dt = ts[2] - ts[1]
-
-  us = zeros(N+1, Nt)
-  finit(x) = exp(-x*10)#4.0.*x.^2 -4.0.*x +1 # # Initial condition
-  us[:,1] = finit(xs) # Initial condition
-  us[1, :] = 1. # Boundary condition
-
-  KK1 = M - (dt/2.)*K
-  KK2 = M + (dt/2.)*K
-
-
-  for (tind, t) in enumerate(ts[2:end])
-
-    us[2:end, tind+1] = \(KK1, KK2*us[2:end, tind] + dt*B)
-
-  end
-
-
-  return us
-end
 
 function fem_2d(kreact, L, R, De, U, N, Nt, timeEnd)
 
@@ -473,13 +409,7 @@ function fem_2d(kreact, L, R, De, U, N, Nt, timeEnd)
   for i=2:xN
     us[:,i] = us[:, i-1]*exp(-10.*xs[i])
   end
-  ## Weird conditions for fun :)
-  ## Weird one
-  # ymid = int(yN/2)
-  # xmid = int(xN/2)
-  # us[ymid-2:ymid+2, xmid-2:xmid+2] = 1.
-  ## Weird two
-  # us[:, 2:end] = rand(yN,xN-1)
+
 
   # Normal code follows
 
@@ -507,18 +437,17 @@ function fem_2d(kreact, L, R, De, U, N, Nt, timeEnd)
     uave[:, time] = aveconv[:]
   end
 
-  return uave
+  return uave[end, :]
 end
 
-us_1d = fem_1d(k, L, R, De, U, N, Nt, timeEnd)
-us_2d = fem_2d(k, L, R, De, U, N, Nt, timeEnd)
-us_1d = round(us_1d, 3)
-us_2d = round(us_2d, 3)
+elements = [4:1:10]
+elen = length(elements)
+change = zeros(elen-1, Nt)
+for k=1:elen-1
+  change[k,:] = abs(fem_2d(k, L, R, De, U, elements[k+1], Nt, timeEnd) - fem_2d(k, L, R, De, U, elements[k], Nt, timeEnd))
+end
 
-per_err = round(us_2d-us_1d, 3)*100.
-contourf(xs, ts, per_err', 20)
-colorbar(label="Percentage Error")
-# clim(-35,35)
-xlabel("Axial Distance")
-ylabel("Time")
-plt.show()
+contourf(ts,elements[2:end], change, 20)
+xlabel("Time")
+ylabel("Elements")
+colorbar(label="Absolute Difference")
