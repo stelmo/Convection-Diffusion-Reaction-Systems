@@ -5,8 +5,16 @@
 using PyPlot
 
 # Inputs
-a = 7.5 # Peclet number
-b = 1.29 # Damkohler number
+L = 6.36
+R = 0.05
+DAB = 7.6E-05
+k = 0.25
+U = 1.24*100.
+Da = DAB + U^2*R^2/(48*DAB)
+
+a = U*L/Da
+b = k*L/U
+
 
 N = 100
 xs = linspace(0., 1., N+1)
@@ -29,10 +37,10 @@ du2 = fill(1./6.*h, N-1)
 
 K2 = Tridiagonal(dl2, d2, du2)
 
-K = (-1.)*K1 - a*b*K2
+K = (-1.)*K1 - b*K2
 
 B = zeros(N)
-B[1] = (-(-1./h - a/2.) - a*b*h/6.)
+B[1] = (-(-1./h - a/2.) - b*h/6.)
 
 m = fill((2./3.)*h, N)
 m[end] = (1./3.)*h
