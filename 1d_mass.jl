@@ -27,11 +27,28 @@ K2 = Tridiagonal(dl2, d2, du2)
 K = (-1.)*K1 - a*b*K2
 K = full(K)
 
-for k=1:length(K)
-  if K[k] != 0.0
-    K[k] = 0.0
-  else
-    K[k] = 1.0
+n = int(sqrt(length(K)))
+b0 = zeros(3,3)
+b1 = diagm([1,1,1.])
+
+newK = zeros(3*n, 3*n)
+counter = 1
+
+for j=1:3:3*n
+  for i=1:3:3*n
+    if K[counter] != 0.
+      newK[i:i+2, j:j+2] = b1
+    else
+      newK[i:i+2, j:j+2] = b0
+    end
+    counter += 1
   end
 end
-imwrite(K, "p1_mass.pdf")
+for k=1:length(newK)
+  if newK[k] == 0.0
+    newK[k] = 1.
+  else
+    newK[k] = 0.
+  end
+end
+imwrite(newK, "p1_mass.pdf")

@@ -367,12 +367,29 @@ K4 = K4[:, yN+1:end]
 # Calculate the magic!
 KK = K1 + K2 + K3 + K4
 
-for k=1:length(KK)
-  if KK[k] != 0.0
-    KK[k] = 0.0
+n = int(sqrt(length(KK)))
+b0 = zeros(3,3)
+b1 = diagm([1,1,1.])
+
+newK = zeros(3*n, 3*n)
+counter = 1
+
+for j=1:3:3*n
+  for i=1:3:3*n
+    if KK[counter] != 0.
+      newK[i:i+2, j:j+2] = b1
+    else
+      newK[i:i+2, j:j+2] = b0
+    end
+    counter += 1
+  end
+end
+for k=1:length(newK)
+  if newK[k] == 0.0
+    newK[k] = 1.
   else
-    KK[k] = 1.0
+    newK[k] = 0.
   end
 end
 
-imwrite(KK, "p2_mass.pdf")
+imwrite(newK, "p2_mass.pdf")

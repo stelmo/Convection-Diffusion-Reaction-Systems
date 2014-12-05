@@ -108,11 +108,28 @@ B24 = copy(b2*K4[2:end, :])
 K = [K11+K12+K13 K14;K23 K21+K22+K24]
 Ks = [K[:,2:N] K[:, N+2:end]]
 
-for k=1:length(Ks)
-  if Ks[k] != 0.0
-    Ks[k] = 0.0
-  else
-    Ks[k] = 1.0
+n = int(sqrt(length(Ks)))
+b0 = zeros(3,3)
+b1 = diagm([1,1,1.])
+
+newK = zeros(3*n, 3*n)
+counter = 1
+
+for j=1:3:3*n
+  for i=1:3:3*n
+    if Ks[counter] != 0.
+      newK[i:i+2, j:j+2] = b1
+    else
+      newK[i:i+2, j:j+2] = b0
+    end
+    counter += 1
   end
 end
-imwrite(Ks, "p4_mass.pdf")
+for k=1:length(newK)
+  if newK[k] == 0.0
+    newK[k] = 1.
+  else
+    newK[k] = 0.
+  end
+end
+imwrite(newK, "p4_mass.pdf")

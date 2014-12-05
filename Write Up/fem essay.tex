@@ -584,12 +584,12 @@ Now if we integrate over the domain $[0, 1]$ and apply the Fundamental Theorem o
 \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx + [(\partial_xu(x, \cdot))v(x, \cdot)]^1_0 = \int^1_0 c_1(\partial_{\tau}u)v dx
 \label{eq_p1d3}
 \end{equation}
-From the boundary conditions we have that $\partial_xu(1,\cdot)=0$ and by making $v$ less arbitrary i.e. $v \in \{v : v(0, \cdot)=0 \} = T$ equation (\ref{eq_p1d3}) simplifies to the variational form in (\ref{eq_p1d4}).
+From the boundary conditions we have that $\partial_xu(1,\cdot)=0$ and by making $v$ less arbitrary i.e. $v \in \{v : v(0, \cdot)=0 \} = T$ equation (\ref{eq_p1d3}) simplifies to (\ref{eq_p1d4}).
 \begin{equation}
 \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx = \int^1_0 c_1(\partial_{\tau}u)v dx
 \label{eq_p1d4}
 \end{equation}
-Now let $B(u, v) = \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx$ and $(c_1(\partial_{\tau}u),v)_0 = \int^1_0 c_1(\partial_{\tau}u)v dx$. From the theory of partial differential equations, if we can find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p1d5}) for all $v \in T$ we have the solution of (\ref{eq_p1d}).
+Now let $B(u, v) = \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx$ and $(c_1(\partial_{\tau}u),v)_0 = \int^1_0 c_1(\partial_{\tau}u)v dx$. From the theory of partial differential equations, if we can find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p1d5}) for all $v \in T$ we have the solution of (\ref{eq_p1d}). This is known as the variational form of the problem. 
 \begin{equation}
 B(u, v) = (c_1(\partial_{\tau}u),v)_0
 \label{eq_p1d5}
@@ -603,6 +603,9 @@ B(u^h, \phi) = (c_1(\partial_{\tau}u^h),\phi)_0~~\forall \phi \in S^h_0
 \end{equation} 
 \begin{rmrk}
 Note the difference between $S^h$ and $S^h_0$. Clearly $S^h_0=S^h\setminus \{\phi_0\}$: it was required that the test functions satisfy $v(0)=0$ which $\phi_0$ does not. 
+\end{rmrk}
+\begin{rmrk}
+Ideally one would like to use the bilinear form $B$ to immediately construct an inner product for use in the analysis of the convergence properties of (\ref{eq_p1d6}). Unfortunately, the convection term in (\ref{eq_p1d4}) precludes the usual \cite{vrb} FEM analysis because $B$ does not satisfy the properties of an inner product. However, it can be shown \cite{strang} that (\ref{eq_p1d6}) has the same order of convergence as a problem without the convection term. The focus of this project is not on a detailed analysis of this specific problem so we refer the interested reader to \cite{strang} for more information about the convergence properties of skew adjoint bilinear forms. This remark holds true for problems 2,3 and 4 as well.
 \end{rmrk}
 Recall that $B(u, v) = \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx$. Substituting the Galerkin approximation into this expression we have (\ref{eq_p1d7}).
 \begin{equation}
@@ -678,7 +681,15 @@ If we were merely interested in solving for the steady state solution of (\ref{e
 \frac{1}{2}\left( K^*\mathbf{u}_{\tau_{m+1}} + K^*\mathbf{u}_{\tau_m} \right) + G^* = c_1K^3_{1:n,1:n}\frac{\mathbf{u}_{\tau_{m+1}} -\mathbf{u}_{\tau_{m}}}{\delta \tau}
 \label{eq_cnq1}
 \end{equation} 
-If we recall that by the initial condition we have $\mathbf{u}_0$ we can iterate using (\ref{eq_cnq1}) to get to the final time step $\mathbf{u}_{\tau_{end}}$. As an example, consider a reactor with physical properties shown in (\ref{eq_q1phys}).
+If we recall that by the initial condition we have $\mathbf{u}_0$ we can iterate using (\ref{eq_cnq1}) to get to the final time step $\mathbf{u}_{\tau_{end}}$. Before we illustrate the method on a physical example we note that the ``mass" matrix $K$ will have a diagonal structure (in this case tridiagonal) as shown in Figure \ref{fig_p1mass}. Specific algorithms have been developed to efficiently solve these types of matrices. Thus we expect the algorithm to be quite efficient. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.5]{./pics/p1_mass}
+\caption{Mass matrix structure} 
+\label{fig_p1mass}
+\end{figure}
+
+Now we move on to an example: consider a reactor with physical properties shown in (\ref{eq_q1phys}).
 \begin{equation}
 \begin{aligned}
 &C_{A0} = 0.5~~ \frac{mol}{dm^3}
@@ -705,6 +716,8 @@ From Figure \ref{fig_p1conv} it is clear that as the number of elements increase
 \label{fig_q1std}
 \end{figure}
 Further analysis is now required to definitively show that $u^h$ actually converges to $u$ (and that $u$ exists and is unique). However, since the approximation is physically reasonable it is quite safe to just assume so - as we do.
+
+Finally we will elaborate briefly on a problem unique to CDR type systems. If the convection term dominates the diffusion term it is possible that the Galerkin FEM
 
 \subsection{Problem 2}
 \label{section_iso2}
