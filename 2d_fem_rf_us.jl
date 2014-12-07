@@ -427,7 +427,7 @@ ylabel("Radial Distance")
 
 # Middles
 figure(2)
-u = reshape(u_profile[:, 30], (yN, xN-1))
+u = reshape(u_profile[:, 20], (yN, xN-1))
 u22 = [u1 u]
 contourf(xs, reverse(ys), u22, 20)
 colorbar(label="Concentration")

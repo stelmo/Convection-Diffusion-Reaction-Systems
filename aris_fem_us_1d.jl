@@ -9,7 +9,7 @@ L = 6.36
 R = 0.05
 DAB = 7.6E-05
 k = 0.25
-U = 1.24*100.
+U = 1.24
 Da = DAB + U^2*R^2/(48*DAB)
 
 a = U*L/Da
@@ -70,7 +70,7 @@ for (tind, t) in enumerate(ts[2:end])
 end
 
 
-surf(xs, ts, us')
+surf(xs, ts, us', linewidth=0.0)
 xlabel("Space")
 ylabel("Time")
 zlabel("Concentration")

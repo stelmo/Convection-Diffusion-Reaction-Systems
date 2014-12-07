@@ -44,7 +44,7 @@
 \end{center}
 
 \begin{abstract}
-This project aims to introduce the reader to the use of the Finite Element Method for solving typical Chemical Engineering reactor design problems. The Convection, Diffusion and Reaction (CDR) equation is derived (along with the corresponding energy balance). Using the CDR equation unsteady tubular reactor problems are then posed and solved using the FEM.
+This project aims to introduce the reader to the use of the Finite Element Method for solving typical Chemical Engineering reactor design problems. The convection, diffusion and reaction equation is derived (along with the corresponding energy balance). Using this, unsteady tubular reactor problems are then posed and solved using the Finite Element Method.
 \end{abstract}
 
 \textsc{\small KEYWORDS:} \small Finite Element Method, diffusion, convection, reaction, tubular reactor
@@ -54,9 +54,9 @@ This project aims to introduce the reader to the use of the Finite Element Metho
 \newpage
 \pagenumbering{arabic}
 \section{Introduction}
-The Finite Element Method (FEM) is a numerical method which is often used to solve partial differential equations. It has its roots in the theory of partial differential equations. The beauty of the FEM is the way in which natural boundary conditions (von Neumann type) are automatically satisfied. Complex geometries are also elegantly handled - unlike the Finite Difference Method \cite{strang}. 
+The Finite Element Method (FEM) is a numerical method which is often used to solve partial differential equations. It has its roots in the theory of partial differential equations. The beauty of the FEM is the way in which natural boundary conditions (von Neumann type) are automatically satisfied. Complex geometries are also elegantly handled - unlike in the Finite Difference Method \cite{strang}. 
 
-This project aims to introduce the reader to the use of the FEM for solving typical Chemical Engineering reactor design problems. The Convection, Diffusion and Reaction (CDR) equation is derived as well as the corresponding energy balance. A brief introduction into a popular engineering simplification of the CDR equation is given: the Aris-Taylor approximation. The accuracy of this approximation for a first order isothermal reaction is investigated. Non-linear and coupled non-linear systems of CDR equations are also investigated. 
+
 
 \section{Model Derivation}
 In this section the general convection, diffusion and reaction (CDR) continuum equation is developed. Furthermore, the accompanying energy balance necessitated by the reaction component of the resultant model is also derived. For the purposes of this project a tubular reactor geometry is assumed; thus the model is derived with respect to the (more natural) cylindrical coordinate system. 
@@ -160,7 +160,7 @@ Up to now not much has been said about the reaction term $r_A$. Typically $r_A$ 
 k(T) = k_a e^{\left(\frac{E}{R_g}\left(\frac{1}{T_a} - \frac{1}{T}\right)\right)}
 \label{eq_arrhenius}
 \end{equation} 
-It is prudent (in practice a necessity) to attempt to model the temperature profile of the reactor. We start the derivation by considering the first law of thermodynamics for an open system again applied to the control volume in Figure \ref{fig_vol_element}. In (\ref{eq_ftd}) $F_{i0}$ and $F_{i}$ denotes the molar flow of species $i$ into and out of the control volume respectively; similarly with the energy $E$. The law states that the rate of change of energy in a system is the sum of the heat flow ($\dot{Q}$) to the system minus the work done ($\dot{W}$) by the system plus the rate of energy transferred due to flow (the last two terms). 
+It is prudent (in practice a necessity) to attempt to model the temperature profile of the reactor because of the temperature dependence of the rate equation. We start the derivation by considering the first law of thermodynamics for an open system again applied to the control volume in Figure \ref{fig_vol_element}. In (\ref{eq_ftd}) $F_{i0}$ and $F_{i}$ denotes the molar flow of species $i$ into and out of the control volume respectively; similarly with the energy $E$. The law states that the rate of change of energy in a system is the sum of the heat flow ($\dot{Q}$) to the system minus the work done ($\dot{W}$) by the system plus the rate of energy transferred due to flow (the last two terms). 
 \begin{equation}
 \frac{d E_{syst}}{dt} = \dot{Q} - \dot{W} + \sum F_{i0}E_{i0} -\sum F_{i}E_{i}
 \label{eq_ftd}
@@ -243,7 +243,7 @@ This assumption results in the one dimensional non-adiabatic energy balance for 
 U_ha(T_a-T) - U_z\sum C_{p_i}C_i \frac{\partial T}{\partial z} + H_{rxn}r_A = \sum C_i C_{p_i} \frac{\partial T}{\partial t}
 \label{eq_baltb1}
 \end{equation}
-If we assume adiabatic conditions (\ref{eq_baltb1}) simplifies to (\ref{eq_baltb2}) where $X$ is the conversion of the limiting species and $C_{p_m}$ is the average heat capacity of the system (which is constant).
+If we assume adiabatic conditions (\ref{eq_baltb1}) simplifies to (\ref{eq_baltb2}) where $X$ is the conversion of the limiting species and $C_{p_m}$ is the average molar heat capacity of the system (which is constant).
 \begin{equation}
 T = T_0 + \frac{-H_{rxn}X}{C_{p_m}}
 \label{eq_baltb2}
@@ -434,13 +434,10 @@ K^3 = \begin{pmatrix}
 0 & 0 & 0  & \frac{h}{6}& \frac{2h}{3} & \frac{h}{6} \\
 0 & 0 & 0 & 0 &\frac{h}{6} & \frac{h}{3}   
 \end{pmatrix}
-\begin{pmatrix}
-u_0 \\ u_1 \\ \vdots \\ u_{n-1} \\ u_n
-\end{pmatrix}
 \label{eq_K3matlin}
 \end{equation} 
-We will make extensive use of these results in the succeeding sections.
 
+We will make extensive use of these results in the succeeding sections.
 \subsection{Piecewise Bilinear Basis Functions}
 \label{section_pbbf}
 In two dimensions the previous roof functions generalise to the piecewise bilinear basis functions. We discretise our domain $[0,1] \times [0,1]$ into $n$ rectangular elements of equal size ($\delta x, \delta y$). We number the nodes of our discretisation column wise as shown in Figure \ref{fig_pbilindomain}.
@@ -534,7 +531,7 @@ For example, $K^4_{1,1} = M^4_{4,4}$ because only $P_4$ overlaps with itself for
 A similar process is repeated for matrices $K^1, K^2$ and $K^3$. Again, we will make extensive use of these results in the succeeding sections.
 
 \section{Isothermal Problem}
-In this section the isothermal models will be developed and solved using the FEM. Finally, the quality of the Aris-Taylor simplification will be analysed numerically.  
+In this section the isothermal models will be developed and solved using the FEM. Finally, the quality of the Aris-Taylor simplification will be (briefly) analysed numerically.  
 \subsection{Problem 1}
 \label{section_isop1}
 We start this section solving the simplified model from (\ref{eq_iso1}) because it is the least complex. The full problem is shown in (\ref{eq_p1}). It is assumed that $D_a, U, k, C_{a0},\text{ and } L$ are given because this is necessary to describe the physical reactor.  
@@ -584,7 +581,7 @@ Now if we integrate over the domain $[0, 1]$ and apply the Fundamental Theorem o
 \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx + [(\partial_xu(x, \cdot))v(x, \cdot)]^1_0 = \int^1_0 c_1(\partial_{\tau}u)v dx
 \label{eq_p1d3}
 \end{equation}
-From the boundary conditions we have that $\partial_xu(1,\cdot)=0$ and by making $v$ less arbitrary i.e. $v \in \{v : v(0, \cdot)=0 \} = T$ equation (\ref{eq_p1d3}) simplifies to (\ref{eq_p1d4}).
+From the boundary conditions we have that $\partial_xu(1,\cdot)=0$ and by making $v$ less arbitrary i.e. $v \in \{v : v(0)=0 \} = T$ equation (\ref{eq_p1d3}) simplifies to (\ref{eq_p1d4}).
 \begin{equation}
 \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx = \int^1_0 c_1(\partial_{\tau}u)v dx
 \label{eq_p1d4}
@@ -596,13 +593,13 @@ B(u, v) = (c_1(\partial_{\tau}u),v)_0
 \end{equation}
 For the purposes of this project we will assume the existence and uniqueness of such a function. While it is certainly within the realm of possibilities to find an analytic solution to (\ref{eq_p1d5}) we will rather attempt to find an approximate solution using the FEM.
 
-Recall the definition of the piecewise linear basis functions ($\phi$) defined in Section \ref{section_plb}. We assume that the function $u^h =\sum^n_{k=0} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p1d5}) by using the Galerkin approximation: find $u^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p1d6}) holds.
+Recall the definition of the piecewise linear basis functions ($\phi$) defined in Section \ref{section_plb}. We assume that the function $u^h(x, \tau) =\sum^n_{k=0} u_k(\tau) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p1d5}) by using the Galerkin approximation: find $u^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p1d6}) holds.
 \begin{equation}
 B(u^h, \phi) = (c_1(\partial_{\tau}u^h),\phi)_0~~\forall \phi \in S^h_0
 \label{eq_p1d6}
 \end{equation} 
 \begin{rmrk}
-Note the difference between $S^h$ and $S^h_0$. Clearly $S^h_0=S^h\setminus \{\phi_0\}$: it was required that the test functions satisfy $v(0)=0$ which $\phi_0$ does not. 
+Note the difference between $S^h$ and $S^h_0$. Clearly $S^h_0=S^h\setminus \{\phi_0\}$: it was required that the test functions satisfy $v(0)=0$ which $\phi_0$ does not; thus we remove it. 
 \end{rmrk}
 \begin{rmrk}
 Ideally one would like to use the bilinear form $B$ to immediately construct an inner product for use in the analysis of the convergence properties of (\ref{eq_p1d6}). Unfortunately, the convection term in (\ref{eq_p1d4}) precludes the usual \cite{vrb} FEM analysis because $B$ does not satisfy the properties of an inner product. However, it can be shown \cite{strang} that (\ref{eq_p1d6}) has the same order of convergence as a problem without the convection term. The focus of this project is not on a detailed analysis of this specific problem so we refer the interested reader to \cite{strang} for more information about the convergence properties of skew adjoint bilinear forms. This remark holds true for problems 2,3 and 4 as well.
@@ -640,7 +637,7 @@ Now consider the second term $\int_0^1  -c_1(\partial_xu^h)\phi_idx$  for each $
 \end{equation}
 Again, after some reflection we notice that (\ref{eq_lindn}) corresponds to $-c_1K^2_{1:n, 0:n}\mathbf{u}$. 
 
-Finally, we consider the last term $\int_0^1 - c_1c_2u^h\phi_i)dx$ for each $i=1,2,...,n$ as shown in (\ref{eq_linnn}).
+Finally, we consider the last term $\int_0^1 - c_1c_2u^h\phi_idx$ for each $i=1,2,...,n$ as shown in (\ref{eq_linnn}).
 \begin{equation}
 \begin{aligned}
 \int_0^1 -c_1c_2u^h\phi_idx &= \int_0^1 - c_1c_2\sum_{k=0}^{n} u_k\phi_k\phi_i dx \\
@@ -656,7 +653,7 @@ Again, we notice that (\ref{eq_linnn}) corresponds to $-c_1c_2K^3_{1:n, 0:n}\mat
 Now consider the right hand side of (\ref{eq_p1d6}). If we substitute the definition of $u^h$ into  $(c_1(\partial_{\tau}u^h),\phi)_0$ we have (\ref{eq_timelin}).
 \begin{equation}
 \begin{aligned}
-\int_0^1 c_1\partial_t (u^h) \phi_i &= \int_0^1 c_1\sum_{k=0}^{n} u_k\prime \phi_k \phi_i dx \\
+\int_0^1 c_1\partial_t (u^h) \phi_i dx &= \int_0^1 c_1\sum_{k=0}^{n} u_k\prime \phi_k \phi_i dx \\
 &= \begin{cases}
 \int_{[x_{i-1},x_{i+1}]}c_1\sum_{k=i-1}^{i+1} u_k\prime \phi_k\phi_idx &\text{ for } i=1,2,..., n-1 \\
 \int_{[x_{i-1},x_{n}]}c_1\sum_{k=i-1}^{n} u_k\prime \phi_k \phi_idx &\text{ for } i=n
@@ -681,7 +678,7 @@ If we were merely interested in solving for the steady state solution of (\ref{e
 \frac{1}{2}\left( K^*\mathbf{u}_{\tau_{m+1}} + K^*\mathbf{u}_{\tau_m} \right) + G^* = c_1K^3_{1:n,1:n}\frac{\mathbf{u}_{\tau_{m+1}} -\mathbf{u}_{\tau_{m}}}{\delta \tau}
 \label{eq_cnq1}
 \end{equation} 
-If we recall that by the initial condition we have $\mathbf{u}_0$ we can iterate using (\ref{eq_cnq1}) to get to the final time step $\mathbf{u}_{\tau_{end}}$. Before we illustrate the method on a physical example we note that the ``mass" matrix $K$ will have a diagonal structure (in this case tridiagonal) as shown in Figure \ref{fig_p1mass}. Specific algorithms have been developed to efficiently solve these types of matrices. Thus we expect the algorithm to be quite efficient. 
+If we recall that by the initial condition we have $\mathbf{u}_0$ we can iterate using (\ref{eq_cnq1}) to get to the final time step $\mathbf{u}_{\tau_{end}}$. Before we illustrate the method on a physical example we note that the ``mass" matrix $K$ will have a diagonal structure\footnote{This graph was constructed by colouring each non-zero entry in mass matrix black.} (in this case tridiagonal) as shown in Figure \ref{fig_p1mass}. Specific algorithms have been developed to efficiently solve these types of matrices. Thus we expect the algorithm to be quite efficient. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.5]{./pics/p1_mass}
@@ -708,16 +705,23 @@ It is our aim to model such a reactor because it is a representative sample of t
 \caption{Absolute difference between successive number of elements} 
 \label{fig_p1conv}
 \end{figure}
-From Figure \ref{fig_p1conv} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation indeed converges to some function. Now we inspect the transient dynamics as shown in Figure \ref{fig_q1std}. Nothing unexpected is apparent in the model approximation. For example, consider the concentration profile of the reactor at steady state (approximately for $\tau \geq 1$): the reagent concentration gradually reduces over time as is usual for tubular reactors at steady state.
+From Figure \ref{fig_p1conv} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. It is quite reassuring to note how few elements are needed for convergence beyond 3 decimal places. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation indeed converges to some function. Now we inspect the transient dynamics of the simulation as shown in Figure \ref{fig_q1std}. Nothing unexpected is apparent in the model approximation. For example, consider the concentration profile of the reactor at steady state (approximately for $\tau \geq 1$): the reagent concentration gradually reduces over time as is usual for tubular reactors at steady state.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/q1_standard}
 \caption{Example reactor transient dynamics} 
 \label{fig_q1std}
 \end{figure}
-Further analysis is now required to definitively show that $u^h$ actually converges to $u$ (and that $u$ exists and is unique). However, since the approximation is physically reasonable it is quite safe to just assume so - as we do.
+Further analysis is now required to definitively show that $u^h$ actually converges to $u$. However, since the approximation is physically realistic it is reasonable to just assume so - as we do.
 
-Finally we will elaborate briefly on a problem unique to CDR type systems. If the convection term dominates the diffusion term it is possible that the Galerkin FEM
+Finally, we briefly illustrate a problem unique to CDR type systems. If the convection term ($\frac{\partial u}{\partial x}$) dominates the diffusion term ($\frac{\partial^2 u}{\partial x^2}$) it is possible that the Galerkin FEM will not yield stable results. This is a well known problem \cite{strang} and has to do with the fact that the piecewise linear basis functions effectively yield a central difference scheme which is inappropriate for this type of problem. We illustrate the problem in Figure \ref{fig_p1_unstab} by increasing the linear flow velocity ($U$) to (an unreasonable) $124~\frac{m}{s}$. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/p1_unstable}
+\caption{Convection dominated system} 
+\label{fig_p1_unstab}
+\end{figure}
+It is clear the fluctuations are not physically realistic. Purpose made FEM basis functions exist which result in a scheme which is not plagued by this problem. This problem is not unique to the FEM, the upwind finite difference scheme was developed to address this issue for the Finite Difference Method. For the rest of this project we ensure that the convection term does not cause this type of problem.  
 
 \subsection{Problem 2}
 \label{section_iso2}
@@ -767,14 +771,14 @@ Now we go to dimensionless form using $u=\frac{C_A}{C_{A0}}$, $x = \frac{z}{L}$,
 \end{aligned}
 \label{eq_p2d2}
 \end{equation}
-If we let $B(u,v) = \int_0^1 \int_0^1 \left(-D_{AB}\left(\frac{1}{R^2}\partial_y u \partial_y v + \frac{1}{L^2}\partial_x u \partial_xv\right) - 2U\left(1-y^2\right)\frac{1}{L}\partial_x(u) v - kuv\right)dxdy$ and $\left(\frac{U}{L} \partial_\tau (u), v\right)_0 = \int_0^1 \int_0^1 \frac{U}{L} \partial_\tau (u) v dxdy$ we have the dimensionless variational form of (\ref{eq_p2}) in (\ref{eq_p2d3}). The goal is to find a function $u$ with $u(x=0,\cdot) = 1$ such that (\ref{eq_p2d3}) holds for all $v \in T$.
+If we let $B(u,v) = \int_0^1 \int_0^1 \left(-D_{AB}\left(\frac{1}{R^2}\partial_y u \partial_y v + \frac{1}{L^2}\partial_x u \partial_xv\right) - 2U\left(1-y^2\right)\frac{1}{L}\partial_x(u) v - kuv\right)dxdy$ and $\left(\frac{U}{L} \partial_\tau (u), v\right)_0 = \int_0^1 \int_0^1 \frac{U}{L} \partial_\tau (u) v dxdy$ we have the dimensionless variational form of (\ref{eq_p2}) in (\ref{eq_p2d3}). The goal is to find a function $u(x, y, \tau)$ with $u(x=0,\cdot, \cdot) = 1$ such that (\ref{eq_p2d3}) holds for all $v \in T$.
 \begin{equation}
 B(u,v) = \left(\frac{U}{L} \partial_\tau (u), v\right)_0
 \label{eq_p2d3}
 \end{equation}
 Likewise with the one dimensional case we assume the existence and uniqueness of such a function $u$. We again rely on the FEM to construct a solution -- it is perhaps more justified to rely on numerical methods like the FEM for the two dimensional non-constant coefficient problem we are currently facing than it was before.
 
-Now we recall the basis functions $\phi$ touched upon in Section \ref{section_pbbf}. We assume that the function $u^h =\sum^n_{k=1} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_1,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p2d3}) by using the Galerkin approximation: find $u^h \in S^h$ with $u^h(\cdot, 0,\cdot) = 1.$ such that for $S^h_0=\{\phi_{m+1}, \phi_{m+2},...,\phi_n \}$, where $m$ is the number of basis functions lying on the y-axis, (\ref{eq_p2d4}) holds.
+Now we recall the basis functions $\phi$ touched upon in Section \ref{section_pbbf}. We assume that the function $u^h(x,y,\tau) =\sum^n_{k=1} u_k(\tau) \phi_k(x, y)$ which by construction lies in the span $S^h=\text{span}(\phi_1,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p2d3}) by using the Galerkin approximation: find $u^h \in S^h$ with $u^h(0,\cdot,\cdot) = 1$ such that for $S^h_0=\{\phi_{m+1}, \phi_{m+2},...,\phi_n \}$, where $m$ is the number of basis functions lying on the y-axis, (\ref{eq_p2d4}) holds.
 \begin{equation}
 B(u^h,v) = (\frac{U}{L} \partial_\tau (u^h), v)_0~~ \forall v \in S^h_0
 \label{eq_p2d4}
@@ -814,11 +818,11 @@ Third, consider $\int_0^1 \int_0^1 - 2U(1-y^2)\frac{1}{L}\partial_x(u^h)  \phi_i
 \end{aligned}
 \label{eq_intdnx}
 \end{equation}
-We proceed by assuming that for a sufficiently small mesh size the non-constant term $(1-y^2)$ can be approximated as a constant over each element. To avoid clumsy notation we supply a few example calculations of entries to the matrix $K^{3*}$ in the hope that the method will become clear. Consider (\ref{eq_intdx2}). 
+We proceed by assuming that for a sufficiently small mesh size the non-constant term $(1-y^2)$ can be approximated as a constant over each element. To avoid clumsy notation we supply a few example calculations of entries of the matrix $K^{3*}$ in the hope that the method will become clear. Consider (\ref{eq_intdx2}). 
 \begin{equation}
 \begin{aligned}
-K^{3*}_{1,2} = \frac{-2U}{L} u_2 \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_2)  \phi_1dxdy \approx \frac{-2U}{L} u_2 (1-y_1)K^3_{1,2} \\
-K^{3*}_{2,2} = \frac{-2U}{L} u_2 \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_2)  \phi_2dxdy \approx \frac{-2U}{L} u_2 (1-y_2)K^3_{2,2} \\ 
+K^{3*}_{1,2} = \frac{-2U}{L} u_2 \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_2)  \phi_1dxdy \approx \frac{-2U}{L} u_2 (1-y_1^2)K^3_{1,2} \\
+K^{3*}_{2,2} = \frac{-2U}{L} u_2 \int_0^1 \int_0^1 (1-y^2) \partial_x(\phi_2)  \phi_2dxdy \approx \frac{-2U}{L} u_2 (1-y_2^2)K^3_{2,2} \\ 
 \end{aligned}
 \label{eq_intdx2}
 \end{equation}
@@ -859,14 +863,23 @@ If we were only interested in the steady state case we could set the right hand 
 \frac{1}{2}\left(K^*\mathbf{u}_{\tau_{m+1}} +K^*\mathbf{u}_{\tau_{m}}\right) + G^* = H^*\frac{\mathbf{u}_{\tau_{m+1}}-\mathbf{u}_{\tau_{m}}}{\delta \tau}
 \label{eq_p2femcn}
 \end{equation}
-By recalling that the initial condition is $\mathbf{u}_0$ we can iterate with (\ref{eq_p2femcn}) to get to the final time step $\mathbf{u}_{\tau_{end}}$. As an example we model the same system as we did in the final example of Section \ref{section_isop1}. As before, we would firstly like to know if  our approximation converges to some function. Figure \ref{fig_p2conv} shows the change in approximate average axial conversion at the end point ($z=L$) of the reactor as the number of elements is increased.
+By recalling that the initial condition is $\mathbf{u}_0$ we can iterate with (\ref{eq_p2femcn}) to get to the final time step $\mathbf{u}_{\tau_{end}}$. Before we discuss numeric convergence and the simulation results, it is interesting to study the shape of $K^* + H^*$ as it will give an indication of the efficiency of the iteration process. The shape of the mass matrix $K^* + H^*$ is shown in Figure \ref{fig_p2mass}.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.5]{./pics/p2_mass}
+\caption{Mass matrix shape} 
+\label{fig_p2mass}
+\end{figure}
+The mass matrix has a banded diagonal structure which implies that it can be solved fairly efficiently using matrix algebra techniques. This is reassuring because it implies that the system can be solved quickly. 
+
+As an example we model the same system as in Section \ref{section_isop1}. As before, we would firstly like to know if  our approximation converges to some function. Figure \ref{fig_p2conv} shows the change in approximate average axial conversion at the end point ($z=L$) of the reactor as the number of elements is increased. The y-axis position has the same meaning as before. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/p2_conv}
 \caption{Absolute difference between successive number of elements} 
 \label{fig_p2conv}
 \end{figure}
-From Figure \ref{fig_p2conv} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation indeed converges to some function. Now we inspect the transient dynamics at specific time points as shown in Figures \ref{fig_rft1} to \ref{fig_rft3}.
+From Figure \ref{fig_p2conv} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. As with the one dimensional case, it is quite reassuring to note how few elements are needed for convergence beyond 3 decimal places. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation indeed converges to some function. Now we inspect the transient dynamics at specific time points as shown in Figures \ref{fig_rft1} to \ref{fig_rft3}.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/rf_t1}
@@ -876,18 +889,18 @@ From Figure \ref{fig_p2conv} it is clear that as the number of elements increase
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/rf_t2}
-\caption{Concentration distribution at $t=0.67$} 
+\caption{Concentration distribution at $\tau=0.67$} 
 \label{fig_rft2}
 \end{figure}
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/rf_t3}
-\caption{Concentration distribution at $t=5$} 
+\caption{Concentration distribution at steady state} 
 \label{fig_rft3}
 \end{figure}
 By inspection of Figures \ref{fig_rft1} to \ref{fig_rft3} we see nothing which is physically unrealistic (perhaps the jagged edges in Figure \ref{fig_rft2}, but these are due to the element size used). It is quite interesting to see the impact a laminar flow profile has on the reaction conversion. Near the middle of the reactor, where the flow is the fastest, we see the reagents are swept out of the reactor quickly, consequently we see a poor conversion. However, near the edges of the reactor, where the flow profile is slowest, we see a much better conversion. This is because the reagents spend more time in the reactor and consequently have more time to react. Since the model solution agrees with what we physically expect we can conclude that solution process was successful.
 
-Further analysis is now required to definitively show that $u^h$ actually converges to $u$ (and that $u$ exists and is unique). However, since the approximation is physically reasonable it is quite safe to just assume so - as we do.
+Further analysis is now required to definitively show that $u^h$ actually converges to $u$. However, since the approximation is physically reasonable it is quite safe to just assume so - as we do.
 
 \subsection{Isothermal Comparison}
 We now discuss the accuracy of the Aris-Taylor approximation. Literature \cite{washington} suggests that the Aris-Taylor approximation is valid under the conditions in (\ref{eq_aris}).
@@ -895,7 +908,7 @@ We now discuss the accuracy of the Aris-Taylor approximation. Literature \cite{w
 \frac{L}{R} \geq 0.08\frac{UR}{D_e} \text{ and } \frac{UR}{D_e} \geq 6.9
 \label{eq_aris}
 \end{equation}
-Consider the example model in Section \ref{section_isop1} with parameters restated below for convenience.
+Note that $D_e$ denotes the average diffusivity. Consider the example model in Section \ref{section_isop1} with parameters restated below for convenience.
 \begin{equation*}
 \begin{aligned}
 &C_{A0} = 0.5~~ \frac{mol}{dm^3}
@@ -916,7 +929,7 @@ To compare the one dimensional model to the two dimensional model we have taken 
 \caption{Percentage error of the example reactor} 
 \label{fig_isocomp1}
 \end{figure}
-It is apparent that the steady state (taken as the conditions at $t=3$) error is approximately 6.1\% at the end of the reactor. In this case the Aris-Taylor approximation is quite accurate. It is noticeable that the Aris-Taylor approximation is not very accurate (in the order of 20\% error) during the initial unsteady operation of the reactor. We also see that on average the Aris-Taylor approximation underestimates the average axial conversion. 
+It is apparent that the steady state (taken as the conditions at $\tau \geq 3$) error is approximately 6.1\% at the end of the reactor. In this case the Aris-Taylor approximation is quite accurate. It is noticeable that the Aris-Taylor approximation is not very accurate (in the order of 20\% error) during the initial unsteady operation of the reactor. We also see that on average the Aris-Taylor approximation underestimates the average axial conversion. 
 
 The focus of this project is not on a detailed accuracy comparison. However, for the sake of interest we quadruple the average linear velocity in the example reactor and investigate the percentage error in Figure \ref{fig_isocomp2}.
 
@@ -963,18 +976,18 @@ The boundary conditions retain their meaning as explained in Section \ref{sectio
 &\frac{\partial u}{\partial x}(x=1, \cdot) = 0\\
 &u(x=0, \cdot) = 1 \\
 &\text{Initial Condition:} \\
-& u(\cdot, t= 0) = e^{-10x}
+& u(\cdot, \tau= 0) = e^{-10x}
 \end{aligned}
 \label{eq_p3d}
 \end{equation}
-If we let $B(u, v) = \int_0^1 \left(-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_2k(u)uv\right)dx$ and $(c_1(\partial_{\tau}u),v)_0 = \int^1_0 c_1(\partial_{\tau}u)v dx$ with $c_1 = \frac{UL}{D_a}$ and $c_2 = \frac{L^2}{D_a}$ we see that Section \ref{section_isop1} is very similar to the current problem. Upon brief consider we notice that it is possible to go directly to the variational form of the problem since we have already done most of the work in Section \ref{section_isop1}.  Find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p3d1}) for all $v \in T=\left\{v:v(0,\cdot)=0\right\}$.
+If we let $B(u, v) = \int_0^1 \left(-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_2k(u)uv\right)dx$ and $(c_1(\partial_{\tau}u),v)_0 = \int^1_0 c_1(\partial_{\tau}u)v dx$ with $c_1 = \frac{UL}{D_a}$, $c_2 = \frac{L^2}{D_a}$ and $v$ some test function which satisfies $v(0) = 0$ we see that Section \ref{section_isop1} is very similar to the current problem. Upon brief consider we notice that it is possible to go directly to the variational form of the problem since we have already done most of the work in Section \ref{section_isop1}.  Find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p3d1}) for all $v \in T=\left\{v:v(0)=0\right\}$.
 \begin{equation}
 B(u, v) = (c_1(\partial_{\tau}u),v)_0
 \label{eq_p3d1}
 \end{equation}
 For the purposes of this project we will assume the existence and uniqueness of such a function. The non-linearity of the problem will make finding an exact solution quite difficult. We proceed as before with the FEM approximation.
 
-Recall the definition of the piecewise linear basis functions ($\phi$) defined in Section \ref{section_plb}. We assume that the function $u^h =\sum^n_{k=0} u_k(t) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p3d1}) by using the Galerkin approximation: find $u^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p3d2}) holds.
+Recall the definition of the piecewise linear basis functions ($\phi$) defined in Section \ref{section_plb}. We assume that the function $u^h =\sum^n_{k=0} u_k(\tau) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p3d1}) by using the Galerkin approximation: find $u^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p3d2}) holds.
 \begin{equation}
 B(u^h, \phi) = (c_1(\partial_{\tau}u^h),\phi)_0~~\forall \phi \in S^h_0
 \label{eq_p3d2}
@@ -1116,6 +1129,15 @@ Now we note that $\mathbf{\delta u}_{\tau} \approx 0$ because we have iterated t
 \end{equation}
 Now we guess $\mathbf{u}^0_{\tau+1}$ and solve for $\mathbf{\delta u}_{\tau+1}$ by remembering that $\mathbf{u}^0_{\tau}$ will always be known since it was solved in the previous step (in the first step it is the initial condition). We update our guess each iteration with  $\mathbf{u}^0_{\tau+1} = \mathbf{u}^0_{\tau+1} + \mathbf{\delta u}_{\tau+1}$ as before and when $\mathbf{\delta u}_{\tau+1}$ has become small in some suitable sense we move on to the next time step.
 
+As before we first investigate the shape of the mass matrix ($G_2+K^3_{1:n,1:n}$) to qualitatively infer whether the system will solve easily. This is shown in Figure \ref{fig_p3mass}.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.5]{./pics/p3_mass}
+\caption{Mass matrix} 
+\label{fig_p3mass}
+\end{figure}
+Clearly Figure \ref{fig_p3mass} strongly resembles Figure \ref{fig_p1mass}. This is not unexpected as the schemes are essentially the same. Again the tridiagonal nature of the mass matrix is reassuring because it has desirable numerical properties.
+
 As an example, we return to the example system from Section \ref{section_isop1}. We restate the physical parameters for convenience and include the additionally required parameters in (\ref{eq_physp3}).
 \begin{equation}
 \begin{matrix}
@@ -1136,7 +1158,7 @@ As before, we would firstly like to know if our approximation converges to some 
 \caption{Absolute difference between successive number of elements} 
 \label{fig_p3conv}
 \end{figure}
-From Figure \ref{fig_p3conv} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation indeed converges to some function. It is also quite interesting to note the difference between Figures \ref{fig_p2conv} and \ref{fig_p3conv}. In Figure \ref{fig_p3conv} we see that for a small number of elements (i.e. large elements) the approximation changes appreciably as more elements are used. In Figure \ref{fig_p2conv} the changes are more than two orders of magnitude smaller. Thus it is clear that the non-linearity requires a greater number of elements for the same measure of accuracy. 
+From Figure \ref{fig_p3conv} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation indeed converges to some function. It is also quite interesting to note the difference between Figures \ref{fig_p1conv} and \ref{fig_p3conv}. In Figure \ref{fig_p3conv} we see that for a small number of elements (i.e. large elements) the approximation changes appreciably as more elements are used. In Figure \ref{fig_p1conv} the changes are more than two orders of magnitude smaller. Thus it is clear that the non-linearity requires a greater number of elements for the same measure of accuracy. 
 
 The unsteady simulation is shown in Figure \ref{fig_adi_unst}. Nothing unexpected is visible in the figure. It is clear that as the reactor heats up the reaction becomes faster and thus we see the steady state solution has a complete conversion. This is very much what one would expect in reality.
 \begin{figure}[H] 
@@ -1146,7 +1168,7 @@ The unsteady simulation is shown in Figure \ref{fig_adi_unst}. Nothing unexpecte
 \label{fig_adi_unst}
 \end{figure}
 
-As before, further analysis is now required to definitively show that $u^h$ actually converges to $u$ (and that $u$ exists and is unique). However, since the approximation is physically reasonable it is quite safe to just assume so - as we do.
+As before, further analysis is now required to definitively show that $u^h$ actually converges to $u$. However, since the approximation is physically reasonable it is quite safe to just assume so - as we do.
 
 \subsection{Problem 4}
 In this problem the isothermal assumption is reinstated. However, we now model the situation where it becomes necessary to solve a coupled system of partial differential equations. The model for the reaction $A + B \rightarrow 2C$ is shown in (\ref{eq_p4}). 
@@ -1175,13 +1197,13 @@ We follow the same procedure as in Section \ref{section_isop1} to convert (\ref{
 &\frac{\partial^2 w}{\partial x^2} - \frac{UL}{D_a} \frac{\partial w}{\partial x} - \frac{L^2C_{A0}}{D_a}kuw 
 = \frac{UL}{D_e}\frac{\partial w}{\partial \tau} \\
 &\text{Boundary Conditions:} \\
-&\frac{\partial u}{\partial x}(z=L, \cdot) = 0\\
+&\frac{\partial u}{\partial x}(x=1, \cdot) = 0\\
 &u(z=0, \cdot) = 1 \\
-&\frac{\partial w}{\partial z}(z=L, \cdot) = 0\\
+&\frac{\partial w}{\partial z}(x=1, \cdot) = 0\\
 &w(z=0, \cdot) = 1 \\
 &\text{Initial Conditions:} \\
-& u(\cdot, t= 0) = e^{-10x} \\
-& w(\cdot, t= 0) = e^{-10x}
+& u(\cdot, \tau= 0) = e^{-10x} \\
+& w(\cdot, \tau= 0) = e^{-10x}
 \end{aligned}
 \label{eq_p4d}
 \end{equation}
@@ -1193,7 +1215,7 @@ Abusing our notation again and multiplying through by arbitrary test functions $
 \end{aligned}
 \label{eq_p4d1}
 \end{equation}
-By following the same procedure as in Section \ref{section_isop1} we have the variational problem: find functions $u, w$ with $w(0,\cdot)=u(0,\cdot)=1$ such that (\ref{eq_p4d2}) holds for all $v \in \left\{v : v(0,\cdot) = 0 \right\} = T_v$ and for all $z \in \left\{z : z(0,\cdot) = 0 \right\} = T_z$.
+By following the same procedure as in Section \ref{section_isop1} we have the variational problem: find functions $u, w$ with $w(0,\cdot)=u(0,\cdot)=1$ such that (\ref{eq_p4d2}) holds for all $v \in \left\{v : v(0) = 0 \right\} = T_v$ and for all $z \in \left\{z : z(0) = 0 \right\} = T_z$.
 \begin{equation}
 \begin{aligned}
 &\int_0^1 -\partial_{x}(u)v - c_1\partial_x(u)v - c_{2B}uwvdx = \int_0^1 c_1\partial_\tau(u)v dx \\
@@ -1203,7 +1225,7 @@ By following the same procedure as in Section \ref{section_isop1} we have the va
 \end{equation}
 As before we assume the existence and uniqueness of functions $u$ and $w$ which satisfy the variational problem. We now attempt to approximate these functions using the FEM with the piecewise linear basis functions from Section \ref{section_plb}. 
 
-We assume that the functions $u^h =\sum^n_{k=0} u_k(t) \phi_k(x)$ and $w^h =\sum^n_{k=0} w_k(t) \phi_k(x)$ which by construction lie in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$ and $w$. We reformulate the variational problem in (\ref{eq_p4d2}) by using the Galerkin approximation: find $u^h, w^h \in S^h$ such that for $T_z = T_v = S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p4d3}) holds.
+We assume that the functions $u^h =\sum^n_{k=0} u_k(\tau) \phi_k(x)$ and $w^h =\sum^n_{k=0} w_k(\tau) \phi_k(x)$ which by construction lie in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$ and $w$. We reformulate the variational problem in (\ref{eq_p4d2}) by using the Galerkin approximation: find $u^h, w^h \in S^h$ such that for $T_z = T_v = S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p4d3}) holds.
 \begin{equation}
 \begin{aligned}
 &\int_0^1 -\partial_{x}(u^h)v - c_1\partial_x(u^h)v - c_{2B}u^hw^hvdx = \int_0^1 c_1\partial_\tau(u^h)v dx~~\forall v \in S^h_0 \\
@@ -1219,7 +1241,7 @@ We now proceed with the Newton-Galerkin Method in essentially the same manner as
 \end{aligned}
 \label{eq_p4d4}
 \end{equation}
-Bearing in mind the work done in Sections \ref{section_isop1}, \ref{section_iso2} and \ref{section_p3} we can immediately write down the linear algebraic systems corresponding to each term in (\ref{eq_p4d4}) as matrices shown in (\ref{eq_p4fem}) for each $v,z \in S^h$ excluding the reaction terms\footnote{Note that we are evaluating the integrals over the space of test functions $S^h$. Later on we remove the necessary entries in the resultant matrices.}$^{,}$\footnote{The reaction terms are more complicated so they are dealt with later.}. As before we have $\mathbf{u}^0=\left(u^0_0,u^0_1,...,u^0_n\right)^T$, $\mathbf{w}^0=\left(w^0_0,w^0_1,...,w^0_n\right)^T$, $\mathbf{\delta u}=\left(\delta u_0,\delta u_1,...,\delta u_n\right)^T$ and $\mathbf{\delta w}=\left(\delta w_0,\delta w_1,...,\delta w_n\right)^T$. Also note that there is not a strict correspondence between the naming convention of the matrices in Section \ref{section_plb} and here. For the sake of simplicity we assign new names to the matrices and assume that the reader has understood how these matrices are constructed from Sections \ref{section_plb}, \ref{section_isop1} and \ref{section_p3}.
+Bearing in mind the work done in Sections \ref{section_isop1}, \ref{section_iso2} and \ref{section_p3} we can immediately write down the linear algebraic systems corresponding to each term in (\ref{eq_p4d4}) as matrices shown in (\ref{eq_p4fem}) for each $v,z \in S^h$ excluding the reaction terms\footnote{Note that we are evaluating the integrals over the space of test functions $S^h$. Later on we remove the necessary entries in the resultant matrices to work with test functions in the space $S^h_0$.}$^{,}$\footnote{The reaction terms are more complicated so they are dealt with later.}. As before we have $\mathbf{u}^0=\left(u^0_0,u^0_1,...,u^0_n\right)^T$, $\mathbf{w}^0=\left(w^0_0,w^0_1,...,w^0_n\right)^T$, $\mathbf{\delta u}=\left(\delta u_0,\delta u_1,...,\delta u_n\right)^T$ and $\mathbf{\delta w}=\left(\delta w_0,\delta w_1,...,\delta w_n\right)^T$. Also note that there is not a strict correspondence between the naming convention of the matrices in Section \ref{section_plb} and here. For the sake of simplicity we assign new names to the matrices and assume that the reader has understood how these matrices are constructed from Sections \ref{section_plb}, \ref{section_isop1} and \ref{section_p3}.
 \begin{equation}
 \begin{aligned}
 &\int_0^1 -\partial_{x}(u^0 + \delta u)vdx = \int_0^1 -\partial_{x}(u^0)vdx +\int_0^1 -\partial_{x}(\delta u)vdx  = -K^1_u\mathbf{u}^0 - K^1_u\mathbf{\delta u}  \\
@@ -1279,7 +1301,7 @@ G_1 \begin{pmatrix}
 \end{aligned}
 \label{eq_p4mat1}
 \end{equation}
-We again remember that due to the boundary conditions we know that $\mathbf{u}^0 = \left(1,u^0_1,...,u^0_n \right)^T$ and $\mathbf{w}^0 = \left(1,w^0_1,...,w^0_n \right)^T$. Consequently we also know that $\mathbf{\delta u} = \left(0,\delta u^0_1,...,\delta u^0_n \right)^T$ and $\mathbf{w}^0 = \left(0,w^0_1,...,w^0_n \right)^T$ by the same reasoning as in Section \ref{section_p3}. To solve the steady state problem we set the right hand side of (\ref{eq_p4mat1}) equal to zero as shown in (\ref{eq_p4mat2}). 
+We again remember that due to the boundary conditions we know that $\mathbf{u}^0 = \left(1,u^0_1,...,u^0_n \right)^T$ and $\mathbf{w}^0 = \left(1,w^0_1,...,w^0_n \right)^T$. Consequently we also know that $\mathbf{\delta u} = \left(0,\delta u^0_1,...,\delta u^0_n \right)^T$ and $\mathbf{\delta w} = \left(0,\delta w_1,...,\delta w_n \right)^T$ by the same reasoning as in Section \ref{section_p3}. To solve the steady state problem we set the right hand side of (\ref{eq_p4mat1}) equal to zero as shown in (\ref{eq_p4mat2}). 
 \begin{equation}
 \begin{aligned}
 G_1 \begin{pmatrix}
@@ -1343,6 +1365,15 @@ The goal is to solve for $\begin{pmatrix} \mathbf{\delta u}\prime \\ \mathbf{\de
 \mathbf{u}^0 \\ \mathbf{w}^0 \end{pmatrix}_{\tau_{m+1}}$. We update each iteration's guess $\begin{pmatrix}
 \mathbf{u}^0 \\ \mathbf{w}^0 \end{pmatrix}_{\tau_{m+1}} = \begin{pmatrix} \mathbf{u}^0 \\ \mathbf{w}^0 \end{pmatrix}_{\tau_{m+1}} + \begin{pmatrix} \mathbf{\delta u}\prime \\ \mathbf{\delta w}\prime \end{pmatrix}_{\tau_{m+1}}$ exactly as was done in Section \ref{section_p3}. 
 
+As before we investigate the form of the mass matrices $G_1 + G_4$ for an indication of how easily the system will solve for each iteration. The shape is shown in Figure \ref{fig_p4mass}.
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.3]{./pics/p4_mass}
+\caption{Mass matrix shape} 
+\label{fig_p4mass}
+\end{figure}
+The mass matrix clearly has a banded diagonal structure which suggests that it won't be too difficult to solve. Thus we expect the numeric routine to be efficient. 
+
 We conclude this section with an example simulation. Consider a system with physical properties shown in (\ref{eq_physp4}).
 \begin{equation}
 \begin{matrix}
@@ -1366,7 +1397,7 @@ As before, we would firstly like to know if our approximation converges to some 
 \caption{Absolute difference between successive number of elements for Species B} 
 \label{fig_p4convB}
 \end{figure}
-From Figures \ref{fig_p4convA} and \ref{fig_p4convB} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation for $u^h$ and $w^h$ indeed converges to some function each. We now consider the transient response of the model as shown in Figures \ref{fig_p4A} and \ref{fig_p4B}.
+From Figures \ref{fig_p4convA} and \ref{fig_p4convB} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. It is quite reassuring to note how few elements are needed for convergence beyond 3 decimal places in both cases. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation for $u^h$ and $w^h$ indeed converges to some function each. We now consider the transient response of the model as shown in Figures \ref{fig_p4A} and \ref{fig_p4B}.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/p4A}
@@ -1384,7 +1415,13 @@ Since the initial concentrations differ by a factor of two, we expect the steady
 Finally and as before, further analysis is now required to definitively show that $u^h$ actually converges to $u$ and that $w^h$ actually converges to $w$. However, since the approximation is physically reasonable it is quite safe to just assume so - as we do.
 
 \section{Conclusion}
-Still to do!
+In this project we have shown how the FEM may be used to solve typical reactor design problems. Four distinct, yet related, problems were solved assuming a tubular reactor set-up with power law kinetics governing the system.
+
+Problems 1 and 2 modelled an isothermal reactor; the Aris-Taylor approximation was used to simplify Problem 2 into Problem 1. The accuracy of this simplification was briefly tested. It was found that the approximation is very good: the steady state error was significantly less than 10\% for all tests run. Moreover, the FEM techniques used converged quickly i.e. were numerically efficient.
+
+Problems 3 and 4 modelled an adiabatic reactor and a coupled reaction isothermal reactor respectively. The non-linearity of both systems was addressed within the framework of the FEM. The models were successfully solved and the solutions were found to converge quickly. 
+
+The ideas and techniques used in this project certainly make it possible to use the FEM to solve more complicated problems. It is suggested that Problems 1 and 2 be analysed from a non-isothermal point of view for future work. Additionally, the analysis of the existence, uniqueness and convergence results assumed in this project could be verified as part of other future work. 
 
 %References
 \newpage
