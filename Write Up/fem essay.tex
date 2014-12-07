@@ -44,7 +44,7 @@
 \end{center}
 
 \begin{abstract}
-This project aims to introduce the reader to the use of the Finite Element Method for solving typical Chemical Engineering reactor design problems. The convection, diffusion and reaction equation is derived (along with the corresponding energy balance). Using this, unsteady tubular reactor problems are then posed and solved using the Finite Element Method.
+This project aims to introduce the reader to the use of the Finite Element Method for solving typical Chemical Engineering reactor design problems. The convection, diffusion and reaction equation is derived (along with the corresponding energy balance). Using this, increasingly complex unsteady tubular reactor problems are posed and then solved using the Finite Element Method.
 \end{abstract}
 
 \textsc{\small KEYWORDS:} \small Finite Element Method, diffusion, convection, reaction, tubular reactor
@@ -56,7 +56,28 @@ This project aims to introduce the reader to the use of the Finite Element Metho
 \section{Introduction}
 The Finite Element Method (FEM) is a numerical method which is often used to solve partial differential equations. It has its roots in the theory of partial differential equations. The beauty of the FEM is the way in which natural boundary conditions (von Neumann type) are automatically satisfied. Complex geometries are also elegantly handled - unlike in the Finite Difference Method \cite{strang}. 
 
+Detailed reactor design, which is of primary importance in the field of Chemical Engineering, invariably requires the solution of coupled non-linear partial differential equations. Moreover, realistic reactors often have complex geometrical features as a consequence of the temperature control requirements intrinsic to a realistic system. Consider Figure \ref{fig_tub_cool}, which is a tubular reactor with built in cooling tubes, as a prime example of a reactor with complex geometrical features. 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale=0.1]{./pics/tub_cool}
+\caption{Tubular reactor with cooling rods} 
+\label{fig_tub_cool}
+\end{figure}
+The FEM is naturally well suited to solve such problems. The overarching goal of this project is to develop the necessary techniques to solve complicated reactor design problems. To achieve this, mass and energy transfer models are derived from first principles and then applied to a tubular reactor.
 
+Since this project is introductory in nature we will assume a simple tubular geometry. We will also, for the most part, use first order power law kinetics to describe the reacting species. Four distinct problems of increasing complexity will be solved using the FEM. We will briefly consider numerical efficiency and convergence using a somewhat simplistic approach for the sake of transparency.  
+
+We briefly describe the purpose of each section for clarity and ease of reading.
+\begin{itemize}
+\item 
+In Section 2 we model the system from first principles.
+\item
+In Section 3 we motivate the four problems this project will deal with.
+\item
+In Section 4 we briefly introduce the basis functions used in the FEM implementation seen in this project.
+\item
+And finally, in Sections 5 and 6 we implement the FEM to solve the problems mentioned earlier.
+\end{itemize}
 
 \section{Model Derivation}
 In this section the general convection, diffusion and reaction (CDR) continuum equation is developed. Furthermore, the accompanying energy balance necessitated by the reaction component of the resultant model is also derived. For the purposes of this project a tubular reactor geometry is assumed; thus the model is derived with respect to the (more natural) cylindrical coordinate system. 
