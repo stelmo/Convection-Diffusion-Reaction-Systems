@@ -44,7 +44,7 @@
 \end{center}
 
 \begin{abstract}
-This project aims to introduce the reader to the use of the Finite Element Method for solving typical Chemical Engineering reactor design problems. The convection, diffusion and reaction equation is derived (along with the corresponding energy balance). Using this, increasingly complex unsteady tubular reactor problems are posed and then solved using the Finite Element Method.
+This project aims to introduce the reader to the use of the Finite Element Method for solving typical Chemical Engineering reactor design problems. The convection, diffusion and reaction equation is derived as well as the corresponding energy balance. Using this, increasingly complex unsteady tubular reactor problems are posed and then solved using the Finite Element Method.
 \end{abstract}
 
 \textsc{\small KEYWORDS:} \small Finite Element Method, diffusion, convection, reaction, tubular reactor
@@ -70,7 +70,7 @@ Since this project is introductory in nature we will assume a simple tubular geo
 We briefly describe the purpose of each section for clarity and ease of reading.
 \begin{itemize}
 \item 
-In Section 2 we model the system from first principles.
+In Section 2 we derive the models describing the system under consideration from first principles.
 \item
 In Section 3 we motivate the four problems this project will deal with.
 \item
@@ -81,49 +81,43 @@ And finally, in Sections 5 and 6 we implement the FEM to solve the problems ment
 
 \section{Model Derivation}
 In this section the general convection, diffusion and reaction (CDR) continuum equation is developed. Furthermore, the accompanying energy balance necessitated by the reaction component of the resultant model is also derived. For the purposes of this project a tubular reactor geometry is assumed; thus the model is derived with respect to the (more natural) cylindrical coordinate system. 
-
 \begin{defn}
 Diffusion is the spontaneous mixing of molecules by random thermal motion. It gives rise to motion of a chemical species relative to the motion of the mixture.
 \end{defn}
-
 In the absence of other gradients, molecules of a single species will always diffuse from regions of higher concentration to regions of lower concentration. This concentration gradient results in a molar flux of the species.
-
 \begin{defn}
 For species A the molar flux is denoted by $\mathbf{W}_A$ and has units of $\frac{moles}{time \times area}$. The molar flux is a vector quantity and can be expressed as $\mathbf{W}_A = W_A|_r \mathbf{e}_r + W_A|_\theta \mathbf{e}_\theta + W_A|_z \mathbf{e}_z$ in cylindrical coordinates. The molar flow rate is related to the molar flux and cross-sectional area by $F_A|_i = A_c|_i \times W_A|_i$ where $i$ indicates the component of interest. 
 \end{defn}
-
-The basis of the model's derivation rests on the conservation of mass principle. A consequence of this assumption is the mole balance: barring a reaction, the number of moles of a species is conserved within a given control volume. The mole balance for the reacting species A is derived with reference to the control volume depicted in Figure \ref{fig_vol_element}.
-
+The basis of the model's derivation rests on the conservation of mass principle. A consequence of this assumption is the mole balance: barring a reaction, the number of moles of a species is conserved within a given control volume if there is no net change in the number of moles entering or leaving the control volume. The mole balance for the reacting species A is derived with reference to the control volume depicted in Figure \ref{fig_vol_element}.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.5]{./pics/volume_element}
 \caption{Control volume for a tubular reactor} 
 \label{fig_vol_element}
 \end{figure}
-
 The mole balance is shown in (\ref{eq_mole_balance}) where $r_A$ indicates the generation or consumption of species A due to reaction and $C_A$ is the concentration of species A in the mixture. The term on the right hand side of (\ref{eq_mole_balance}) represents the accumulation of species A in the control volume ($\delta V$).
 \begin{equation}
 \sum_{i=r, \theta, z}\left(F_A|_i(i) - F_A|_i(i+\delta i)\right) + r_A \delta V = \delta V \frac{\partial C_A}{\partial t}
 \label{eq_mole_balance}
 \end{equation}
-Consider the molar flow rate in the $\mathbf{e}_r$ direction. By using the definition of molar flux and the linear approximation of $F_A|_r(r+\delta r)$ we have (\ref{eq_far}).
+Consider the molar flow rate in the $\mathbf{e}_r$ direction. By using the definition of molar flux and the linear approximation of $W_A|_r(r+\delta r)$ we have (\ref{eq_far}). Note that the factor $(r+\delta r)\delta \theta \delta z$ is the surface area normal to $\mathbf{e}_r$ at $r+\delta r$ in Figure \ref{fig_vol_element}.
 \begin{equation}
 \begin{aligned}
 F_A|_r(r) &= W_A|_r(r) r \delta \theta \delta z \\
-F_A|_r(r+\delta r) &= \left(W_ A|_r(r) + \frac{\partial W_A|_r(r)}{\partial r} \delta r\right)(r+\delta r)\delta \theta \delta z + h(\delta r)
+F_A|_r(r+\delta r) &= \left(W_ A|_r(r) + \frac{\partial W_A|_r(r)}{\partial r} \delta r\right)(r+\delta r)\delta \theta \delta z
 \end{aligned}
 \label{eq_far}
 \end{equation}
-For the linear approximation we have $\lim_{\delta r \to 0} ||\delta r||^{-1}||h(\delta r)|| = 0 $ and consequently for sufficiently small $\delta r$ we have (\ref{eq_far2}).  
+For sufficiently small $\delta r$ we have (\ref{eq_far2}).  
 \begin{equation}
 F_A|_r(r) - F_A|_r(r+\delta r)  = - \left(W_ A|_r(r)  + \frac{\partial W_A|_r(r)}{\partial r}r\right) \delta r \delta \theta \delta z
 \label{eq_far2}
 \end{equation}
-In a similar manner, consider the molar flow rate in the $\mathbf{e}_\theta$ direction. By again using the definition of molar flux and the linear approximation of $F_A|_\theta(\theta+\delta \theta)$ we have (\ref{eq_fat}).
+In a similar manner, consider the molar flow rate in the $\mathbf{e}_\theta$ direction. By again using the definition of molar flux and the linear approximation of $W_A|_\theta(\theta+\delta \theta)$ we have (\ref{eq_fat}).
 \begin{equation}
 \begin{aligned}
 F_A|_\theta(\theta) &= W_A|_\theta(\theta) \delta r \delta z \\
-F_A|_\theta(\theta + \delta \theta) &= W_A|_\theta(\theta) \delta r \delta z + \frac{\partial W_A|_\theta(\theta)}{r \partial \theta}\delta \theta\delta r \delta z + h(\delta \theta)
+F_A|_\theta(\theta + \delta \theta) &= W_A|_\theta(\theta) \delta r \delta z + \frac{\partial W_A|_\theta(\theta)}{r \partial \theta}\delta \theta\delta r \delta z
 \end{aligned}
 \label{eq_fat}
 \end{equation}
@@ -132,11 +126,11 @@ Again, for sufficiently small $\delta \theta$ we have (\ref{eq_fat2}).
 F_A|_\theta(\theta) - F_A|_\theta(\theta + \delta \theta) =- \frac{\partial W_A|_\theta(\theta)}{r \partial \theta}\delta \theta\delta r \delta z
 \label{eq_fat2} 
 \end{equation}
-Finally, consider the molar flow rate in the $\mathbf{e}_z$ direction. By using the definition of molar flux, the linear approximation of $F_A|_z(z+\delta z)$ and approximating the cross-sectional area normal to $\mathbf{e}_z$ in Figure \ref{fig_vol_element} as a trapezium we have (\ref{eq_faz}).
+Finally, consider the molar flow rate in the $\mathbf{e}_z$ direction. By using the definition of molar flux, the linear approximation of $W_A|_z(z+\delta z)$ and approximating the cross-sectional area normal to $\mathbf{e}_z$ in Figure \ref{fig_vol_element} as a trapezium we have (\ref{eq_faz}).
 \begin{equation}
 \begin{aligned}
 F_A|_z(z) &= W_A|_z(z) r \delta r \delta \theta \\
-F_A|_z(z + \delta z) &= W_A|_z(z) r \delta r \delta \theta + \frac{\partial W_A|_z(z)}{\partial z}r \delta z \delta r \delta \theta + h(\delta z)
+F_A|_z(z + \delta z) &= W_A|_z(z) r \delta r \delta \theta + \frac{\partial W_A|_z(z)}{\partial z}r \delta z \delta r \delta \theta 
 \end{aligned}
 \label{eq_faz}
 \end{equation}
@@ -176,7 +170,7 @@ Substituting (\ref{eq_fick}) into (\ref{eq_mb3}) results in the model (\ref{eq_c
 D_{AB}\left(\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial C_A}{\partial r}\right) + \frac{\partial^2 C_A}{\partial z^2}\right) - U_z\frac{\partial C_A}{\partial z} + r_A = \frac{\partial C_A}{\partial t}
 \label{eq_cdr}
 \end{equation}
-Up to now not much has been said about the reaction term $r_A$. Typically $r_A$ is formulated as a rate equation based on experimental evidence modelling reaction kinetics. It is possible for the rate ``law" to be quite complex in character. A class of commonly encountered expressions for forward, irreversible reactions are power law kinetics \cite{levenspiel}. Power law kinetics usually take the form $-r_A=k(T)C_A^M$ for reactions of the form $A \rightarrow B$ or $-r_A=k(T)C_A^MC_B^N$ for reactions of the form $A + B \rightarrow 2C$ with $M,N$ usually a non-negative integer less than 3. The factor $k(T)$ is called the rate constant even though it is not a constant (it depends quite strongly on temperature). The Arrhenius equation is a very commonly used empirical function which describes the temperature dependence of the rate constant. It is typically expressed by (\ref{eq_arrhenius}) where $E$ is the activation energy, $R_g$ the ideal gas constant and $k_a$ is the pre-exponential factor at the reference temperature $T_a$. 
+Up to now not much has been said about the reaction term $r_A$. Typically $r_A$ is formulated as a rate equation based on experimental evidence modelling reaction kinetics. It is possible for the rate ``law" to be quite complex in character. A class of commonly encountered expressions for forward, irreversible reactions are power law kinetics \cite{levenspiel}. Power law kinetics usually take the form $-r_A=k(T)C_A^M$ for reactions of the form $A \rightarrow B$ or $-r_A=k(T)C_A^MC_B^N$ for reactions of the form $A + B \rightarrow 2C$ with $M,N$ usually non-negative integers less than 3. The factor $k(T)$ is called the rate constant even though it is not a constant (it depends quite strongly on temperature). The Arrhenius equation is a very commonly used empirical function which describes the temperature dependence of the rate constant. It is typically expressed by (\ref{eq_arrhenius}) where $E$ is the activation energy, $R_g$ the ideal gas constant and $k_a$ is the pre-exponential factor at the reference temperature $T_a$. 
 \begin{equation}
 k(T) = k_a e^{\left(\frac{E}{R_g}\left(\frac{1}{T_a} - \frac{1}{T}\right)\right)}
 \label{eq_arrhenius}
@@ -298,7 +292,7 @@ In the non-adiabtic case one would also want to perform an energy balance on the
 \end{rmrk}
 
 \section{Overview}
-The purpose of this project is twofold. Firstly, it serves as an introduction to the use of the Finite Element Method (FEM) for solving typical reactor modelling problems found in chemical engineering. Secondly, it investigates the error made by making an (engineering) simplification to the model.
+The purpose of this project is twofold. Firstly, it serves as an introduction to the use of the Finite Element Method (FEM) for solving typical reactor modelling problems found in Chemical Engineering. Secondly, it investigates the error made by making an (engineering) simplification to the model.
 \begin{defn}
 The Aris-Taylor approximation is a procedure where the radial component of the two dimensional CDR equation is lumped with the axial component resulting in a simplified one dimensional partial differential equation. This simplification replaces the diffusion coefficient ($D_{AB}$) with a lumped diffusion coefficient ($D_a$). The lumped coefficient is defined as $D_a = D_{AB} + \frac{U^2R^2}{48D_{AB}}$. This simplification is valid only for reactors with a laminar flow profile. 
 \end{defn}
@@ -342,7 +336,7 @@ Similarly, the non-linear non-isothermal simplified model corresponding to (\ref
 \end{equation} 
 Ideally we would like to do the same comparison between the two models as with the isothermal case. However, it is clear that solving the non-linear coupled system is quite daunting. For this reason the factors which make it difficult to solve will be handled separately to lay the foundation for future work where they can be solved simultaneously. Inspection of (\ref{eq_noniso1}) or (\ref{eq_noniso2}) reveal that they each have the same difficult aspects: the non-linearity introduced by the non-isothermal assumption and the coupled system which needs to be solved simultaneously.
 
-Bearing this in mind, consider the uncoupled non-linear problem shown in (\ref{eq_nl1}). This corresponds to an adiabatic reactor where $A \rightarrow B$. While this may seem like a major simplification it models a situation commonly encountered in practice (e.g. an insulated reactor). The solution to this problem will illustrate one way of handling non-linear equations using the FEM.
+Bearing this in mind, consider the uncoupled non-linear problem shown in (\ref{eq_nl1}). This corresponds to an adiabatic reactor where $A \rightarrow B$. While this may seem like a major simplification it models a situation commonly encountered in practice e.g. an insulated reactor. The solution to this problem will illustrate one way of handling non-linear equations using the FEM.
 \begin{equation}
 \begin{aligned}
 &D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - k(C_A)
@@ -353,7 +347,7 @@ C_A = \frac{\partial C_A}{\partial t} \\
 \label{eq_nl1}
 \end{equation}  
 
-Finally, consider the coupled problem shown in (\ref{eq_nl2}). This corresponds to an isothermal coupled reaction where $A + B \rightarrow 2C$. This problem is weakly\footnote{I use the term weakly here to indicate that this type of non-linearity it is much easier to handle than the non-linearity introduced by the Arrhenius equation in the previous problem} non-linear due to the rate equation $-r_A = kC_AC_B$.
+Finally, consider the coupled problem shown in (\ref{eq_nl2}). This corresponds to an isothermal coupled reaction where $A + B \rightarrow 2C$. This problem is also non-linear due to the rate equation $-r_A = kC_AC_B$.
 \begin{equation}
 \begin{aligned}
 &D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_AC_B 
@@ -367,6 +361,9 @@ These two problems combined capture the difficulties one would encounter attempt
 
 \section{Basis Functions}
 To solve problems with the FEM it is desirable to construct basis functions with simple analytical properties. Ideally these basis functions should lend themselves to simple computational implementation for numerical integration. We consider two basis functions in this project. 
+\begin{rmrk}
+The problems solved in this project require that the basis functions lie in $H^1(\Omega)$ (the first order Sobolev Space) where $\Omega$ is the domain specific to the problem. The reason is technical in nature: we require that the functions belong to this space so that the solution also belongs to this space. In so doing the solution does not have to satisfy the model equations, i.e. the derivatives, in a classical sense but rather in a suitably weak sense only. We refer the reader to \cite{strang} for more information but assert that these basis functions do belong to $H^1(\Omega)$ for suitable $\Omega$.  
+\end{rmrk}
 
 \subsection{Piecewise Linear Basis Functions}
 \label{section_plb}
@@ -379,7 +376,7 @@ The so-called hat (or roof) basis functions are defined on the interval $[0,1]$ 
 &\phi_k(x) = 0 \text{ for } x \notin [x_{k-1}, x_{k+1}] \\
 &\text{And otherwise} \\
 &\phi_0(x) = 1- h^{-1}x \text{ for } x \in [0, x_1] \\
-&\phi_0(x) = 0 \text{ for } x \notin [x_{k-1}, x_1] \\
+&\phi_0(x) = 0 \text{ for } x \notin [0, x_1] \\
 &\phi_n(x) = h^{-1}(x-x_{n-1}) \text{ for } x \in [x_{n-1}, 1] \\
 &\phi_n(x) = 0 \text{ for } x \notin [x_{n-1}, 1] \\
 \end{aligned}
@@ -468,16 +465,16 @@ In two dimensions the previous roof functions generalise to the piecewise biline
 \caption{Domain discretisation} 
 \label{fig_pbilindomain}
 \end{figure}
-Now we define a basis function $\phi_i(x,y) = a+ bx +cy +dxy$ on each node $i$ of Figure \ref{fig_pbilindomain}. Each basis function $\phi_i$ takes on the value $1$ at node $i$ and a value of $0$ at any node not $i$. For details on the construction of the basis functions we refer the avid reader to \cite{vrb}. 
+Now we define basis functions on each node $i$ so that the restriction of the basis function $\phi_i$ to an element is a bilinear polynomial $\phi_i(x,y) = a+ bx +cy +dxy$ on each element of Figure \ref{fig_pbilindomain}. Each basis function $\phi_i$ takes on the value $1$ at node $i$ and a value of $0$ at any node not $i$. For details on the construction of the basis functions we refer the avid reader to \cite{vrb}. 
 
-Each basis function $\phi$ is composed of four constitutive functions named $P_1, P_2, P_3$ and $P_4$ defined on the element adjacent to the basis function $\phi$ in question and with orientation shown in Figure \ref{fig_pbasis}. Each function $P$ takes on the value $1$ at the corner nearest $\phi$ and $0$ at the other corners. If the rectangle corresponding to a particular function $P$ is not in the domain $[0,1]\times[0,1]$ it is neglected in the calculation involving that $\phi$. 
+The bilinear components of the basis function $\phi$ are named $P_1, P_2, P_3$ and $P_4$ and are defined on the elements adjacent to the basis function $\phi$ in question and with orientation shown in Figure \ref{fig_pbasis}. Each function $P$ takes on the value $1$ at the corner nearest $\phi$ and $0$ at the other corners. If the rectangle corresponding to a particular function $P$ is not in the domain $[0,1]\times[0,1]$ it is neglected in the calculation involving that $\phi$. 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.8]{./pics/basis_p}
 \caption{Basis functions} 
 \label{fig_pbasis}
 \end{figure}
-In \cite{vrb} the definitions of the constitutive basis functions $P$ are motivated. We merely state those definitions on a rectangle $[0,\delta x] \times [0, \delta y]$ in (\ref{eq_pbasisdef}). 
+In \cite{vrb} the definitions of the bilinear functions $P$ are motivated. We merely state those definitions on a rectangle $[0,\delta x] \times [0, \delta y]$ in (\ref{eq_pbasisdef}). 
 \begin{equation}
 \begin{aligned}
 &P_1(x,y) = 1 -x-y-xy \\
@@ -540,14 +537,14 @@ M^4 = \frac{\delta x \delta y}{36}\begin{pmatrix}
 \end{equation}
 Now we are in a position to calculate matrices of the form $\int_0^1 \int_0^1 \partial_x\phi_i \partial_x\phi_j dxdy$, $\int_0^1 \int_0^1 \partial_y\phi_i \partial_y\phi_j dxdy$, $\int_0^1 \int_0^1 \phi_i \partial_x\phi_j dxdy$ and $\int_0^1 \int_0^1 \phi_i \phi_j dxdy$ for each $i=1,2,...,n$ and each $j=1,2,...,n$. Like the matrices of Section \ref{section_plb} they are each constructed in a similar manner.
 
-Consider the construction of matrix $K^4$ which uses matrix $M^4$ as the basis of its elements as an example. For each $i=1,2,...,n$ and each $j=1,2,...,n$ we wish to compute $K^4_{i,j}$. To achieve this we ``stitch" together the four constitutive functions $P$ around node $i$ and likewise we ``stitch" together four more constitutive functions $P$ around node $j$. We sum together the overlapping constitutive functions and assign this value to $K^4_{i,j}$. This is perhaps easier to understand graphically as shown in Figure \ref{fig_mat_ex}.
+Consider the construction of matrix $K^4$ which uses matrix $M^4$ as the basis of its elements as an example. For each $i=1,2,...,n$ and each $j=1,2,...,n$ we wish to compute $K^4_{i,j}$. To achieve this we ``stitch" together the four bilinear functions $P$ around node $i$ and likewise we ``stitch" together four more bilinear functions $P$ around node $j$. We sum together the overlapping bilinear functions and assign this value to $K^4_{i,j}$. This is perhaps easier to understand graphically as shown in Figure \ref{fig_mat_ex}.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.8]{./pics/mat_ax}
 \caption{Construction Example} 
 \label{fig_mat_ex}
 \end{figure} 
-For example, $K^4_{1,1} = M^4_{4,4}$ because only $P_4$ overlaps with itself for nodes 1 and 1. Another example would be $K^4_{1,8} = M^4_{4,3}$ as $P_4$ overlaps with $P_3$. Another example would be $K^4_{9,9} = M^4_{1,1} + M^4_{2,2}+ M^4_{3,3}+M^4_{4,4}$ as every constitutive functions overlaps with itself. A final example is $K^4_{1,3} = 0$ as nodes 1 and 3 have no constitutive functions in common. 
+For example, $K^4_{1,1} = M^4_{4,4}$ because only $P_4$ overlaps with itself for nodes 1 and 1. Another example would be $K^4_{1,8} = M^4_{4,3}$ as $P_4$ overlaps with $P_3$. Another example would be $K^4_{9,9} = M^4_{1,1} + M^4_{2,2}+ M^4_{3,3}+M^4_{4,4}$ as every bilinear function overlaps with itself. A final example is $K^4_{1,3} = 0$ as nodes 1 and 3 have no bilinear functions in common. 
 
 A similar process is repeated for matrices $K^1, K^2$ and $K^3$. Again, we will make extensive use of these results in the succeeding sections.
 
@@ -555,7 +552,7 @@ A similar process is repeated for matrices $K^1, K^2$ and $K^3$. Again, we will 
 In this section the isothermal models will be developed and solved using the FEM. Finally, the quality of the Aris-Taylor simplification will be (briefly) analysed numerically.  
 \subsection{Problem 1}
 \label{section_isop1}
-We start this section solving the simplified model from (\ref{eq_iso1}) because it is the least complex. The full problem is shown in (\ref{eq_p1}). It is assumed that $D_a, U, k, C_{a0},\text{ and } L$ are given because this is necessary to describe the physical reactor.  
+We start this section solving the simplified model from (\ref{eq_iso1}) because it is the least complex. The full problem is shown in (\ref{eq_p1}). It is assumed that $D_{AB}, R, U, k, C_{a0},\text{ and } L$ are given because this is necessary to describe the physical reactor.  
 \begin{equation}
 \begin{aligned}
 &D_a \frac{\partial^2 C_A}{\partial z^2} - U \frac{\partial C_A}{\partial z} - kC_A = 
@@ -584,7 +581,7 @@ c_1\frac{\partial u}{\partial \tau} \\
 \end{aligned}
 \label{eq_p1d}
 \end{equation}
-Now suppose $v$ is an arbitrary function. By abusing our notation a little bit and using the product rule we have (\ref{eq_prodrule}).
+Now suppose $v \in C^1_+[0, 1]$. By abusing our notation a little bit and using the product rule we have (\ref{eq_prodrule}).
 \begin{equation}
 \begin{aligned}
 &(\partial_{xx}u)v + (\partial_xu)(\partial_xv) = \partial_x( (\partial_xu)v)\\
@@ -592,6 +589,9 @@ Now suppose $v$ is an arbitrary function. By abusing our notation a little bit a
 \end{aligned}
 \label{eq_prodrule}
 \end{equation}
+\begin{rmrk}
+We have used the non-standard notation $C^1_+[0, 1]$ to mean that if $v \in C^1_+[0, 1]$ then $v \in C[0, 1]$ and $v$ is at least weakly differentiable on $(0,1)$ and $v\prime \in L^2[0,1]$.
+\end{rmrk}
 By multiplying the modelling equation in (\ref{eq_p1d}) by $v$ and using (\ref{eq_prodrule}) we have (\ref{eq_p1d2}).
 \begin{equation}
  -(\partial_xu)(\partial_xv) + \partial_x( (\partial_xu)v) - c_1(\partial_xu)v - c_1c_2uv = c_1(\partial_{\tau}u)v 
@@ -602,7 +602,7 @@ Now if we integrate over the domain $[0, 1]$ and apply the Fundamental Theorem o
 \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx + [(\partial_xu(x, \cdot))v(x, \cdot)]^1_0 = \int^1_0 c_1(\partial_{\tau}u)v dx
 \label{eq_p1d3}
 \end{equation}
-From the boundary conditions we have that $\partial_xu(1,\cdot)=0$ and by making $v$ less arbitrary i.e. $v \in \{v : v(0)=0 \} = T$ equation (\ref{eq_p1d3}) simplifies to (\ref{eq_p1d4}).
+From the boundary conditions we have that $\partial_xu(1,\cdot)=0$ and by restricting $v$ such that $v \in \{v \in C^1_+[0, 1] : v(0)=0 \} = T$ equation (\ref{eq_p1d3}) simplifies to (\ref{eq_p1d4}).
 \begin{equation}
 \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx = \int^1_0 c_1(\partial_{\tau}u)v dx
 \label{eq_p1d4}
@@ -642,7 +642,7 @@ Now we will consider each term of (\ref{eq_p1d7}) separately. Firstly, consider 
 \end{aligned}
 \label{eq_lindd}
 \end{equation}
-After a little reflection we notice that (\ref{eq_lindd}) corresponds to $-K^1_{1:n, 0:n}\mathbf{u}$ with $\mathbf{u} = \left(u_0, u_1,...,u_{n-1}, u_n \right)^T$. 
+After a little reflection we notice that (\ref{eq_lindd}) corresponds to $-K^1_{1:n, 0:n}\mathbf{u}$ with $\mathbf{u} = \left(u_0, u_1,...,u_{n-1}, u_n \right)^T$ in the setting of Section \ref{section_plb}.
 
 Now consider the second term $\int_0^1  -c_1(\partial_xu^h)\phi_idx$  for each $i=1,2,...,n$ as shown in (\ref{eq_lindn}).
 \begin{equation}
@@ -963,7 +963,7 @@ By quadrupling the average linear velocity we are no longer in the region where 
 \end{figure}
 It is quite interesting to note that the steady state error percentage is still small. However, in the unsteady region the error is much more appreciable than before. The accuracy of the approximation might have to do with the simple reaction kinetics. Future work could establish the accuracy of the approximation for more general reaction kinetics.
 
-We now move on the the non-isothermal problems.
+We now move on to the non-isothermal problems.
 
 \section{Non-Isothermal Problem}
 
