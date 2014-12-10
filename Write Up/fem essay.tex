@@ -362,7 +362,7 @@ These two problems combined capture the difficulties one would encounter attempt
 \section{Basis Functions}
 To solve problems with the FEM it is desirable to construct basis functions with simple analytical properties. Ideally these basis functions should lend themselves to simple computational implementation for numerical integration. We consider two basis functions in this project. 
 \begin{rmrk}
-The problems solved in this project require that the basis functions lie in $H^1(\Omega)$ (the first order Sobolev Space) where $\Omega$ is the domain specific to the problem. The reason is technical in nature: we require that the functions belong to this space so that the solution also belongs to this space. In so doing the solution does not have to satisfy the model equations, i.e. the derivatives, in a classical sense but rather in a suitably weak sense only. We refer the reader to \cite{strang} for more information but assert that these basis functions do belong to $H^1(\Omega)$ for suitable $\Omega$.  
+The problems solved in this project require that the basis functions lie in $H^1(\Omega)$ (the first order Sobolev Space in $L^2$) where $\Omega$ is the domain specific to the problem. The reason is technical in nature: we require that the functions belong to this space so that the solution also belongs to this space. In so doing the solution does not have to satisfy the model equations, i.e. the derivatives, in a classical sense but rather in a suitably weak sense only. We refer the reader to \cite{strang} for more information but assert that these basis functions do belong to $H^1(\Omega)$ for suitable $\Omega$.  
 \end{rmrk}
 
 \subsection{Piecewise Linear Basis Functions}
@@ -602,7 +602,7 @@ Now if we integrate over the domain $[0, 1]$ and apply the Fundamental Theorem o
 \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx + [(\partial_xu(x, \cdot))v(x, \cdot)]^1_0 = \int^1_0 c_1(\partial_{\tau}u)v dx
 \label{eq_p1d3}
 \end{equation}
-From the boundary conditions we have that $\partial_xu(1,\cdot)=0$ and by restricting $v$ such that $v \in \{v \in C^1_+[0, 1] : v(0)=0 \} = T$ equation (\ref{eq_p1d3}) simplifies to (\ref{eq_p1d4}).
+From the boundary conditions we have that $\partial_xu(1,\cdot)=0$ and by restricting $v$ such that $v \in \left\{v \in C^1_+[0, 1] : v(0)=0 \right\} = T$ equation (\ref{eq_p1d3}) simplifies to (\ref{eq_p1d4}).
 \begin{equation}
 \int_0^1 (-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1c_2uv)dx = \int^1_0 c_1(\partial_{\tau}u)v dx
 \label{eq_p1d4}
@@ -694,7 +694,7 @@ Note that $u_0=1$ because of the boundary condition at the start of the reactor 
 \left(-K^1_{1:n,1:n}-c_1K^2_{1:n,1:n}-c_1c_2K^3_{1:n,1:n} \right)\mathbf{u} +\left(-K^1_{1:n,0}-c_1K^2_{1:n,0} -c_1c_2K^3_{1:n,0}\right) =  c_1K^3_{1:n,1:n}\mathbf{u}\prime
 \label{eq_femq12}
 \end{equation}
-If we were merely interested in solving for the steady state solution of (\ref{eq_p1d}) we could have set the right hand side of (\ref{eq_femq12}) equal to zero and solved the resulting system of equations for $\mathbf{u}$. However, we would like to solve for the transient response as well. For this we use the Crank-Nicholson method for solving the system of ordinary differential equations (ODEs) in (\ref{eq_femq12}). For convenience we define $K^* = \left(-K^1_{1:n,1:n}-c_1K^2_{1:n,1:n}-c_1c_2K^3_{1:n,1:n} \right)$ and $G^{*} = \left(-K^1_{1:n,0}-c_1K^2_{1:n,0} -c_1c_2K^3_{1:n,0}\right)$. We discretise the dimensionless time domain $[0,\tau_{end}]$ into $n$ equidistant elements with nodes $\tau_0 = 0, \tau_1=\delta \tau, \tau_2=\tau_1 + \delta \tau,...,\tau_n=\tau_{end}$ and approximate $\mathbf{u}\prime = \frac{\mathbf{u}_{\tau+1} -\mathbf{u}_{\tau}}{\delta \tau}$. The Crank-Nicholson scheme for (\ref{eq_femq12}) is shown in (\ref{eq_cnq1}).
+If we were merely interested in solving for the steady state solution of (\ref{eq_p1d}) we could have set the right hand side of (\ref{eq_femq12}) equal to zero and solved the resulting system of equations for $\mathbf{u}$. However, we would like to solve for the transient response as well. For this we use the Crank-Nicholson method for solving the system of ordinary differential equations (ODEs) in (\ref{eq_femq12}). For convenience we define $K^* = \left(-K^1_{1:n,1:n}-c_1K^2_{1:n,1:n}-c_1c_2K^3_{1:n,1:n} \right)$ and $G^{*} = \left(-K^1_{1:n,0}-c_1K^2_{1:n,0} -c_1c_2K^3_{1:n,0}\right)$. We discretise the dimensionless time domain $[0,\tau_{end}]$ into $n$ equidistant elements with nodes $\tau_0 = 0, \tau_1=\delta \tau, \tau_2=\tau_1 + \delta \tau,...,\tau_n=\tau_{end}$ and approximate $\mathbf{u}\prime = \frac{\mathbf{u}_{\tau_{m+1}} -\mathbf{u}_{\tau_m}}{\delta \tau}$. The Crank-Nicholson scheme for (\ref{eq_femq12}) is shown in (\ref{eq_cnq1}).
 \begin{equation}
 \frac{1}{2}\left( K^*\mathbf{u}_{\tau_{m+1}} + K^*\mathbf{u}_{\tau_m} \right) + G^* = c_1K^3_{1:n,1:n}\frac{\mathbf{u}_{\tau_{m+1}} -\mathbf{u}_{\tau_{m}}}{\delta \tau}
 \label{eq_cnq1}
@@ -719,14 +719,14 @@ Now we move on to an example: consider a reactor with physical properties shown 
 \end{aligned}
 \label{eq_q1phys}
 \end{equation}
-It is our aim to model such a reactor because it is a representative sample of the type of problem we can solve given the preceding work. Given the development of our FEM approximation we would firstly like to know if it indeed converges to some function. Figure \ref{fig_p1conv} shows the change in approximate conversion at the end point ($z=L$) of the reactor as the number of elements is increased. For example, a $y$ axis position of 10 is the difference between the end point estimate using 10 and 9 elements over the temporal horizon.
+It is our aim to model such a reactor because it is a representative sample of the type of problem we can solve given the preceding work. Given the development of our FEM approximation we would firstly like to know if it indeed converges to some function. Figure \ref{fig_p1conv} shows the change in approximate conversion at the end point ($z=L$) of the reactor as the number of elements is increased. In Figure \ref{fig_p1conv}, for example, the $y$ axis position of 10 is the absolute difference in value between the end point estimate using 10 and 9 elements over the temporal horizon (we stop at $\tau=3$).
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/p1_conv}
 \caption{Absolute difference between successive number of elements} 
 \label{fig_p1conv}
 \end{figure}
-From Figure \ref{fig_p1conv} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero. It is quite reassuring to note how few elements are needed for convergence beyond 3 decimal places. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation indeed converges to some function. Now we inspect the transient dynamics of the simulation as shown in Figure \ref{fig_q1std}. Nothing unexpected is apparent in the model approximation. For example, consider the concentration profile of the reactor at steady state (approximately for $\tau \geq 1$): the reagent concentration gradually reduces over time as is usual for tubular reactors at steady state.
+From Figure \ref{fig_p1conv} it is clear that as the number of elements increases the absolute difference between the successive approximations tends to zero quickly. In literature it is usual to double the number of elements to infer convergence properties, but since the solution converges so quickly this is not done. It is quite reassuring to note how few elements are needed for convergence beyond 3 decimal places. On the strength of the behaviour of the approximation at this isolated point we conclude that our approximation indeed converges to some function. Now we inspect the transient dynamics of the simulation as shown in Figure \ref{fig_q1std}. Nothing unexpected is apparent in the model approximation. For example, consider the concentration profile of the reactor at steady state (approximately for $\tau \geq 1$): the reagent concentration gradually reduces over time as is usual for tubular reactors at steady state.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/q1_standard}
@@ -762,7 +762,7 @@ The next problem we solve is the full two dimensional model from (\ref{eq_iso1})
 \end{equation}
 The boundary conditions indicate that no reaction occurs at the outer edge $r=R$ of the tubular reactor. We also assume that the reactor is rotationally symmetrical about $\mathbf{e}_\theta$ and hence there is no concentration gradient at $r=0$. The other boundary conditions are the same as in the one dimensional case. 
 
-It is desirable to convert (\ref{eq_p2}) to a dimensionless form. This time we proceed in a slightly different manner to take advantage of Green's Formula. We first multiply (\ref{eq_p2}) with an arbitrary test function $v$ and integrate over the reactor (\ref{eq_p2c1}). 
+It is desirable to convert (\ref{eq_p2}) to a dimensionless form. This time we proceed in a slightly different manner to take advantage of Green's Formula. We first multiply (\ref{eq_p2}) with a test function $v \in C^1_+[0,1]\times[0,1]$ and integrate over the reactor (\ref{eq_p2c1}). 
 \begin{equation}
 \begin{aligned}
 &\int_0^R \int_0^L D_{AB}\left(\frac{1}{r}\frac{\partial}{\partial r}\left(r\frac{\partial C_A}{\partial r}\right) + \frac{\partial^2 C_A}{\partial z^2}\right)v - 2U\left(1-\left(\frac{r}{R}\right)^2\right)\frac{\partial C_A}{\partial z}v - kC_Av dzdr \\ &= \int_0^R \int_0^L \frac{\partial C_A}{\partial t}v dzdr
@@ -774,7 +774,7 @@ Now we use Green's Formula by noting that in two dimensions $v\nabla^2C_A = v(\f
 \int_0^R \int_0^L D_{AB}(\text{div}(v\nabla C_A)-\nabla C_A \cdot \nabla v ) - 2U\left(1-\left(\frac{r}{R}\right)^2\right)\frac{\partial C_A}{\partial z}v - kC_Av dzdr = \int_0^R \int_0^L \frac{\partial C_A}{\partial t}v dzdr
 \label{eq_p2c2}
 \end{equation}
-By recalling the boundary conditions and specifying that $v \in \left\{v : v(z=0,\cdot)=0 \right\} = T$ we can apply Gauss's Theorem to integrate (\ref{eq_p2c3}) where $\Gamma$ is the boundary of the reactor.
+By recalling the boundary conditions and specifying that $v \in \left\{v \in C^1_+[0,1]\times[0,1] : v(z=0,\cdot)=0 \right\} = T$ we can apply Gauss's Theorem to integrate (\ref{eq_p2c3}) where $\Gamma$ is the boundary of the reactor.
 \begin{equation}
 \int_0^R \int_0^L \text{div}(v\nabla C_A)dzdr = \int_\Gamma v\nabla C_A \cdot n ds = 0 
 \label{eq_p2c3}
@@ -801,7 +801,7 @@ Likewise with the one dimensional case we assume the existence and uniqueness of
 
 Now we recall the basis functions $\phi$ touched upon in Section \ref{section_pbbf}. We assume that the function $u^h(x,y,\tau) =\sum^n_{k=1} u_k(\tau) \phi_k(x, y)$ which by construction lies in the span $S^h=\text{span}(\phi_1,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p2d3}) by using the Galerkin approximation: find $u^h \in S^h$ with $u^h(0,\cdot,\cdot) = 1$ such that for $S^h_0=\{\phi_{m+1}, \phi_{m+2},...,\phi_n \}$, where $m$ is the number of basis functions lying on the y-axis, (\ref{eq_p2d4}) holds.
 \begin{equation}
-B(u^h,v) = (\frac{U}{L} \partial_\tau (u^h), v)_0~~ \forall v \in S^h_0
+B(u^h,\phi) = (\frac{U}{L} \partial_\tau (u^h), \phi)_0~~ \forall \phi \in S^h_0
 \label{eq_p2d4}
 \end{equation}
 \begin{rmrk}
@@ -893,7 +893,7 @@ By recalling that the initial condition is $\mathbf{u}_0$ we can iterate with (\
 \end{figure}
 The mass matrix has a banded diagonal structure which implies that it can be solved fairly efficiently using matrix algebra techniques. This is reassuring because it implies that the system can be solved quickly. 
 
-As an example we model the same system as in Section \ref{section_isop1}. As before, we would firstly like to know if  our approximation converges to some function. Figure \ref{fig_p2conv} shows the change in approximate average axial conversion at the end point ($z=L$) of the reactor as the number of elements is increased. The y-axis position has the same meaning as before. 
+As an example we model the same system as in Section \ref{section_isop1}. As before, we would firstly like to know if  our approximation converges to some function. Figure \ref{fig_p2conv} shows the change in approximate average axial conversion at the end point ($z=L$) of the reactor as the number of elements is increased. The y-axis position has the same meaning as before (in Figure \ref{fig_p1conv}). 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale=0.3]{./pics/p2_conv}
@@ -1001,19 +1001,19 @@ The boundary conditions retain their meaning as explained in Section \ref{sectio
 \end{aligned}
 \label{eq_p3d}
 \end{equation}
-If we let $B(u, v) = \int_0^1 \left(-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_2k(u)uv\right)dx$ and $(c_1(\partial_{\tau}u),v)_0 = \int^1_0 c_1(\partial_{\tau}u)v dx$ with $c_1 = \frac{UL}{D_a}$, $c_2 = \frac{L^2}{D_a}$ and $v$ some test function which satisfies $v(0) = 0$ we see that Section \ref{section_isop1} is very similar to the current problem. Upon brief consider we notice that it is possible to go directly to the variational form of the problem since we have already done most of the work in Section \ref{section_isop1}.  Find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p3d1}) for all $v \in T=\left\{v:v(0)=0\right\}$.
+If we let $B(u, v) = \int_0^1 \left(-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_2k(u)uv\right)dx$ and $(c_1(\partial_{\tau}u),v)_0 = \int^1_0 c_1(\partial_{\tau}u)v dx$ with $c_1 = \frac{UL}{D_a}$, $c_2 = \frac{L^2}{D_a}$ and $v \in C^1_+[0,1]$ some test function which satisfies $v(0) = 0$ we see that Section \ref{section_isop1} is very similar to the current problem. Upon brief consider we notice that it is possible to go directly to the variational form of the problem since we have already done most of the work in Section \ref{section_isop1}.  Find a unique function $u$ with $u(0, \cdot)=1$ which satisfies (\ref{eq_p3d1}) for all $v \in T=\left\{v \in C^1_+[0, 1] : v(0)=0 \right\}$.
 \begin{equation}
 B(u, v) = (c_1(\partial_{\tau}u),v)_0
 \label{eq_p3d1}
 \end{equation}
-For the purposes of this project we will assume the existence and uniqueness of such a function. The non-linearity of the problem will make finding an exact solution quite difficult. We proceed as before with the FEM approximation.
+For the purposes of this project we will assume the existence and uniqueness of such a function. The non-linearity of the problem will make finding an exact solution more difficult. We proceed as before with the FEM approximation.
 
 Recall the definition of the piecewise linear basis functions ($\phi$) defined in Section \ref{section_plb}. We assume that the function $u^h =\sum^n_{k=0} u_k(\tau) \phi_k(x)$ which by construction lies in the span $S^h=\text{span}(\phi_0,...,\phi_n)$ can approximate $u$. We reformulate the variational problem in (\ref{eq_p3d1}) by using the Galerkin approximation: find $u^h \in S^h$ such that for $S^h_0=\{\phi_1, \phi_2,...,\phi_n \}$ (\ref{eq_p3d2}) holds.
 \begin{equation}
 B(u^h, \phi) = (c_1(\partial_{\tau}u^h),\phi)_0~~\forall \phi \in S^h_0
 \label{eq_p3d2}
 \end{equation} 
-Recall that $B(u, v) = \int_0^1 \left(-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_1k(u)uv\right)dx$. Substituting the Galerkin approximation into this expression we have (\ref{eq_p3d3}).
+Recall that $B(u, v) = \int_0^1 \left(-(\partial_xu)(\partial_xv) - c_1(\partial_xu)v - c_2k(u)uv\right)dx$. Substituting the Galerkin approximation into this expression we have (\ref{eq_p3d3}).
 \begin{equation}
 B(u^h, \phi_i) = \int_0^1 \left(-(\partial_xu^h)(\partial_x\phi_i) - c_1(\partial_xu^h)\phi_i - c_2k(u^h)u^h\phi_i\right)dx \text{ for } i=1,2,...,n
 \label{eq_p3d3}
@@ -1026,7 +1026,7 @@ Thus the FEM problem is to find $u^h \in S^h$ with $u^h(0,\cdot)=1$ such that (\
 Unfortunately we cannot proceed as before because there is no linear algebraic system corresponding to (\ref{eq_femp3}). To overcome this problem we use the Newton-Galerkin Method \cite{larson}.
 
 \subsubsection{Newton-Galerkin Method}
-The aim of this section is to guess a solution to (\ref{eq_femp3}), linearise the system of non-linear equations in (\ref{eq_femp3}) about the guess and iteratively improve our guess until it converges to what we assume is the true solution. To this end we suppose $u^h = u^0 + \delta u = \sum_{k=0}^n u^0_k\phi_k + \sum_{k=0}^n \delta u_k\phi_k$ where $u^0$ is the guess and $\delta u$ is some correction we need to solve for. We now consider each term in (\ref{eq_femp3}) individually and make use of Section \ref{section_plb} and Section \ref{section_isop1} as necessary.
+The aim of this section is to solve the unsteady non-linear system in (\ref{eq_femp3}). We do this by discretising the time domain as before, guessing a solution to (\ref{eq_femp3}) at each time step, linearising the system of non-linear equations in (\ref{eq_femp3}) about the guess and iteratively improving our guess until it converges to what we assume is the true solution. We then repeat this process for the next time step. To this end we suppose $u^h = u^0 + \delta u = \sum_{k=0}^n u^0_k\phi_k + \sum_{k=0}^n \delta u_k\phi_k$ where $u^0$ is the guess and $\delta u$ is some correction we need to solve for. We now consider each term in (\ref{eq_femp3}) individually and make use of Section \ref{section_plb} and Section \ref{section_isop1} as necessary.
 
 First consider $\int_0^1 -(\partial_xu^h)(\partial_x\phi_i)dx$  in (\ref{eq_p3nl1}) for $i=1,2,...,n$ with $\mathbf{u}^0 = \left(u^0_0,u^0_1,...,u^0_n\right)^T$ and $\mathbf{\delta u} = \left(\delta u_0,\delta u_1,...,\delta u_n\right)^T$.
 \begin{equation}
@@ -1069,7 +1069,7 @@ k(u^0_1)K^3_{1,0} & k(u^0_1)K^3_{1,1} & k(u^0_1)K^3_{1,2} &0& \hdots\\
 \end{equation}
 The trick is to notice that each row is non-zero over at most two elements by the definition of the basis functions. We then take the middle node over the two elements as $k$ and say $k(u^0) \approx k(u^0_k)$ due to the definition of the basis function over those elements - we will not be integrating over the other elements so we take the contribution of those basis functions in $k(u^0)$ as zero. Following from this we can see that $\int_0^1  -c_2k(u^0)u^0\phi_i dx$ for each $i=1,2,...,n$ is merely the vector $-c_2K^4_{1:n,0:n}\mathbf{u}^0$. 
 
-We do essentially the same for the matrix $-c_2K^5$ created by  evaluating $\int_0^1  -c_2k(u^0)\delta u\phi_i dx$ for each $i=0,1,2,...,n$ and end up with the matrix $-c_2K^5_{1:n,0:n}\mathbf{\delta u}$. Note that this is a matrix since $\mathbf{\delta u}$ is not known. 
+We do essentially the same for the matrix $-c_2K^5$ created by  evaluating $\int_0^1  -c_2k(u^0)\delta u\phi_i dx$ for each $i=0,1,2,...,n$ and end up with the matrix $-c_2K^5_{1:n,0:n}\mathbf{\delta u}$ since we are only interested in  the rows $i=1,2,...,n$. Note that this is a matrix since $\mathbf{\delta u}$ is not known. 
 
 Finally, we consider the matrix $-c_2K^6$ created by evaluating $\int_0^1 -c_2 k\prime(u^0)(\delta u )(u^0) \phi_i dx$ for each $i=0,1,2,...,n$. We handle the factor $k\prime(u^0)$ in the same manner as previously. Consider (\ref{eq_nonconst2}) which is $\int_0^1 -c_2 k\prime(u^0)(\delta u )(u^0) \phi_i dx$ for each $i=0,1,2,...,n$.
 \begin{equation}
@@ -1214,21 +1214,21 @@ We follow the same procedure as in Section \ref{section_isop1} to convert (\ref{
 \begin{equation}
 \begin{aligned}
 &\frac{\partial^2 u}{\partial x^2} - \frac{UL}{D_a} \frac{\partial u}{\partial x} - \frac{L^2C_{B0}}{D_a}kuw 
-= \frac{UL}{D_e}\frac{\partial u}{\partial \tau} \\
+= \frac{UL}{D_a}\frac{\partial u}{\partial \tau} \\
 &\frac{\partial^2 w}{\partial x^2} - \frac{UL}{D_a} \frac{\partial w}{\partial x} - \frac{L^2C_{A0}}{D_a}kuw 
-= \frac{UL}{D_e}\frac{\partial w}{\partial \tau} \\
+= \frac{UL}{D_a}\frac{\partial w}{\partial \tau} \\
 &\text{Boundary Conditions:} \\
 &\frac{\partial u}{\partial x}(x=1, \cdot) = 0\\
-&u(z=0, \cdot) = 1 \\
+&u(x=0, \cdot) = 1 \\
 &\frac{\partial w}{\partial z}(x=1, \cdot) = 0\\
-&w(z=0, \cdot) = 1 \\
+&w(x=0, \cdot) = 1 \\
 &\text{Initial Conditions:} \\
 & u(\cdot, \tau= 0) = e^{-10x} \\
 & w(\cdot, \tau= 0) = e^{-10x}
 \end{aligned}
 \label{eq_p4d}
 \end{equation}
-Abusing our notation again and multiplying through by arbitrary test functions $v$ and $z$ we have (\ref{eq_p4d1}) with $c_1 = \frac{UL}{D_a}$,  $c_{2A} = \frac{L^2C_{A0}}{D_a}$ and  $c_{2B} = \frac{L^2C_{B0}}{D_a}$.
+Abusing our notation again and multiplying through by test functions $v \in C^1_+[0,1]$ and $z \in C^1_+[0,1]$ we have (\ref{eq_p4d1}) with $c_1 = \frac{UL}{D_a}$,  $c_{2A} = \frac{L^2C_{A0}}{D_a}$ and  $c_{2B} = \frac{L^2C_{B0}}{D_a}$.
 \begin{equation}
 \begin{aligned}
 &\partial_{xx}(u)v - c_1\partial_x(u)v - c_{2B}uwv = c_1\partial_\tau(u)v \\
@@ -1236,7 +1236,7 @@ Abusing our notation again and multiplying through by arbitrary test functions $
 \end{aligned}
 \label{eq_p4d1}
 \end{equation}
-By following the same procedure as in Section \ref{section_isop1} we have the variational problem: find functions $u, w$ with $w(0,\cdot)=u(0,\cdot)=1$ such that (\ref{eq_p4d2}) holds for all $v \in \left\{v : v(0) = 0 \right\} = T_v$ and for all $z \in \left\{z : z(0) = 0 \right\} = T_z$.
+By following the same procedure as in Section \ref{section_isop1} we have the variational problem: find functions $u, w$ with $w(0,\cdot)=u(0,\cdot)=1$ such that (\ref{eq_p4d2}) holds for all $v \in \left\{v \in  C^1_+[0,1] : v(0) = 0 \right\} = T_v$ and for all $z \in \left\{z \in  C^1_+[0,1] : z(0) = 0 \right\} = T_z$.
 \begin{equation}
 \begin{aligned}
 &\int_0^1 -\partial_{x}(u)v - c_1\partial_x(u)v - c_{2B}uwvdx = \int_0^1 c_1\partial_\tau(u)v dx \\
@@ -1322,7 +1322,7 @@ G_1 \begin{pmatrix}
 \end{aligned}
 \label{eq_p4mat1}
 \end{equation}
-We again remember that due to the boundary conditions we know that $\mathbf{u}^0 = \left(1,u^0_1,...,u^0_n \right)^T$ and $\mathbf{w}^0 = \left(1,w^0_1,...,w^0_n \right)^T$. Consequently we also know that $\mathbf{\delta u} = \left(0,\delta u^0_1,...,\delta u^0_n \right)^T$ and $\mathbf{\delta w} = \left(0,\delta w_1,...,\delta w_n \right)^T$ by the same reasoning as in Section \ref{section_p3}. To solve the steady state problem we set the right hand side of (\ref{eq_p4mat1}) equal to zero as shown in (\ref{eq_p4mat2}). 
+We again remember that due to the boundary conditions we know that $\mathbf{u}^0 = \left(1,u^0_1,...,u^0_n \right)^T$ and $\mathbf{w}^0 = \left(1,w^0_1,...,w^0_n \right)^T$. Consequently we also know that $\mathbf{\delta u} = \left(0,\delta u_1,...,\delta u_n \right)^T$ and $\mathbf{\delta w} = \left(0,\delta w_1,...,\delta w_n \right)^T$ by the same reasoning as in Section \ref{section_p3}. To solve the steady state problem we set the right hand side of (\ref{eq_p4mat1}) equal to zero as shown in (\ref{eq_p4mat2}). 
 \begin{equation}
 \begin{aligned}
 G_1 \begin{pmatrix}
@@ -1360,7 +1360,7 @@ Solving this system of equations by Newton-Galerkin Method iteration proceeds in
 \end{equation}
 As before we note that $\begin{pmatrix}
 \mathbf{\delta u}\prime \\ \mathbf{\delta w}\prime 
-\end{pmatrix}_{\tau_{m}} \approx \mathbf{0}$ because we have iterated until it was suitably small and we know what $\begin{pmatrix}
+\end{pmatrix}_{\tau_{m}} \approx \mathbf{0}$ because we have iterated until it was suitably small in the previous time step and we know what $\begin{pmatrix}
 \mathbf{u}^0 \\ \mathbf{w}^0 \end{pmatrix}_{\tau_{m}}$ is either because of the initial condition for $\tau_0$ or because it was solved in the previous time step. Thus we have the simplified scheme in (\ref{eq_p4mat4}).
 \begin{equation}
 \begin{aligned}
@@ -1438,11 +1438,14 @@ Finally and as before, further analysis is now required to definitively show tha
 \section{Conclusion}
 In this project we have shown how the FEM may be used to solve typical reactor design problems. Four distinct, yet related, problems were solved assuming a tubular reactor set-up with power law kinetics governing the system.
 
-Problems 1 and 2 modelled an isothermal reactor; the Aris-Taylor approximation was used to simplify Problem 2 into Problem 1. The accuracy of this simplification was briefly tested. It was found that the approximation is very good: the steady state error was significantly less than 10\% for all tests run. Moreover, the FEM techniques used converged quickly i.e. were numerically efficient.
+Problems 1 and 2 modelled an isothermal reactor; the Aris-Taylor approximation was used to simplify Problem 2 into Problem 1. The accuracy of this simplification was briefly tested. It was found that the approximation is very good: the steady state error was significantly less than 10\% for all tests run. Moreover, the FEM techniques used converged quickly and were numerically efficient.
 
-Problems 3 and 4 modelled an adiabatic reactor and a coupled reaction isothermal reactor respectively. The non-linearity of both systems was addressed within the framework of the FEM. The models were successfully solved and the solutions were found to converge quickly. 
+Problems 3 and 4 modelled an adiabatic reactor and a coupled isothermal reactor respectively. The non-linearity of both systems was addressed within the framework of the FEM. The models were successfully solved and the solutions were found to converge quickly. 
 
 The ideas and techniques used in this project certainly make it possible to use the FEM to solve more complicated problems. It is suggested that Problems 1 and 2 be analysed from a non-isothermal point of view for future work. Additionally, the analysis of the existence, uniqueness and convergence results assumed in this project could be verified as part of other future work. 
+
+\textit{The programs used in this project may be found in my Github repository under the user name} stelmo. \textit{All the program files are stand alone and programmed in the Julia Language.}
+
 
 %References
 \newpage

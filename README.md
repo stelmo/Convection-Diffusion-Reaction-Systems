@@ -4,26 +4,21 @@ Convection-Diffusion-Reaction-Systems
 ### The analysis and implementation of coupled and uncoupled convection diffusion reaction systems with the finite element method.
 All the programs were written in the Julia Language.
 
-# Uncoupled System
-The reactor is assumed to be isothermal.
+The PyPlot package is required for the graphical output. The packages: Images and ImageView are required to view the PDF mass matrices as seen in the report.
 
-## One Dimensional Analysis
-The elements are comprised of piecewise linear basis functions (roof functions). The spatial problem was solved using the finite element method. The unsteady (temporal) problem was solved using a combination of the FEM and the Crank-Nicholson method (to solve the system of resultant ODEs).
+## Guide to the programs
+All programs are stand alone. There is some room for improvement in programming style...
 
-### Steady State System
-The Aris-Taylor approximation is used to model a reacting system with radial and axial diffusion, and axial convection. First order kinetics are used with a constant rate.
+1. aris_fem_us_1d.jl = One dimensional isothermal system unsteady.
 
-### Unsteady System
-The unsteady case was an extension of the steady case. The initial condition approximates an inert reactor.
+2. 2d_fem_rf_us.jl = Two dimensional isothermal system unsteady.
 
-## Two Dimensional Analysis
-Piecewise bilinear basis functions (rectangular elements) are used as elements in the spatial dimensions. Again the Crank-Nicholson method was used to solve the system of resultant ODEs for the unsteady problem.
+3. adi_1d_us.jl = Adiabatic one dimensional system unsteady.
 
-### Steady State System
-Axial and radial diffusion with axial convection was considered. First order kinetics are used. Both plug flow and laminar flow were implemented.
+4. coupled_1d_us.jl = Coupled isothermal one dimensional system unsteady.
 
-### Unsteady System
-The unsteady case was again just an extension of the steady case. An inert reactor was approximated for the initial condition. Both plug flow and laminar flow were implemented.
+Note: If a program's name includes "us" it implies it is the unsteady solution. The same name without the "us" is the steady state solution.
 
-# Coupled Systems
-The isothermal assumption is dropped. The same systems as above, but this time incorporating a non-constant rate term which depends on temperature were modelled. Only the one dimensional case was modelled.
+Note: If a program's name includes "rf" it implies it is the laminar flow profile solution. The same name without the "rf" is the plug flow solution. This applies only to the 2 dimensional problems.
+
+Note: The other programs were used to generate the convergence results etc. but consist only of the programs mentioned above with some formatting.
