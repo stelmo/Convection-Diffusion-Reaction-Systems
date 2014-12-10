@@ -465,7 +465,7 @@ In two dimensions the previous roof functions generalise to the piecewise biline
 \caption{Domain discretisation} 
 \label{fig_pbilindomain}
 \end{figure}
-Now we define basis functions on each node $i$ so that the restriction of the basis function $\phi_i$ to an element is a bilinear polynomial $\phi_i(x,y) = a+ bx +cy +dxy$ on each element of Figure \ref{fig_pbilindomain}. Each basis function $\phi_i$ takes on the value $1$ at node $i$ and a value of $0$ at any node not $i$. For details on the construction of the basis functions we refer the avid reader to \cite{vrb}. 
+Now we define basis functions on each node $i$ so that the restriction of the basis function $\phi_i$ to an element is a bilinear polynomial $\phi_i(x,y) = a+ bx +cy +dxy$ on each element of Figure \ref{fig_pbilindomain}. Each basis function $\phi_i$ takes on the value $1$ at node $i$ and a value of $0$ at any node not $i$. For details on the construction of the basis functions we refer the avid reader to \cite{strang}. 
 
 The bilinear components of the basis function $\phi$ are named $P_1, P_2, P_3$ and $P_4$ and are defined on the elements adjacent to the basis function $\phi$ in question and with orientation shown in Figure \ref{fig_pbasis}. Each function $P$ takes on the value $1$ at the corner nearest $\phi$ and $0$ at the other corners. If the rectangle corresponding to a particular function $P$ is not in the domain $[0,1]\times[0,1]$ it is neglected in the calculation involving that $\phi$. 
 \begin{figure}[H] 
